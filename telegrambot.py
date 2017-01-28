@@ -29,7 +29,7 @@ def main():
 	dp.add_handler(RegexHandler('^(/biblioteca|/Biblioteca|/BIBLIOTECA)$',biblioteca))
 	dp.add_handler(RegexHandler('^(/cus|/Cus|/CUS)$',cus))
 	dp.add_handler(RegexHandler('^(/smonta_portoni|/Smonta_portoni|/SMONTA_PORTONI)$',smonta_portoni))
-	dp.add_handler(RegexHandler('^(/santino|/Santino|/SANTINO)$',santino))   #NN VA
+	dp.add_handler(RegexHandler('^(/santino|/Santino|/SANTINO)$',santino))
 	dp.add_handler(RegexHandler('^(/liste|/Liste|/LISTE)$',liste))
 	dp.add_handler(RegexHandler('^(/contributors|/Contributors|/CONTRIBUTORS)$',contributors))
 	dp.add_handler(RegexHandler('/forum',forum_bot))
