@@ -19,6 +19,7 @@ For the bot istance to be executed, your system needs:
 install with *pip*
 - python-telegram-bot
 - pydrive
+- requests
 
 ###Using the live version
 The bot is live on Telegram with the username [@DMI_Bot](https://telegram.me/DMI_Bot).
