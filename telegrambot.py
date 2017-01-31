@@ -33,15 +33,22 @@ def main():
 	dp.add_handler(RegexHandler('^(/liste|/Liste|/LISTE)$',liste))
 	dp.add_handler(RegexHandler('^(/contributors|/Contributors|/CONTRIBUTORS)$',contributors))
 	dp.add_handler(RegexHandler('/forum',forum_bot))
-	dp.add_handler(RegexHandler('/news',news_))
-	dp.add_handler(RegexHandler('^(/spamnews|/Spamnews|/SPAMNEWS)$',spamnews))
-	dp.add_handler(RegexHandler('^(/disablenews|/Disablenews|/DISABLENEWS)$',disablenews))
-	dp.add_handler(RegexHandler('^(/enablenews|/Enablenews|/ENABLENEWS)$',enablenews))
-	dp.add_handler(RegexHandler('^(/drive|/Drive|/DRIVE)$',drive))
-	dp.add_handler(RegexHandler('/adddb',adddb))
-	dp.add_handler(RegexHandler('/request',request))
-	dp.add_handler(RegexHandler('^(/stats)',stats))
-	dp.add_handler(RegexHandler('^(/statsT)$',statsTot))
+
+	if (disable_drive == 0):
+	  dp.add_handler(RegexHandler('^(/drive|/Drive|/DRIVE)$',drive))
+	  dp.add_handler(RegexHandler('/adddb',adddb))
+	  dp.add_handler(RegexHandler('/request',request))
+
+	if (disable_db == 0):
+	  dp.add_handler(RegexHandler('^(/stats)',stats))
+	  dp.add_handler(RegexHandler('^(/statsT)$',statsTot))
+
+	if (disable_logs == 0):
+	  dp.add_handler(RegexHandler('/news',news_))
+	  dp.add_handler(RegexHandler('^(/spamnews|/Spamnews|/SPAMNEWS)$',spamnews))
+	  dp.add_handler(RegexHandler('^(/disablenews|/Disablenews|/DISABLENEWS)$',disablenews))
+	  dp.add_handler(RegexHandler('^(/enablenews|/Enablenews|/ENABLENEWS)$',enablenews))
+
 
 	dp.add_handler(CallbackQueryHandler(callback))
 

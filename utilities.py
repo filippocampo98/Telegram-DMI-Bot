@@ -20,6 +20,11 @@ from bs4 import BeautifulSoup
 import sqlite3
 import logging
 
+# debug
+disable_logs = 1    #news, stats
+disable_db = 1      #stats, drive
+disable_drive = 1   #drive
+
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 
@@ -147,7 +152,6 @@ CUSicon = {0 : "🏋",
 }
 
 def help_cmd():
-    print "Entra"
     output = "@DMI_Bot risponde ai seguenti comandi: \n\n"
     output += "📖 /esami - /mesami - linka il calendario degli esami\n"
     output+= "🗓 /aulario - linka l\'aulario\n"
@@ -450,7 +454,6 @@ def callback(bot, update):
 			sys.exit(0)
 
 def request(bot, update):
-	print "entra request"
 	chat_id = update.message.chat_id
 	flag=0
 	if (chat_id>0):
@@ -490,7 +493,6 @@ def request(bot, update):
 
 
 def adddb(bot, update):
-	print "entra adddb"
 	chat_id = update.message.chat_id
 	if (chat_id==26349488 or chat_id==-1001095167198 or chat_id==46806104):
 		ArrayValue=update.message.text.split(" ") #/add nome cognome e-mail username chatid
@@ -750,11 +752,14 @@ def statsTot(bot,update):
 
 
 def checkLog(bot, update,type):
-    chat_id = update.message.chat_id
-    conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
-    today=unicode(date.today());
-    conn.execute("INSERT INTO stat_list VALUES ('"+str(type)+"',"+str(chat_id)+",'"+str(today)+" ')");
-    conn.commit()
-    log = open("logs/log.txt", "a+")
-    if not str(chat_id) in log.read():
-        log.write(str(chat_id)+"\n")
+    if (disable_db == 0):
+        chat_id = update.message.chat_id
+        conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
+        today=unicode(date.today());
+        conn.execute("INSERT INTO stat_list VALUES ('"+str(type)+"',"+str(chat_id)+",'"+str(today)+" ')");
+        conn.commit()
+
+    if (disable_logs == 0):
+        log = open("logs/log.txt", "a+")
+        if not str(chat_id) in log.read():
+            log.write(str(chat_id)+"\n")
