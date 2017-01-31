@@ -326,7 +326,7 @@ def santino_cmd():
 
 def contributors_cmd():
 	output = "@Helias, @adriano_effe, @Veenz, @simone989\n"
-	output +="https://github.com/Helias/telegram-dmi-bot"
+	output +="https://github.com/UNICT-DMI/Telegram-DMI-Bot.git"
 	return output
 
 def forum_cmd(text):
