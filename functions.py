@@ -21,7 +21,7 @@ import sqlite3
 import logging
 
 # debug
-disable_logs = 0    #news, stats
+disable_chatid_logs = 0    #news, stats
 disable_db = 0      #stats, drive
 disable_drive = 0   #drive
 
@@ -687,7 +687,7 @@ def news_(bot, update):
 
 def spamnews(bot, update):
 	if(update.message.chat_id==26349488):
-		chat_ids = open('logs/log.txt', 'r').read()
+		chat_ids = open('logs/chatid.txt', 'r').read()
 		chat_ids = chat_ids.split("\n")
 		for i in range((len(chat_ids)-1)):
 			try:
@@ -700,12 +700,12 @@ def spamnews(bot, update):
 
 def disablenews(bot, update):
 	checkLog(bot, update,"disablenews")
-	chat_ids = open('logs/log.txt', 'r').read()
+	chat_ids = open('logs/chatid.txt', 'r').read()
 	chat_id = update.message.chat_id
 	if not ("+"+str(chat_id)) in chat_ids:
 		chat_ids = chat_ids.replace(str(chat_id), "+"+str(chat_id))
 		messageText= "News disabilitate!"
-		open('logs/log.txt', 'w').write(chat_ids)
+		open('logs/chatid.txt', 'w').write(chat_ids)
 	else:
 		messageText = "News già disabilitate!"
 	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
@@ -713,17 +713,17 @@ def disablenews(bot, update):
 
 def enablenews(bot, update):
 	checkLog(bot, update,"enablenews")
-	chat_ids = open('logs/log.txt', 'r').read()
+	chat_ids = open('logs/chatid.txt', 'r').read()
 	chat_id = update.message.chat_id
 	if ("+"+str(chat_id)) in chat_ids:
 		chat_ids = chat_ids.replace("+"+str(chat_id), str(chat_id))
 		messageText = "News abilitate!"
-		open('logs/log.txt', 'w').write(chat_ids)
+		open('logs/chatid.txt', 'w').write(chat_ids)
 	else:
 		messageText = "News già abilitate!"
 	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
-# check if user (chatid) is registered on log.txt
+# check if user (chatid) is registered on chatid.txt
 
 def stats(bot,update):
     chat_id = update.message.chat_id
@@ -759,7 +759,7 @@ def checkLog(bot, update,type):
         conn.execute("INSERT INTO stat_list VALUES ('"+str(type)+"',"+str(chat_id)+",'"+str(today)+" ')");
         conn.commit()
 
-    if (disable_logs == 0):
-        log = open("logs/log.txt", "a+")
+    if (disable_chatid_logs == 0):
+        log = open("logs/chatid.txt", "a+")
         if not str(chat_id) in log.read():
             log.write(str(chat_id)+"\n")

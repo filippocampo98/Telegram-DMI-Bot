@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from utilities import *
+from functions import *
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -8,7 +8,7 @@ bot= telegram.Bot(TOKEN)
 
 def record_everything(bot, update):
 	message = str(update.message)
-	log_tmp = open("tmp_log.txt","a+")
+	log_tmp = open("logs/logs.txt","a+")
 	log_tmp.write("\n"+message)
 
 def main():
@@ -48,7 +48,7 @@ def main():
 	  dp.add_handler(RegexHandler('/stats',stats))
 	  dp.add_handler(RegexHandler('/statsT',statsTot))
 
-	if (disable_logs == 0):
+	if (disable_chatid_logs == 0):
 	  dp.add_handler(RegexHandler('/news',news_))
 	  dp.add_handler(RegexHandler('/spamnews',spamnews))
 	  dp.add_handler(RegexHandler('/disablenews',disablenews))
