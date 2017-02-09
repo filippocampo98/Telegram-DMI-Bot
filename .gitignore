@@ -1,9 +1,10 @@
 config/token.conf
 logs/errors.txt
-logs/log.txt
+logs/logs.txt
+logs/chatid.txt
 classes/StringParser.pyc
 classes/__init__.pyc
-utilities.pyc
+functions.pyc
 config/drive_credentials.json
 config/settings.yaml
 data/DMI_DB.db
