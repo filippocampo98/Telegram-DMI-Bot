@@ -1,5 +1,5 @@
 #!/bin/sh
 while (true)
 do
-	python telegrambot.py
+	python2 telegrambot.py
 done

@@ -5,11 +5,16 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 bot= telegram.Bot(TOKEN)
-updater = Updater(TOKEN)
-# Get the dispatcher to register handlers
-dp = updater.dispatcher
+
+def record_everything(bot, update):
+	message = str(update.message)
+	log_tmp = open("tmp_log.txt","a+")
+	log_tmp.write("\n"+message)
 
 def main():
+	updater = Updater(TOKEN)
+	dp = updater.dispatcher
+	dp.add_handler(MessageHandler(Filters.all, record_everything),1)
 	dp.add_handler(RegexHandler('/help',help))
 	dp.add_handler(RegexHandler('/rappresentanti',rappresentanti))
 	dp.add_handler(RegexHandler('/rappresentanti_dmi',rappresentanti_dmi))
