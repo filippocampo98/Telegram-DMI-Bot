@@ -520,7 +520,7 @@ def drive(bot, update):
     TestDB=0
     IDDrive='0B7-Gi4nb88hremEzWnh3QmN3ZlU'
     if chat_id < 0:
-    	bot.sendMessage(chat_id=chat_id,text="LA FUNZIONE /drive NON È AMMESSA NEI GRUPPI")
+    	bot.sendMessage(chat_id=chat_id,text="La funzione /drive non è ammessa nei gruppi")
     else:
     	for row in conn.execute("SELECT Chat_id FROM 'Chat_id_List' "):
     		if row[0] == chat_id:
