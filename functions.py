@@ -21,9 +21,9 @@ import sqlite3
 import logging
 
 # debug
-disable_chatid_logs = 0    #news, stats
-disable_db = 0      #stats, drive
-disable_drive = 0   #drive
+disable_chatid_logs = 1 #news, stats
+disable_db = 1          #stats, drive
+disable_drive = 1       #drive
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -36,6 +36,17 @@ conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
 tokenconf = open('config/token.conf', 'r').read()
 tokenconf = tokenconf.replace("\n", "")
 TOKEN = tokenconf      		#Token of your telegram bot that you created from @BotFather, write it on token.conf
+
+def getLezioni():
+    r = requests.get('http://localhost/PHP-DMI-API/result/lezioni.json')
+    if(r.status_code == requests.codes.ok):
+        print r.json()["status"]["lastupdate"]
+
+def lezioni(bot, update):
+	checkLog(bot, update,"lezioni")
+	#messageText = prof_cmd(update.message.text)
+    getLezioni()
+    bot.sendMessage(chat_id=update.message.chat_id, text="CiaoCompa" + update.message.text)
 
 def getProfessori(input):
     with open("data/json/professori.json") as data_file:
@@ -62,61 +73,6 @@ def getProfessori(input):
 
     return output #Redefine with @TkdAlex
 
-def getLezioni(anno,semestre,giorno,corso):
-    if (corso == "triennale"):
-        with open("data/json/lezioni.json") as data_file:
-            lezioni_data = json.load(data_file)
-    elif (corso == "magistrale"):
-        with open("data/json/mlezioni.json") as data_file:
-            lezioni_data = json.load(data_file)
-    output = ""
-    i = 0
-    risultati = 0
-    while(lezioni_data[i]["Nome"] != "nil") :
-        if(lezioni_data[i]["GiornoSettimana"] == str(giorno) and lezioni_data[i]["Anno"] == anno and lezioni_data[i]["Semestre"] == semestre):
-            output += "\nLezione di " + lezioni_data[i]["Nome"] + ", dalle ore " + lezioni_data[i]["OraInizio"] + " alle ore " + lezioni_data[i]["OraFine"] + ", in aula " + lezioni_data[i]["Aula"]
-            risultati += 1
-        i += 1
-    if (risultati == 0):
-        return "Nessuna lezione trovata per il giorno specificato"
-    return output #Redefine with @TkdAlex
-
-def lezioni(input,corso):
-    #Interpreta l'anno richiesto
-    inputArray = input.split(' ')
-    if (inputArray[0] == "primo"):
-        anno = "1"
-    elif (inputArray[0] == "secondo"):
-        anno = "2"
-    elif (inputArray[0] == "terzo"):
-        anno = "3"
-    else:
-        return "Non ho capito la richiesta. Digita /help per maggiori info"
-    #Interpreta il giorno della settimana
-    if (len(inputArray) == 1 or inputArray[1] == "oggi"):
-        giorno = datetime.datetime.today().weekday()+1
-    elif (inputArray[1] == "domani"):
-        giorno = datetime.datetime.today().weekday()+2
-        if (giorno == 8):
-            giorno = 1
-    elif ("lun" in inputArray[1]):
-        giorno = 1
-    elif ("mar" in inputArray[1]):
-        giorno = 2
-    elif ("mer" in inputArray[1]):
-        giorno = 3
-    elif ("gio" in inputArray[1]):
-        giorno = 4
-    elif ("ven" in inputArray[1]):
-        giorno = 5
-    else:
-        return "Non ho capito la richiesta. Digita /help per maggiori info"
-    #Imposta il semestre corrente
-    semestre = "1"
-    #Chiama la funzione apposita con gli argomenti correttamente interpretati
-    return getLezioni(anno,semestre,giorno,corso) #Redefine with @TkdAlex
-
-
 def forum(sezione):
 
     response = urllib2.urlopen("http://forum.informatica.unict.it/")
@@ -140,7 +96,6 @@ def forum(sezione):
                         return dictionary
 
     return False #Redefine with @Veeenz API
-
 
 # Commands
 CUSicon = {0 : "🏋",
@@ -238,8 +193,8 @@ def sstudenti_cmd():
 	return output
 
 def cea_cmd():
-        output  = "Centro per i sistemi di elaborazione e le applicazioni scientifiche e didattiche (CEA)\n"
-        output += "📞 0957307560 - fax: 0957307544\n"
+    output  = "Centro per i sistemi di elaborazione e le applicazioni scientifiche e didattiche (CEA)\n"
+    output += "📞 0957307560 - fax: 0957307544\n"
 	output += "✉️ cea@unict.it\n"
 	output += "Via Santa Maria del Rosario, 9 - via Sangiuliano 257 (terzo piano) - 95131 Catania\n"
 	output += "http://archivio.unict.it/cea"
@@ -342,7 +297,6 @@ def forum_cmd(text):
 	else:
 		output = "La sezione non e' stata trovata."
 	return output
-
 
 def callback(bot, update):
 	keyboard2=[[]];
@@ -490,8 +444,6 @@ def request(bot, update):
 		messageText="Non è possibile utilizzare /request in un gruppo"
 		bot.sendMessage(chat_id=chat_id, text=messageText)
 
-
-
 def adddb(bot, update):
 	chat_id = update.message.chat_id
 	if (chat_id==26349488 or chat_id==-1001095167198 or chat_id==46806104):
@@ -559,12 +511,10 @@ def drive(bot, update):
     	else:
     		bot.sendMessage(chat_id=chat_id,text="🔒 Non hai i permessi per utilizzare la funzione /drive,\n Utilizzare il comando /request <nome> <cognome> <e-mail> (il nome e il cognome devono essere scritti uniti Es: Di mauro -> Dimauro) ")
 
-
 def help(bot, update):
     checkLog(bot, update,"help")
     messageText = help_cmd()
     bot.sendMessage(chat_id=update.message.chat_id,text=messageText)
-
 
 def rappresentanti(bot, update):
 	checkLog(bot, update,"rappresentanti")
