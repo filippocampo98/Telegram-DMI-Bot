@@ -43,7 +43,7 @@ def getLezioni():
         print r.json()["status"]["lastupdate"]
 
 def lezioni(bot, update):
-	checkLog(bot, update,"lezioni")
+    checkLog(bot, update,"lezioni")
 	#messageText = prof_cmd(update.message.text)
     getLezioni()
     bot.sendMessage(chat_id=update.message.chat_id, text="CiaoCompa" + update.message.text)
@@ -193,8 +193,8 @@ def sstudenti_cmd():
 	return output
 
 def cea_cmd():
-    output  = "Centro per i sistemi di elaborazione e le applicazioni scientifiche e didattiche (CEA)\n"
-    output += "📞 0957307560 - fax: 0957307544\n"
+        output  = "Centro per i sistemi di elaborazione e le applicazioni scientifiche e didattiche (CEA)\n"
+        output += "📞 0957307560 - fax: 0957307544\n"
 	output += "✉️ cea@unict.it\n"
 	output += "Via Santa Maria del Rosario, 9 - via Sangiuliano 257 (terzo piano) - 95131 Catania\n"
 	output += "http://archivio.unict.it/cea"
