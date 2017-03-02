@@ -37,19 +37,30 @@ tokenconf = open('config/token.conf', 'r').read()
 tokenconf = tokenconf.replace("\n", "")
 TOKEN = tokenconf      		#Token of your telegram bot that you created from @BotFather, write it on token.conf
 
-def getLezioni():
+def lezioni_cmd(args):
+    # /lezioni oggi | domani | dayname | nomemateria | oggi anno | domani anno | dayname anno | anno
+    output = ""
     r = requests.get('http://localhost/PHP-DMI-API/result/lezioni_dmi.json')
     if(r.status_code == requests.codes.ok):
-        print r.json()["status"]["lastupdate"]
+        items = r.json()["items"]
+        for item in items:
+            if(args[0].lower() in item["insegnamento"].lower()):
+                output += "*Insegnamento:* " + item["insegnamento"]
+                output += "\n*Aula:* " + item["aula"]
+                output += "\n*Lunedi:*" + item["lunedi"]
+                output += "\n*Martedi:* " + item["martedi"]
+                output += "\n*Mercoledi:* " + item["mercoledi"]
+                output += "\n*Giovedi:* " + item["giovedi"]
+                output += "\n*Venerdi:* " + item["venerdi"]
+                output += "\n*Anno:* " + item["anno"] + "\n\n"
+
+    return output
 
 def lezioni(bot, update, args):
-    checkLog(bot, update,"lezioni")
-    messageText = "Vuoto"
+    checkLog(bot, update, "lezioni")
     if(args):
-        print(args)
-        messageText = ' '.join(args)
-    getLezioni()
-    bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+        messageText = lezioni_cmd(args)
+        bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
 def getProfessori(input):
     with open("data/json/professori.json") as data_file:
@@ -112,25 +123,25 @@ CUSicon = {0 : "🏋",
 def help_cmd():
     output = "@DMI_Bot risponde ai seguenti comandi: \n\n"
     output += "📖 /esami - /mesami - linka il calendario degli esami\n"
-    output+= "🗓 /aulario - linka l\'aulario\n"
-    output+= "👔 /prof <nome> - es. /prof Milici\n"
-    output+= "🍽 /mensa - orario mensa\n"
-    output+= "👥 /rappresentanti - elenco dei rappresentanti del DMI\n"
-    output+= "📚 /biblioteca - orario biblioteca DMI\n"
-    output+= CUSicon[random.randint(0,5)] + " /cus sede e contatti\n\n"
-    output+= "Segreteria orari e contatti:\n"
-    output+= "/sdidattica - segreteria didattica\n"
-    output+= "/sstudenti - segreteria studenti\n"
-    output+= "/cea - CEA\n"
-    output+= "\nERSU orari e contatti\n"
-    output+= "/ersu - sede centrale\n"
-    output+= "/ufficioersu - (ufficio tesserini)\n"
-    output+= "/urp - URP studenti\n\n"
-    output+= "~Bot~\n"
-    output+= "📂 /drive - accedi a drive\n"
-    output+= "/disablenews \n"
-    output+= "/enablenews\n"
-    output+= "/contributors"
+    output += "🗓 /aulario - linka l\'aulario\n"
+    output += "👔 /prof <nome> - es. /prof Milici\n"
+    output += "🍽 /mensa - orario mensa\n"
+    output += "👥 /rappresentanti - elenco dei rappresentanti del DMI\n"
+    output += "📚 /biblioteca - orario biblioteca DMI\n"
+    output += CUSicon[random.randint(0,5)] + " /cus sede e contatti\n\n"
+    output += "Segreteria orari e contatti:\n"
+    output += "/sdidattica - segreteria didattica\n"
+    output += "/sstudenti - segreteria studenti\n"
+    output += "/cea - CEA\n"
+    output += "\nERSU orari e contatti\n"
+    output += "/ersu - sede centrale\n"
+    output += "/ufficioersu - (ufficio tesserini)\n"
+    output += "/urp - URP studenti\n\n"
+    output += "~Bot~\n"
+    output += "📂 /drive - accedi a drive\n"
+    output += "/disablenews \n"
+    output += "/enablenews\n"
+    output += "/contributors"
     return output
 
 def rapp_cmd():
