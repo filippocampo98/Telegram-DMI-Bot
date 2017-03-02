@@ -38,15 +38,18 @@ tokenconf = tokenconf.replace("\n", "")
 TOKEN = tokenconf      		#Token of your telegram bot that you created from @BotFather, write it on token.conf
 
 def getLezioni():
-    r = requests.get('http://localhost/PHP-DMI-API/result/lezioni.json')
+    r = requests.get('http://localhost/PHP-DMI-API/result/lezioni_dmi.json')
     if(r.status_code == requests.codes.ok):
         print r.json()["status"]["lastupdate"]
 
-def lezioni(bot, update):
+def lezioni(bot, update, args):
     checkLog(bot, update,"lezioni")
-	#messageText = prof_cmd(update.message.text)
+    messageText = "Vuoto"
+    if(args):
+        print(args)
+        messageText = ' '.join(args)
     getLezioni()
-    bot.sendMessage(chat_id=update.message.chat_id, text="CiaoCompa" + update.message.text)
+    bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
 
 def getProfessori(input):
     with open("data/json/professori.json") as data_file:
@@ -193,12 +196,12 @@ def sstudenti_cmd():
 	return output
 
 def cea_cmd():
-        output  = "Centro per i sistemi di elaborazione e le applicazioni scientifiche e didattiche (CEA)\n"
-        output += "📞 0957307560 - fax: 0957307544\n"
-	output += "✉️ cea@unict.it\n"
-	output += "Via Santa Maria del Rosario, 9 - via Sangiuliano 257 (terzo piano) - 95131 Catania\n"
-	output += "http://archivio.unict.it/cea"
-	return output
+    output  = "Centro per i sistemi di elaborazione e le applicazioni scientifiche e didattiche (CEA)\n"
+    output += "📞 0957307560 - fax: 0957307544\n"
+    output += "✉️ cea@unict.it\n"
+    output += "Via Santa Maria del Rosario, 9 - via Sangiuliano 257 (terzo piano) - 95131 Catania\n"
+    output += "http://archivio.unict.it/cea"
+    return output
 
 def ersu_cmd():
 	output  = "ERSU Catania - sede centrale\n"

@@ -39,7 +39,7 @@ def main():
 	dp.add_handler(RegexHandler('/contributors',contributors))
 	dp.add_handler(RegexHandler('/forum',forum_bot))
 
-	dp.add_handler(RegexHandler('/lezioni',lezioni))
+	dp.add_handler(CommandHandler('lezioni', lezioni, pass_args=True))
 
 	if (disable_drive == 0):
 	  dp.add_handler(RegexHandler('/drive',drive))
