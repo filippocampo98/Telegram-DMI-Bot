@@ -20,6 +20,11 @@ from bs4 import BeautifulSoup
 import sqlite3
 import logging
 
+import calendar
+import locale
+
+locale.setlocale(locale.LC_ALL, 'it_IT.utf8')
+
 # debug
 disable_chatid_logs = 1 #news, stats
 disable_db = 1          #stats, drive
@@ -47,11 +52,9 @@ def lezioni_cmd(args):
             if(args[0].lower() in item["insegnamento"].lower()):
                 output += "*Insegnamento:* " + item["insegnamento"]
                 output += "\n*Aula:* " + item["aula"]
-                output += "\n*Lunedi:*" + item["lunedi"]
-                output += "\n*Martedi:* " + item["martedi"]
-                output += "\n*Mercoledi:* " + item["mercoledi"]
-                output += "\n*Giovedi:* " + item["giovedi"]
-                output += "\n*Venerdi:* " + item["venerdi"]
+                for day in list(calendar.day_name):
+                    if(day.replace('ì','i') in item and item[day.replace('ì','i')] != ""):
+                        output += "\n*" + day.title() + ":* " + item[day.replace('ì','i')]
                 output += "\n*Anno:* " + item["anno"] + "\n\n"
 
     return output
