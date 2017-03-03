@@ -56,6 +56,18 @@ def output_lezioni(item):
 
     return output
 
+def condition_lezioni(items, condition, *arg):
+    output = ""
+    for item in items:
+        if(arg):
+            if(arg[0] in item[condition].lower()):
+                output += output_lezioni(item)
+        else:
+            if(condition.replace('ì','i') in item and item[condition.replace('ì','i')] != ""):
+                output += output_lezioni(item)
+
+    return output
+
 def lezioni_cmd(args):
     # /lezioni oggi | domani | dayname | nomemateria | oggi anno | domani anno | dayname anno | anno
     output = ""
@@ -69,50 +81,35 @@ def lezioni_cmd(args):
 
         if(len(args) == 1):
             if(args[0] in daylist):
-
-                for item in items:
-                    if(args[0].replace('ì','i') in item and item[args[0].replace('ì','i')] != ""):
-                        output += output_lezioni(item)
+                output = condition_lezioni(items, args[0])
 
             elif(args[0] == "oggi"):
-
-                for item in items:
-                    if(time.strftime("%A").replace('ì','i') in item and item[time.strftime("%A").replace('ì','i')] != ""):
-                        output += output_lezioni(item)
+                output = condition_lezioni(items, time.strftime("%A"))
 
             elif(args[0] == "domani"):
-
                 tomorrow_date = datetime.datetime.today() + datetime.timedelta(1)
-                tomorrow_name = time.datetime.strftime(tomorrow_date,'%A')
-                '''
-                for item in items:
-                    if(tomorrow_name.replace('ì','i') in item and item[tomorrow_name.replace('ì','i')] != ""):
-                        output += output_lezioni(item)
-                '''
+                tomorrow_name = datetime.datetime.strftime(tomorrow_date,'%A')
+                output = condition_lezioni(items, tomorrow_name)
 
             elif(args[0] in ("primo", "secondo", "terzo")):
-
-                for item in items:
-                    if(args[0] in item["anno"].lower()):
-                        output += output_lezioni(item)
+                output = condition_lezioni(items, "anno", args[0])
 
             elif([item["insegnamento"].lower().find(args[0]) for item in items]):
+                output = condition_lezioni(items, "insegnamento", args[0])
 
-                for item in items:
-                    if(args[0] in item["insegnamento"].lower()):
-                        output += output_lezioni(item)
+            output += "_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
 
         elif(len(args) > 1):
             print "Parametri multi\n"
+        else:
+            output = "Inserisci almeno un parametro\n"
 
-        output += "_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
     return output
 
 def lezioni(bot, update, args):
     checkLog(bot, update, "lezioni")
-    if(args):
-        messageText = lezioni_cmd(args)
-        bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
+    messageText = lezioni_cmd(args)
+    bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
 def getProfessori(input):
     with open("data/json/professori.json") as data_file:
