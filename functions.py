@@ -22,6 +22,7 @@ import logging
 
 import calendar
 import locale
+import time
 
 locale.setlocale(locale.LC_ALL, 'it_IT.utf8')
 
@@ -42,6 +43,19 @@ tokenconf = open('config/token.conf', 'r').read()
 tokenconf = tokenconf.replace("\n", "")
 TOKEN = tokenconf      		#Token of your telegram bot that you created from @BotFather, write it on token.conf
 
+def output_lezioni(item):
+    daylist = list(calendar.day_name)
+    output = ""
+
+    output += "*Insegnamento:* " + item["insegnamento"]
+    output += "\n*Aula:* " + item["aula"]
+    for day in daylist:
+        if(day.replace('ì','i') in item and item[day.replace('ì','i')] != ""):
+            output += "\n*" + day.title() + ":* " + item[day.replace('ì','i')]
+    output += "\n*Anno:* " + item["anno"] + "\n\n"
+
+    return output
+
 def lezioni_cmd(args):
     # /lezioni oggi | domani | dayname | nomemateria | oggi anno | domani anno | dayname anno | anno
     output = ""
@@ -49,30 +63,46 @@ def lezioni_cmd(args):
     if(r.status_code == requests.codes.ok):
         items = r.json()["items"]
         daylist = list(calendar.day_name)
+        args = [x.lower() for x in args]
 
-        [x.lower() for x in args]
-        print args
-        '''
-        if("anno" in args)
-
-        if thing in some_list: args.remove(thing)
+        if 'anno' in args: args.remove('anno')
 
         if(len(args) == 1):
-            if(args[0].lower().replace('ì','i') in daylist):
-            elif()
+            if(args[0] in daylist):
+
+                for item in items:
+                    if(args[0].replace('ì','i') in item and item[args[0].replace('ì','i')] != ""):
+                        output += output_lezioni(item)
+
+            elif(args[0] == "oggi"):
+
+                for item in items:
+                    if(time.strftime("%A").replace('ì','i') in item and item[time.strftime("%A").replace('ì','i')] != ""):
+                        output += output_lezioni(item)
+
+            elif(args[0] == "domani"):
+
+                tomorrow_date = datetime.datetime.today() + datetime.timedelta(1)
+                tomorrow_name = time.datetime.strftime(tomorrow_date,'%A')
+
+                for item in items:
+                    if(tomorrow_name.replace('ì','i') in item and item[tomorrow_name.replace('ì','i')] != ""):
+                        output += output_lezioni(item)
+
+            elif(args[0] in ("primo", "secondo", "terzo")):
+
+                for item in items:
+                    if(args[0] in item["anno"].lower()):
+                        output += output_lezioni(item)
+
+            elif([item["insegnamento"].lower().find(args[0]) for item in items]):
+
+                for item in items:
+                    if(args[0] in item["insegnamento"].lower()):
+                        output += output_lezioni(item)
+
         elif(len(args) > 1):
-        '''
-
-
-        for item in items:
-            if(args[0].lower() in item["insegnamento"].lower()):
-                output += "*Insegnamento:* " + item["insegnamento"]
-                output += "\n*Aula:* " + item["aula"]
-                for day in daylist:
-                    if(day.replace('ì','i') in item and item[day.replace('ì','i')] != ""):
-                        output += "\n*" + day.title() + ":* " + item[day.replace('ì','i')]
-                output += "\n*Anno:* " + item["anno"] + "\n\n"
-
+            print "Parametri multi\n"
 
         output += "_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
     return output
