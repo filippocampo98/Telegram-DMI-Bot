@@ -84,10 +84,11 @@ def lezioni_cmd(args):
 
                 tomorrow_date = datetime.datetime.today() + datetime.timedelta(1)
                 tomorrow_name = time.datetime.strftime(tomorrow_date,'%A')
-
+                '''
                 for item in items:
                     if(tomorrow_name.replace('ì','i') in item and item[tomorrow_name.replace('ì','i')] != ""):
                         output += output_lezioni(item)
+                '''
 
             elif(args[0] in ("primo", "secondo", "terzo")):
 
