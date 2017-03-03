@@ -48,15 +48,33 @@ def lezioni_cmd(args):
     r = requests.get('http://localhost/PHP-DMI-API/result/lezioni_dmi.json')
     if(r.status_code == requests.codes.ok):
         items = r.json()["items"]
+        daylist = list(calendar.day_name)
+
+        [x.lower() for x in args]
+        print args
+        '''
+        if("anno" in args)
+
+        if thing in some_list: args.remove(thing)
+
+        if(len(args) == 1):
+            if(args[0].lower().replace('ì','i') in daylist):
+            elif()
+        elif(len(args) > 1):
+        '''
+
+
         for item in items:
             if(args[0].lower() in item["insegnamento"].lower()):
                 output += "*Insegnamento:* " + item["insegnamento"]
                 output += "\n*Aula:* " + item["aula"]
-                for day in list(calendar.day_name):
+                for day in daylist:
                     if(day.replace('ì','i') in item and item[day.replace('ì','i')] != ""):
                         output += "\n*" + day.title() + ":* " + item[day.replace('ì','i')]
                 output += "\n*Anno:* " + item["anno"] + "\n\n"
 
+
+        output += "_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
     return output
 
 def lezioni(bot, update, args):
