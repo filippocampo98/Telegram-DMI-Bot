@@ -36,7 +36,6 @@ def main():
 	dp.add_handler(RegexHandler('/santino',santino))
 
 	'''
-	dp.add_handler(RegexHandler('/liste',liste))
 	dp.add_handler(RegexHandler('/forum',forum_bot))
 	'''
 
@@ -51,6 +50,8 @@ def main():
 	dp.add_handler(CommandHandler('cus', lambda bot, update: custom_callback(bot, update, 'cus')))
 
 	dp.add_handler(CommandHandler('lezioni', lezioni, pass_args=True))
+	dp.add_handler(CommandHandler('esami', esami, pass_args=True))
+
 	dp.add_handler(CommandHandler('aulario', aulario))
 
 	if (disable_drive == 0):

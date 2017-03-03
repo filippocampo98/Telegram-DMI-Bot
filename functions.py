@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 #Telegram
 import telegram
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
@@ -8,10 +9,10 @@ from telegram.ext import Updater, Filters, MessageHandler, CommandHandler, Callb
 from pydrive.drive import GoogleDrive
 from pydrive.auth import GoogleAuth
 
-# custom classes
+#Custom classes
 from classes.StringParser import StringParser
 
-# system libraries
+#System libraries
 from datetime import date, datetime, timedelta
 import json,datetime,re,random,os,sys
 import requests
@@ -28,19 +29,18 @@ import time
 
 locale.setlocale(locale.LC_ALL, 'it_IT.utf8')
 
-# debug
+# Debug
 disable_chatid_logs = 1 #news, stats
 disable_db = 1          #stats, drive
 disable_drive = 1       #drive
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 logger = logging.getLogger(__name__)
 
 conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
 
-#token
+#Token
 tokenconf = open('config/token.conf', 'r').read()
 tokenconf = tokenconf.replace("\n", "")
 TOKEN = tokenconf      		#Token of your telegram bot that you created from @BotFather, write it on token.conf
@@ -149,6 +149,101 @@ def lezioni_cmd(args):
 def lezioni(bot, update, args):
     checkLog(bot, update, "lezioni")
     messageText = lezioni_cmd(args)
+    bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
+
+def output_esami(item, sessions):
+
+    output = ""
+    output += "*Insegnamento:* " + item["insegnamento"]
+    output += "\n*Docenti:* " + item["docenti"]
+
+    for session in sessions:
+        date = [x for x in item[session.lower()] if x]
+        if(date):
+            output += "\n*" + session.title() + ":* " + " | ".join(date)
+
+    output += "\n*Anno:* " + item["anno"] + "\n"
+
+    return output
+
+def condition_esami(items, condition, value, session):
+    output = Set()
+    if(session):
+        for item in items:
+            ss = [x for x in item[value] if x]
+            if(ss):
+                output.add(output_esami(item, [value]))
+    else:
+        for item in items:
+            if(value in item[condition].lower()):
+                output.add(output_esami(item, ("prima", "seconda", "terza", "straordinaria")))
+
+    return output
+
+def esami_cmd(args):
+
+    # /esami nomemateria n sessione
+    # /esami anno sessione
+
+    output = Set()
+    r = requests.get('http://localhost/PHP-DMI-API/result/esami_dmi.json')
+    if(r.status_code == requests.codes.ok):
+
+        items = r.json()["items"]
+        daylist = list(calendar.day_name)
+
+        args = [x.lower().encode('utf-8') for x in args if len(x) > 2]
+        if 'anno' in args: args.remove('anno')
+        if 'sessione' in args: args.remove('sessione')
+
+        if(len(args) == 1):
+
+            if(args[0] in ("primo", "secondo", "terzo")):
+                output = condition_esami(items, "anno", args[0], False)
+
+            elif(args[0] in ("prima", "seconda", "terza", "straordinaria")):
+                output = condition_esami(items, "sessione", args[0], True)
+
+            elif([item["insegnamento"].lower().find(args[0]) for item in items]):
+                output = condition_esami(items, "insegnamento", args[0], False)
+
+            if(len(output)):
+                string = '\n'.join(list(output))
+                string += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
+            else:
+                string = "Nessun risultato trovato :(\n"
+
+        elif(len(args) > 1):
+
+            sessions = list(set(args).intersection(("prima", "seconda", "terza", "straordinaria")))
+            years = list(set(args).intersection(("primo", "secondo", "terzo")))
+
+            if(sessions and years):
+                for item in items:
+                    if( [year for year in years if year in item["anno"].lower()] ):
+                        for ss in sessions:
+                            if([y for y in [x for x in item[ss] if x] if y]):
+                                output.add(output_esami(item, sessions))
+
+            elif(sessions and not years):
+                print("sessioni e materie")
+            else:
+                for arg in args:
+                    output = output.union(condition_esami(items, "insegnamento", arg, False))
+
+            if(len(output)):
+                string = '\n'.join(list(output))
+                string += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
+            else:
+                string = "Nessun risultato trovato :(\n"
+        else:
+            string = "Inserisci almeno un parametro.\n"
+
+    return string
+
+def esami(bot, update, args):
+    checkLog(bot, update, "esami")
+    messageText = esami_cmd(args)
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
 def getProfessori(input):
@@ -598,13 +693,6 @@ def santino(bot, update):
 	messageText = santino_cmd()
 	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
-def liste(bot, update):
-	checkLog(bot, update,"liste")
-	picture = open("data/img/liste.png", "rb")
-	messageText = "Liste e candidati"
-	bot.sendPhoto(chat_id=update.message.chat_id, photo=picture)
-	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
-
 def forum_bot(bot, update):
 	checkLog(bot, update,"forum_bot")
 	messageText = forum_cmd(update.message.text)
@@ -642,7 +730,6 @@ def disablenews(bot, update):
 		messageText = "News già disabilitate!"
 	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
-
 def enablenews(bot, update):
 	checkLog(bot, update,"enablenews")
 	chat_ids = open('logs/chatid.txt', 'r').read()
@@ -657,7 +744,7 @@ def enablenews(bot, update):
 
 # check if user (chatid) is registered on chatid.txt
 
-def stats(bot,update):
+def stats(bot, update):
     chat_id = update.message.chat_id
     conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
     if(len(update['message']['text'].split(' '))==2):
@@ -673,7 +760,7 @@ def stats(bot,update):
         text+=str(row[1])+": "+str(row[0])+"\n"
     bot.sendMessage(chat_id=chat_id,text=text)
 
-def statsTot(bot,update):
+def statsTot(bot, update):
     chat_id = update.message.chat_id
     conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
     text=""
@@ -682,8 +769,7 @@ def statsTot(bot,update):
         text+=str(row[1])+": "+str(row[0])+"\n"
     bot.sendMessage(chat_id=chat_id,text=text)
 
-
-def checkLog(bot, update,type):
+def checkLog(bot, update, type):
     if (disable_db == 0):
         chat_id = update.message.chat_id
         conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
