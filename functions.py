@@ -233,109 +233,26 @@ def help_cmd():
     output += "/contributors"
     return output
 
-def sdidattica_cmd():
-	output  = "Sede presso il Dipartimento di Matematica e Informatica (primo piano vicino al laboratorio) \n\n"
-	output += "Sig.ra Cristina Mele\n"
-	output += "📞 095/7337227\n"
-	output += "✉️ cmele@dmi.unict.it\n\n"
-	output += "🕑 Orari:\n"
-	output += "Martedì dalle 10:30 alle 12:30\n"
-	output += "Giovedì dalle 10:30 alle 12:30"
-	return output
-
-def sstudenti_cmd():
-	output  = "Segreteria studenti\n"
-	output += "Sede presso la Cittadella Universitaria (vicino la mensa)\n\n"
-	output += "Via S. Sofia, 64 ed. 11 - 95125 Catania\n"
-	output += "📞 095.7386103, 6119, 6109, 6125, 6129, 6123, 6122, 6106, 6107, 6121\n"
-	output += "✉️ settore.scientifico@unict.it\n\n"
-	output += "🕑 Orario invernale:\n"
-	output += "Lunedi\': 10:00 - 12.30\n"
-	output += "Martedi\': 10:00 -12:30 | 15:00 - 16:30\n"
-	output += "Giovedi\': 10:00 - 12:30 | 15:00 - 16:30\n"
-	output += "Venerdi\': 10:00 - 12:30"
-	return output
-
-def cea_cmd():
-    output  = "Centro per i sistemi di elaborazione e le applicazioni scientifiche e didattiche (CEA)\n"
-    output += "📞 0957307560 - fax: 0957307544\n"
-    output += "✉️ cea@unict.it\n"
-    output += "Via Santa Maria del Rosario, 9 - via Sangiuliano 257 (terzo piano) - 95131 Catania\n"
-    output += "http://archivio.unict.it/cea"
-    return output
-
-def ersu_cmd():
-	output  = "ERSU Catania - sede centrale\n"
-	output += "Sede presso Via Etnea, 570\n\n"
-	output += "📞 095/7517940 (ore 9:00/12:00)\n"
-	output += "✉️ urp@ersucatania.gov.it\n\n"
-	output += "🕑 Orari:\n"
-	output += "Lunedì: 09:00 - 12:00\n"
-	output += "Mercoledì: 15:30 - 18:00\n"
-	output += "Venerdì: 09:00 - 12:00"
-	return output
-
-def ufficio_ersu_cmd():
-	output  = "ERSU Catania - Ufficio Tesserini\n"
-	output += "Sede della Cittadella (accanto l\'ingresso della Casa dello Studente)\n\n"
-	output += "🕑 Orari:\n"
-	output += "martedì-giovedì dalle 9.00 alle 12.30 \n\n"
-	output += "UfficioErsu vicino la mensa Oberdan\n"
-	output += "lunedì-mercoledì-venerdì dalle 09.00 alle 12.30 \n"
-	output += "mercoledì 15:00 - 18.00:"
-	return output
-
-def urp_cmd():
-	output = "URP Studenti\n"
-	output += "Sede in Via A.di Sangiuliano, 44\n\n"
-	output += "📞 800894327 (da fisso), 095 6139202/1/0\n"
-	output += "✉️ urp-studenti@unict.it"
-	return output
-
-def mensa_cmd():
-	output  = "🕑 Orario Mensa\n"
-	output += "pranzo dalle ore 12,00 alle ore 14,30\n"
-	output += "cena dalle ore 19,00 alle ore 21,30"
-	return output
-
-def biblioteca_cmd():
-	output  = "Sala Lettura:\n"
-	output += "lunedì - venerdì 08.00 - 19.00 \n\n"
-	output += "Servizio Distribuzione: \n"
-	output += "lunedì - giovedì 08.30 - 14.00 \n"
-	output += "lunedì - giovedì 14.30 - 16.30 \n"
-	output += "venerdì  08.30 - 13.30"
-	return output
-
-def cus_cmd():
-	output = "CUS Catania\n"
-	output += "Viale A. Doria n° 6  - 95125 Catania \n"
-	output += "📞 095336327- fax 095336478 \n"
-	output += "✉ info@cuscatania.it\n"
-	output += "http://www.cuscatania.it/Contatti.aspx";
-	return output
-
 def contributors_cmd():
 	output = "@Helias, @adriano_effe, @Veenz, @simone989\n"
 	output +="https://github.com/UNICT-DMI/Telegram-DMI-Bot.git"
 	return output
 
-list_cmd = {'sdidattica' : sdidattica_cmd,
-            'sstudenti' : sstudenti_cmd,
-            'cea' : cea_cmd,
-            'ersu' : ersu_cmd,
-            'ufficioersu' : ufficio_ersu_cmd,
-            'urp' : urp_cmd,
-            'mensa' : mensa_cmd,
-            'biblioteca' : biblioteca_cmd,
-            'cus' : cus_cmd,
-            'contributors' : contributors_cmd
-            }
+def contributors(bot, update):
+	checkLog(bot, update, "contributors")
+	messageText = contributors_cmd()
+	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+
+def read_md(namefile):
+    in_file = open("data/markdown/" + namefile + ".md","r")
+    text = in_file.read()
+    in_file.close()
+    return text
 
 def custom_callback(bot, update, cmd):
     checkLog(bot, update, cmd)
-    messageText = list_cmd[cmd]()
-    bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+    messageText = read_md(cmd)
+    bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
 def prof_cmd(text):
 	text = text.replace("@dmi_bot", "")

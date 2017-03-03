@@ -15,7 +15,9 @@ def main():
 	updater = Updater(TOKEN)
 	dp = updater.dispatcher
 	dp.add_handler(MessageHandler(Filters.all, record_everything),1)
+
 	dp.add_handler(RegexHandler('/help',help))
+	dp.add_handler(CommandHandler('contributors',contributors))
 
 	dp.add_handler(CommandHandler('rappresentanti',rappresentanti))
 	dp.add_handler(CommandHandler('rappresentanti_dmi',rappresentanti_dmi))
@@ -47,7 +49,6 @@ def main():
 	dp.add_handler(CommandHandler('mensa', lambda bot, update: custom_callback(bot, update, 'mensa')))
 	dp.add_handler(CommandHandler('biblioteca', lambda bot, update: custom_callback(bot, update, 'biblioteca')))
 	dp.add_handler(CommandHandler('cus', lambda bot, update: custom_callback(bot, update, 'cus')))
-	dp.add_handler(CommandHandler('contributors', lambda bot, update: custom_callback(bot, update, 'contributors')))
 
 	dp.add_handler(CommandHandler('lezioni', lezioni, pass_args=True))
 	dp.add_handler(CommandHandler('aulario', aulario))
