@@ -20,6 +20,8 @@ from bs4 import BeautifulSoup
 import sqlite3
 import logging
 
+from pprint import pprint
+from sets import Set
 import calendar
 import locale
 import time
@@ -52,34 +54,44 @@ def output_lezioni(item):
     for day in daylist:
         if(day.replace('ì','i') in item and item[day.replace('ì','i')] != ""):
             output += "\n*" + day.title() + ":* " + item[day.replace('ì','i')]
-    output += "\n*Anno:* " + item["anno"] + "\n\n"
+    output += "\n*Anno:* " + item["anno"] + "\n"
 
     return output
 
 def condition_lezioni(items, condition, *arg):
-    output = ""
+    output = Set()
     for item in items:
         if(arg):
             if(arg[0] in item[condition].lower()):
-                output += output_lezioni(item)
+                output.add(output_lezioni(item))
         else:
             if(condition.replace('ì','i') in item and item[condition.replace('ì','i')] != ""):
-                output += output_lezioni(item)
+                output.add(output_lezioni(item))
 
     return output
 
+def condition_mult_lezioni(days, years, items):
+    output = Set()
+    for item in items:
+        for day in days:
+            if( [year for year in years if year in item["anno"].lower()] ):
+                if(day.replace('ì','i') in item and item[day.replace('ì','i')] != ""):
+                    output.add(output_lezioni(item))
+    return output
+
 def lezioni_cmd(args):
-    # /lezioni oggi | domani | dayname | nomemateria | oggi anno | domani anno | dayname anno | anno
-    output = ""
+    output = Set()
     r = requests.get('http://localhost/PHP-DMI-API/result/lezioni_dmi.json')
     if(r.status_code == requests.codes.ok):
+
         items = r.json()["items"]
         daylist = list(calendar.day_name)
-        args = [x.lower() for x in args]
 
+        args = [x.lower().encode('utf-8') for x in args if len(x) > 2]
         if 'anno' in args: args.remove('anno')
 
         if(len(args) == 1):
+
             if(args[0] in daylist):
                 output = condition_lezioni(items, args[0])
 
@@ -97,14 +109,38 @@ def lezioni_cmd(args):
             elif([item["insegnamento"].lower().find(args[0]) for item in items]):
                 output = condition_lezioni(items, "insegnamento", args[0])
 
-            output += "_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
-
         elif(len(args) > 1):
-            print "Parametri multi\n"
-        else:
-            output = "Inserisci almeno un parametro\n"
 
-    return output
+            days = list(set(args).intersection(daylist))
+            years = list(set(args).intersection(("primo", "secondo", "terzo")))
+
+            if(days and years):
+                output = condition_mult_lezioni(days, years, items)
+
+            elif("oggi" in args and years):
+                days = [time.strftime("%A")]
+                output = condition_mult_lezioni(days, years, items)
+
+            elif("domani" in args and years):
+                tomorrow_date = datetime.datetime.today() + datetime.timedelta(1)
+                tomorrow_name = datetime.datetime.strftime(tomorrow_date,'%A')
+                days = [tomorrow_name]
+                output = condition_mult_lezioni(days, years, items)
+
+            else:
+                for arg in args:
+                    output = output.union(condition_lezioni(items, "insegnamento", arg))
+
+        else:
+            output.add("Inserisci almeno un parametro.\n")
+
+    if(len(output)):
+        string = '\n'.join(list(output))
+        string += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
+    else:
+        string = "Nessun risultato trovato :(\n"
+
+    return string
 
 def lezioni(bot, update, args):
     checkLog(bot, update, "lezioni")
