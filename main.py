@@ -16,30 +16,41 @@ def main():
 	dp = updater.dispatcher
 	dp.add_handler(MessageHandler(Filters.all, record_everything),1)
 	dp.add_handler(RegexHandler('/help',help))
-	dp.add_handler(RegexHandler('/rappresentanti',rappresentanti))
-	dp.add_handler(RegexHandler('/rappresentanti_dmi',rappresentanti_dmi))
-	dp.add_handler(RegexHandler('/rappresentanti_informatica',rappresentanti_info))
-	dp.add_handler(RegexHandler('/rappresentanti_matematica',rappresentanti_mate))
-	dp.add_handler(RegexHandler('/sdidattica',sdidattica))
-	dp.add_handler(RegexHandler('/sstudenti',sstudenti))
-	dp.add_handler(RegexHandler('/cea',cea))
-	dp.add_handler(RegexHandler('/ersu',ersu))
-	dp.add_handler(RegexHandler('/ufficioersu',ufficioersu))
-	dp.add_handler(RegexHandler('/urp',urp))
+
+	dp.add_handler(CommandHandler('rappresentanti',rappresentanti))
+	dp.add_handler(CommandHandler('rappresentanti_dmi',rappresentanti_dmi))
+	dp.add_handler(CommandHandler('rappresentanti_informatica',rappresentanti_info))
+	dp.add_handler(CommandHandler('rappresentanti_matematica',rappresentanti_mate))
+
 	dp.add_handler(RegexHandler('/prof',prof))
+
+	'''
 	dp.add_handler(RegexHandler('/esami',esami))
+	'''
+
 	dp.add_handler(RegexHandler('/mesami',mesami))
-	dp.add_handler(RegexHandler('/aulario',aulario))
-	dp.add_handler(RegexHandler('/mensa',mensa))
-	dp.add_handler(RegexHandler('/biblioteca',biblioteca))
-	dp.add_handler(RegexHandler('/cus',cus))
+
 	dp.add_handler(RegexHandler('/smonta_portoni',smonta_portoni))
 	dp.add_handler(RegexHandler('/santino',santino))
+
+	'''
 	dp.add_handler(RegexHandler('/liste',liste))
-	dp.add_handler(RegexHandler('/contributors',contributors))
 	dp.add_handler(RegexHandler('/forum',forum_bot))
+	'''
+
+	dp.add_handler(CommandHandler('sdidattica', lambda bot, update: custom_callback(bot, update, 'sdidattica')))
+	dp.add_handler(CommandHandler('sstudenti', lambda bot, update: custom_callback(bot, update, 'sstudenti')))
+	dp.add_handler(CommandHandler('cea', lambda bot, update: custom_callback(bot, update, 'cea')))
+	dp.add_handler(CommandHandler('ersu', lambda bot, update: custom_callback(bot, update, 'ersu')))
+	dp.add_handler(CommandHandler('ufficioersu', lambda bot, update: custom_callback(bot, update, 'ufficioersu')))
+	dp.add_handler(CommandHandler('urp', lambda bot, update: custom_callback(bot, update, 'urp')))
+	dp.add_handler(CommandHandler('mensa', lambda bot, update: custom_callback(bot, update, 'mensa')))
+	dp.add_handler(CommandHandler('biblioteca', lambda bot, update: custom_callback(bot, update, 'biblioteca')))
+	dp.add_handler(CommandHandler('cus', lambda bot, update: custom_callback(bot, update, 'cus')))
+	dp.add_handler(CommandHandler('contributors', lambda bot, update: custom_callback(bot, update, 'contributors')))
 
 	dp.add_handler(CommandHandler('lezioni', lezioni, pass_args=True))
+	dp.add_handler(CommandHandler('aulario', aulario))
 
 	if (disable_drive == 0):
 	  dp.add_handler(RegexHandler('/drive',drive))

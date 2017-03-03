@@ -70,7 +70,7 @@ def condition_lezioni(items, condition, *arg):
 
     return output
 
-def condition_mult_lezioni(days, years, items):
+def condition_mult_lezioni(items, days, years):
     output = Set()
     for item in items:
         for day in days:
@@ -109,36 +109,40 @@ def lezioni_cmd(args):
             elif([item["insegnamento"].lower().find(args[0]) for item in items]):
                 output = condition_lezioni(items, "insegnamento", args[0])
 
+            if(len(output)):
+                string = '\n'.join(list(output))
+                string += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
+            else:
+                string = "Nessun risultato trovato :(\n"
         elif(len(args) > 1):
 
             days = list(set(args).intersection(daylist))
             years = list(set(args).intersection(("primo", "secondo", "terzo")))
 
             if(days and years):
-                output = condition_mult_lezioni(days, years, items)
+                output = condition_mult_lezioni(items, days, years)
 
             elif("oggi" in args and years):
                 days = [time.strftime("%A")]
-                output = condition_mult_lezioni(days, years, items)
+                output = condition_mult_lezioni(items, days, years)
 
             elif("domani" in args and years):
                 tomorrow_date = datetime.datetime.today() + datetime.timedelta(1)
                 tomorrow_name = datetime.datetime.strftime(tomorrow_date,'%A')
                 days = [tomorrow_name]
-                output = condition_mult_lezioni(days, years, items)
+                output = condition_mult_lezioni(items, days, years)
 
             else:
                 for arg in args:
                     output = output.union(condition_lezioni(items, "insegnamento", arg))
 
+            if(len(output)):
+                string = '\n'.join(list(output))
+                string += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
+            else:
+                string = "Nessun risultato trovato :(\n"
         else:
-            output.add("Inserisci almeno un parametro.\n")
-
-    if(len(output)):
-        string = '\n'.join(list(output))
-        string += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
-    else:
-        string = "Nessun risultato trovato :(\n"
+            string = "Inserisci almeno un parametro.\n"
 
     return string
 
@@ -229,45 +233,6 @@ def help_cmd():
     output += "/contributors"
     return output
 
-def rapp_cmd():
-	output = "Usa uno dei seguenti comandi per mostrare i rispettivi rappresentanti\n"
-	output += "/rappresentanti_dmi\n"
-	output += "/rappresentanti_informatica\n"
-	output += "/rappresentanti_matematica"
-	return output
-
-def rapp_dmi_cmd():
-	output =  "Rappresentanti DMI\n"
-	output += "Aliperti Vincenzo - @VAliperti\n"
-	output += "Apa Marco - @MarcoApa\n"
-	output += "Borzì Stefano - @Helias\n"
-	output += "Costa Alberto - @knstrct\n"
-	output += "Marroccia Marco - @MarcoLebon\n"
-	output += "Mattia Ferdinando Alessandro - @AlessandroMattia\n"
-	output += "Presente Fabrizio\n"
-	output += "Petralia Luca- @lucapppla\n"
-	output += "Rapisarda Simone - @CarlinoMalvagio\n"
-	output += "Ricordo che per segnalare qualcosa a tutti i rappresentanti si può utilizzare l'email reportdmiunict@gmail.com"
-	return output
-
-def rapp_inf_cmd():
-	output =  "Rappresentanti Inforamtica\n"
-	output += "Aliperti Vincenzo - @VAliperti\n"
-	output += "Apa Marco - @MarcoApa\n"
-	output += "Borzì Stefano - @Helias\n"
-	output += "Costa Alberto - @knstrct\n"
-	output += "Giangreco Antonio - @Antonio0793\n"
-	output += "Marroccia Marco - @MarcoLebon\n"
-	return output
-
-def rapp_mat_cmd():
-	output =  "Rappresentanti Matematica\n"
-	output += "Alessandro Massimiliano - @massi_94\n"
-	output += "De Cristofaro Gaetano\n"
-	output += "Pratissoli Mirco - @Mirko291194\n"
-	output += "Sciuto Rita - @RitaSciuto"
-	return output
-
 def sdidattica_cmd():
 	output  = "Sede presso il Dipartimento di Matematica e Informatica (primo piano vicino al laboratorio) \n\n"
 	output += "Sig.ra Cristina Mele\n"
@@ -327,12 +292,6 @@ def urp_cmd():
 	output += "✉️ urp-studenti@unict.it"
 	return output
 
-def prof_cmd(text):
-	text = text.replace("@dmi_bot", "")
-	text = text.replace("/prof ", "")
-	output = getProfessori(text)
-	return output
-
 def mensa_cmd():
 	output  = "🕑 Orario Mensa\n"
 	output += "pranzo dalle ore 12,00 alle ore 14,30\n"
@@ -354,6 +313,73 @@ def cus_cmd():
 	output += "📞 095336327- fax 095336478 \n"
 	output += "✉ info@cuscatania.it\n"
 	output += "http://www.cuscatania.it/Contatti.aspx";
+	return output
+
+def contributors_cmd():
+	output = "@Helias, @adriano_effe, @Veenz, @simone989\n"
+	output +="https://github.com/UNICT-DMI/Telegram-DMI-Bot.git"
+	return output
+
+list_cmd = {'sdidattica' : sdidattica_cmd,
+            'sstudenti' : sstudenti_cmd,
+            'cea' : cea_cmd,
+            'ersu' : ersu_cmd,
+            'ufficioersu' : ufficio_ersu_cmd,
+            'urp' : urp_cmd,
+            'mensa' : mensa_cmd,
+            'biblioteca' : biblioteca_cmd,
+            'cus' : cus_cmd,
+            'contributors' : contributors_cmd
+            }
+
+def custom_callback(bot, update, cmd):
+    checkLog(bot, update, cmd)
+    messageText = list_cmd[cmd]()
+    bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+
+def prof_cmd(text):
+	text = text.replace("@dmi_bot", "")
+	text = text.replace("/prof ", "")
+	output = getProfessori(text)
+	return output
+
+def rapp_cmd():
+	output = "Usa uno dei seguenti comandi per mostrare i rispettivi rappresentanti\n"
+	output += "/rappresentanti_dmi\n"
+	output += "/rappresentanti_informatica\n"
+	output += "/rappresentanti_matematica"
+	return output
+
+def rapp_dmi_cmd():
+	output =  "Rappresentanti DMI\n"
+	output += "Aliperti Vincenzo - @VAliperti\n"
+	output += "Apa Marco - @MarcoApa\n"
+	output += "Borzì Stefano - @Helias\n"
+	output += "Costa Alberto - @knstrct\n"
+	output += "Marroccia Marco - @MarcoLebon\n"
+	output += "Mattia Ferdinando Alessandro - @AlessandroMattia\n"
+	output += "Presente Fabrizio\n"
+	output += "Petralia Luca- @lucapppla\n"
+	output += "Rapisarda Simone - @CarlinoMalvagio\n"
+	output += "Ricordo che per segnalare qualcosa a tutti i rappresentanti si può utilizzare l'email reportdmiunict@gmail.com"
+	return output
+
+def rapp_inf_cmd():
+	output =  "Rappresentanti Inforamtica\n"
+	output += "Aliperti Vincenzo - @VAliperti\n"
+	output += "Apa Marco - @MarcoApa\n"
+	output += "Borzì Stefano - @Helias\n"
+	output += "Costa Alberto - @knstrct\n"
+	output += "Giangreco Antonio - @Antonio0793\n"
+	output += "Marroccia Marco - @MarcoLebon\n"
+	return output
+
+def rapp_mat_cmd():
+	output =  "Rappresentanti Matematica\n"
+	output += "Alessandro Massimiliano - @massi_94\n"
+	output += "De Cristofaro Gaetano\n"
+	output += "Pratissoli Mirco - @Mirko291194\n"
+	output += "Sciuto Rita - @RitaSciuto"
 	return output
 
 #Easter egg
@@ -381,11 +407,6 @@ def santino_cmd():
         output = "https://s12.postimg.org/5d7y88pj1/photo_2016_11_24_11_04_29.jpg"
 
     return output
-
-def contributors_cmd():
-	output = "@Helias, @adriano_effe, @Veenz, @simone989\n"
-	output +="https://github.com/UNICT-DMI/Telegram-DMI-Bot.git"
-	return output
 
 def forum_cmd(text):
 	text = text.replace("/forum ","")
@@ -635,44 +656,9 @@ def rappresentanti_mate(bot, update):
 	messageText = rapp_mat_cmd()
 	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
 
-def sdidattica(bot, update):
-	checkLog(bot, update,"sdidattica")
-	messageText = sdidattica_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def sstudenti(bot, update):
-	checkLog(bot, update,"sstudenti")
-	messageText = sstudenti_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def cea(bot, update):
-	checkLog(bot, update,"cea")
-	messageText = cea_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def ersu(bot, update):
-	checkLog(bot, update,"ersu")
-	messageText = ersu_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def ufficioersu(bot, update):
-	checkLog(bot, update,"ufficioersu")
-	messageText = ufficio_ersu_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def urp(bot, update):
-	checkLog(bot, update,"urp")
-	messageText = urp_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
 def prof(bot, update):
 	checkLog(bot, update,"prof")
 	messageText = prof_cmd(update.message.text)
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def esami(bot, update):
-	checkLog(bot, update,"esami")
-	messageText = "http://web.dmi.unict.it/Didattica/Laurea%20Triennale%20in%20Informatica%20L-31/Calendario%20dEsami"
 	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
 
 def mesami(bot, update):
@@ -684,21 +670,6 @@ def aulario(bot, update):
 	checkLog(bot, update,"aulario")
 	messageText = 'http://aule.dmi.unict.it/aulario/roschedule.php'
 	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def mensa(bot, update):
-	checkLog(bot, update,"mensa")
-	messageText = mensa_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def biblioteca(bot, update):
-	checkLog(bot, update,"biblioteca")
-	messageText= biblioteca_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def cus(bot, update):
-	checkLog(bot, update,"cus")
-	messageText= cus_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
 def smonta_portoni(bot, update):
 	checkLog(bot, update,"smonta_portoni")
@@ -715,11 +686,6 @@ def liste(bot, update):
 	picture = open("data/img/liste.png", "rb")
 	messageText = "Liste e candidati"
 	bot.sendPhoto(chat_id=update.message.chat_id, photo=picture)
-	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
-
-def contributors(bot, update):
-	checkLog(bot, update,"contributors")
-	messageText = contributors_cmd()
 	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
 def forum_bot(bot, update):
