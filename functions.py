@@ -157,9 +157,12 @@ def lezioni_cmd(args, link):
 
     return output_str
 
-def lezioni(bot, update, args):
+def lezioni(bot, update, args, *m):
     checkLog(bot, update, "lezioni")
-    messageText = lezioni_cmd(args, 'http://188.213.170.165/PHP-DMI-API/result/lezioni_dmi.json')
+    if(m):
+        messageText = "_Command under developement._\nControlla la risorsa da te richiesta sul [sito](http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20delle%20Lezioni)"
+    else:
+        messageText = lezioni_cmd(args, 'http://188.213.170.165/PHP-DMI-API/result/lezioni_dmi.json')
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
 #Esami
@@ -272,35 +275,13 @@ def esami_cmd(args, link):
 
     return output_str
 
-def esami(bot, update, args):
+def esami(bot, update, args, *m):
     checkLog(bot, update, "esami")
-    messageText = esami_cmd(args, 'http://188.213.170.165/PHP-DMI-API/result/esami_dmi.json')
+    if(m):
+        messageText = "_Command under developement._\nControlla la risorsa da te richiesta sul [sito](http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20degli%20Esami)"
+    else:
+        messageText = esami_cmd(args, 'http://188.213.170.165/PHP-DMI-API/result/esami_dmi.json')
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
-
-def getProfessori(input):
-    with open("data/json/professori.json") as data_file:
-        professori_data = json.load(data_file)
-
-    output = ""
-    i = 0
-
-    while(professori_data[i]["ID"] != "-1"):
-        if (input == "/prof"):
-	    return "La sintassi del comando è: /prof <nomeprofessore>"
-	if len(input) < 3:
-            return "Inserisci almeno 3 caratteri come nome/cognome del professore"
-        elif (( input.lower() in professori_data[i]["Nome"].lower() ) or ( input.lower() in professori_data[i]["Cognome"].lower() )):
-            output += "Ruolo: " + professori_data[i]["Ruolo"] + "\n"
-            output += "Cognome: " + professori_data[i]["Cognome"] + "\n"
-            output += "Nome: " + professori_data[i]["Nome"] + "\n"
-            output += "Indirizzo email : " + professori_data[i]["Email"] + "\n"
-            output += "Sito web: " + professori_data[i]["Sito"] + "\n"
-            output += "Scheda DMI: " + professori_data[i]["SchedaDMI"] + "\n\n"
-        i += 1
-    if output == "":
-        return "\nNon sono stati trovati risultati :(\n\n"
-
-    return output #Redefine with @TkdAlex
 
 def forum(sezione):
 
@@ -380,11 +361,41 @@ def custom_callback(bot, update, cmd):
     messageText = read_md(cmd)
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
-def prof_cmd(text):
-	text = text.replace("@dmi_bot", "")
-	text = text.replace("/prof ", "")
-	output = getProfessori(text)
-	return output
+def prof_output(prof):
+    output = "Ruolo: " + prof["Ruolo"] + "\n"
+    output += "Cognome: " + prof["Cognome"] + "\n"
+    output += "Nome: " + prof["Nome"] + "\n"
+    output += "Indirizzo email : " + prof["Email"] + "\n"
+    output += "Sito web: " + prof["Sito"] + "\n"
+    output += "Scheda DMI: " + prof["SchedaDMI"] + "\n"
+    return output
+
+def prof_cmd(profs):
+
+    output_str = "Poffarbacco, qualcosa non va. Segnalalo ai dev \contributors \n"
+
+    if(profs):
+
+        output = Set()
+        profs = [x.lower().encode('utf-8') for x in profs if len(x) > 3]
+
+        with open("data/json/professori.json") as data_file:
+            professori_data = json.load(data_file)
+
+        for prof in profs:
+            professori = [professore for professore in professori_data if (prof in professore["Nome"].lower() or prof in professore["Cognome"].lower())]
+            for professore in professori:
+                output.add(prof_output(professore))
+
+        if(len(output)):
+            output_str = '\n'.join(list(output))
+        else:
+            output_str = "Nessun risultato trovato :(\n"
+
+    else:
+        output_str = "La sintassi del comando è: /prof <nomeprofessore>\n"
+
+    return output_str
 
 def rapp_cmd():
 	output = "Usa uno dei seguenti comandi per mostrare i rispettivi rappresentanti\n"
@@ -699,14 +710,9 @@ def rappresentanti_mate(bot, update):
 	messageText = rapp_mat_cmd()
 	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
 
-def prof(bot, update):
-	checkLog(bot, update,"prof")
-	messageText = prof_cmd(update.message.text)
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def mesami(bot, update):
-	checkLog(bot, update,"mesami")
-	messageText = 'http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20degli%20Esami'
+def prof(bot, update, args):
+	checkLog(bot, update, "prof")
+	messageText = prof_cmd(args)
 	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
 
 def aulario(bot, update):

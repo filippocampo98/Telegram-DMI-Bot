@@ -24,14 +24,6 @@ def main():
 	dp.add_handler(CommandHandler('rappresentanti_informatica',rappresentanti_info))
 	dp.add_handler(CommandHandler('rappresentanti_matematica',rappresentanti_mate))
 
-	dp.add_handler(RegexHandler('/prof',prof))
-
-	'''
-	dp.add_handler(RegexHandler('/esami',esami))
-	'''
-
-	dp.add_handler(CommandHandler('mesami',mesami))
-
 	dp.add_handler(CommandHandler('smonta_portoni',smonta_portoni))
 	dp.add_handler(CommandHandler('santino',santino))
 
@@ -49,8 +41,15 @@ def main():
 	dp.add_handler(CommandHandler('biblioteca', lambda bot, update: custom_callback(bot, update, 'biblioteca')))
 	dp.add_handler(CommandHandler('cus', lambda bot, update: custom_callback(bot, update, 'cus')))
 
-	dp.add_handler(CommandHandler('lezioni', lezioni, pass_args=True))
-	dp.add_handler(CommandHandler('esami', esami, pass_args=True))
+	dp.add_handler(CommandHandler('cmd', lambda bot, update, args: cmdFunction(bot, update, 'cmd', args), pass_args=True))
+
+	dp.add_handler(CommandHandler('lezioni', lambda bot, update, args: lezioni(bot, update, args), pass_args=True))
+	dp.add_handler(CommandHandler('esami', lambda bot, update, args: esami(bot, update, args), pass_args=True))
+
+	dp.add_handler(CommandHandler('mlezioni', lambda bot, update, args: lezioni(bot, update, args, True), pass_args=True))
+	dp.add_handler(CommandHandler('mesami', lambda bot, update, args: esami(bot, update, args, True), pass_args=True))
+
+	dp.add_handler(CommandHandler('prof', prof, pass_args=True))
 
 	dp.add_handler(CommandHandler('aulario', aulario))
 
