@@ -45,6 +45,7 @@ tokenconf = open('config/token.conf', 'r').read()
 tokenconf = tokenconf.replace("\n", "")
 TOKEN = tokenconf      		#Token of your telegram bot that you created from @BotFather, write it on token.conf
 
+#Lezioni
 def output_lezioni(item):
     daylist = list(calendar.day_name)
     output = ""
@@ -153,114 +154,119 @@ def lezioni(bot, update, args):
     messageText = lezioni_cmd(args)
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
+#Esami
 def output_esami(item, sessions):
 
-    output = ""
-    output += "*Insegnamento:* " + item["insegnamento"]
+    output = "*Insegnamento:* " + item["insegnamento"]
     output += "\n*Docenti:* " + item["docenti"]
 
     for session in sessions:
-        date = [x for x in item[session.lower()] if x]
-        if(date):
-            output += "\n*" + session.title() + ":* " + " | ".join(date)
+        appeal = [appeal for appeal in item[session] if appeal]
+        if(appeal):
+            output += "\n*" + session.title() + ":* " + " | ".join(appeal)
 
     output += "\n*Anno:* " + item["anno"] + "\n"
 
     return output
 
-def condition_esami(items, condition, value, session):
+def condition_esami(items, field, value, *session):
     output = Set()
     if(session):
         for item in items:
-            ss = [x for x in item[value] if x]
-            if(ss):
+            if([appeal for appeal in item[value] if appeal]):
                 output.add(output_esami(item, [value]))
     else:
         for item in items:
-            if(value in item[condition].lower()):
+            if(value in item[field].lower()):
                 output.add(output_esami(item, ("prima", "seconda", "terza", "straordinaria")))
 
     return output
 
-def esami_cmd(args):
+def esami_cmd(args, link):
 
-    # /esami nomemateria n sessione
-    # /esami anno sessione
+    output_str = "Poffarbacco, qualcosa non va. Segnalalo ai dev \contributors \n"
 
-    output = Set()
-    r = requests.get('http://188.213.170.165/PHP-DMI-API/result/esami_dmi.json')
-    if(r.status_code == requests.codes.ok):
+    if(args):
+        output = Set()
+        r = requests.get(link)
+        if(r.status_code == requests.codes.ok):
 
-        items = r.json()["items"]
-        daylist = list(calendar.day_name)
+            items = r.json()["items"]
+            daylist = list(calendar.day_name)
 
-        args = [x.lower().encode('utf-8') for x in args if len(x) > 2]
-        if 'anno' in args: args.remove('anno')
-        if 'sessione' in args: args.remove('sessione')
+            #Clear arguments - Trasform all to lower case - Remove word 'anno', 'sessione'
+            args = [x.lower().encode('utf-8') for x in args if len(x) > 2]
+            if 'anno' in args: args.remove('anno')
+            if 'sessione' in args: args.remove('sessione')
 
-        if(len(args) == 1):
+            #Study case
+            if(len(args) == 1):
 
-            if(args[0] in ("primo", "secondo", "terzo")):
-                output = condition_esami(items, "anno", args[0], False)
+                if(args[0] in ("primo", "secondo", "terzo")):
+                    output = condition_esami(items, "anno", args[0])
 
-            elif(args[0] in ("prima", "seconda", "terza", "straordinaria")):
-                output = condition_esami(items, "sessione", args[0], True)
+                elif(args[0] in ("prima", "seconda", "terza", "straordinaria")):
+                    output = condition_esami(items, "sessione", args[0], True)
 
-            elif([item["insegnamento"].lower().find(args[0]) for item in items]):
-                output = condition_esami(items, "insegnamento", args[0], False)
+                elif([item["insegnamento"].lower().find(args[0]) for item in items]):
+                    output = condition_esami(items, "insegnamento", args[0])
 
-            if(len(output)):
-                string = '\n'.join(list(output))
-                string += "\n_Risultati trovati: " + str(len(output)) + "/" + str(r.json()["status"]["length"]) + "_"
-                string += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
-            else:
-                string = "Nessun risultato trovato :(\n"
+                if(len(output)):
+                    output_str = '\n'.join(list(output))
+                    output_str += "\n_Risultati trovati: " + str(len(output)) + "/" + str(r.json()["status"]["length"]) + "_"
+                    output_str += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
 
-        elif(len(args) > 1):
+                else:
+                    output_str = "Nessun risultato trovato :(\n"
 
-            sessions = list(set(args).intersection(("prima", "seconda", "terza", "straordinaria")))
-            years = list(set(args).intersection(("primo", "secondo", "terzo")))
+            elif(len(args) > 1):
 
-            if(sessions and years):
-                for item in items:
-                    if( [year for year in years if year in item["anno"].lower()] ):
-                        for ss in sessions:
-                            if([y for y in [x for x in item[ss] if x] if y]):
+                #Create an array of session and years if in arguments
+                sessions = list(set(args).intersection(("prima", "seconda", "terza", "straordinaria")))
+                years = list(set(args).intersection(("primo", "secondo", "terzo")))
+
+                if(sessions and years):
+                    for item in items:
+                        if(item["anno"].lower().replace("anno","").replace(" ", "") in years):
+                            if( [session for session in sessions if [appeal for appeal in item[session] if appeal]] ):
                                 output.add(output_esami(item, sessions))
 
-            elif(sessions and not years):
-                subjects = [x for x in args if x not in(sessions)]
-                for item in items:
-                    if(subjects):
-                        for subject in subjects:
-                            for ss in sessions:
-                                if([y for y in [x for x in item[ss] if x] if y]):
+                elif(sessions and not years):
+                    #If years array is empty and session not, the other word are subjects
+                    subjects = [arg for arg in args if arg not in(sessions)]
+
+                    for item in items:
+                        if(subjects):
+                            for subject in subjects:
+                                if( [session for session in sessions if [appeal for appeal in item[session] if appeal]] ):
                                     if(subject in item["insegnamento"].lower()):
                                         output.add(output_esami(item, sessions))
-                    else:
-                        for ss in sessions:
-                            if([y for y in [x for x in item[ss] if x] if y]):
+
+                        #List of session of all years [useless]
+                        '''
+                        else:
+                            if( [session for session in sessions if [appeal for appeal in item[session] if appeal]] ):
                                 output.add(output_esami(item, sessions))
+                        '''
 
+                else:
+                    for arg in args:
+                        output = output.union(condition_esami(items, "insegnamento", arg, False))
 
-            else:
-                for arg in args:
-                    output = output.union(condition_esami(items, "insegnamento", arg, False))
+                if(len(output)):
+                    output_str = '\n'.join(list(output))
+                    output_str += "\n_Risultati trovati: " + str(len(output)) + "/" + str(r.json()["status"]["length"]) + "_"
+                    output_str += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
+                else:
+                    output_str = "Nessun risultato trovato :(\n"
+    else:
+        output_str = "Inserisci almeno un parametro.\n"
 
-            if(len(output)):
-                string = '\n'.join(list(output))
-                string += "\n_Risultati trovati: " + str(len(output)) + "/" + str(r.json()["status"]["length"]) + "_"
-                string += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
-            else:
-                string = "Nessun risultato trovato :(\n"
-        else:
-            string = "Inserisci almeno un parametro.\n"
-
-    return string
+    return output_str
 
 def esami(bot, update, args):
     checkLog(bot, update, "esami")
-    messageText = esami_cmd(args)
+    messageText = esami_cmd(args, 'http://188.213.170.165/PHP-DMI-API/result/esami_dmi.json')
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
 def getProfessori(input):

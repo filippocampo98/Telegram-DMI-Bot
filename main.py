@@ -16,7 +16,7 @@ def main():
 	dp = updater.dispatcher
 	dp.add_handler(MessageHandler(Filters.all, record_everything),1)
 
-	dp.add_handler(RegexHandler('/help',help))
+	dp.add_handler(CommandHandler('help',help))
 	dp.add_handler(CommandHandler('contributors',contributors))
 
 	dp.add_handler(CommandHandler('rappresentanti',rappresentanti))
@@ -30,10 +30,10 @@ def main():
 	dp.add_handler(RegexHandler('/esami',esami))
 	'''
 
-	dp.add_handler(RegexHandler('/mesami',mesami))
+	dp.add_handler(CommandHandler('mesami',mesami))
 
-	dp.add_handler(RegexHandler('/smonta_portoni',smonta_portoni))
-	dp.add_handler(RegexHandler('/santino',santino))
+	dp.add_handler(CommandHandler('smonta_portoni',smonta_portoni))
+	dp.add_handler(CommandHandler('santino',santino))
 
 	'''
 	dp.add_handler(RegexHandler('/forum',forum_bot))
