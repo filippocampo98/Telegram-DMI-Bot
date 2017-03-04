@@ -11,4 +11,4 @@ data/DMI_DB.db
 module/__init__.pyc
 module/professori.pyc
 module/esami.pyc
-module/lezioni.py
+module/lezioni.pyc
