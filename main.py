@@ -16,7 +16,7 @@ def main():
 	dp = updater.dispatcher
 	dp.add_handler(MessageHandler(Filters.all, record_everything),1)
 
-  #Heaster eggd
+  	#Heaster eggd
 	dp.add_handler(CommandHandler('smonta_portoni',smonta_portoni))
 	dp.add_handler(CommandHandler('santino',santino))
 
@@ -24,7 +24,7 @@ def main():
 	dp.add_handler(RegexHandler('/forum',forum_bot))
 	'''
 
-  #Informative command
+  	#Informative command
 	dp.add_handler(CommandHandler('sdidattica', lambda bot, update: informative_callback(bot, update, 'sdidattica')))
 	dp.add_handler(CommandHandler('sstudenti', lambda bot, update: informative_callback(bot, update, 'sstudenti')))
 	dp.add_handler(CommandHandler('cea', lambda bot, update: informative_callback(bot, update, 'cea')))
@@ -44,7 +44,7 @@ def main():
 	dp.add_handler(CommandHandler('prof', prof, pass_args=True))
 
 	dp.add_handler(CommandHandler('aulario', aulario))
-  dp.add_handler(CommandHandler('help',help))
+  	dp.add_handler(CommandHandler('help',help))
 	dp.add_handler(CommandHandler('contributors',contributors))
 
 	dp.add_handler(CommandHandler('rappresentanti',rappresentanti))
