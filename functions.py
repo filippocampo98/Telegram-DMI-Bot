@@ -48,13 +48,14 @@ TOKEN = tokenconf      		#Token of your telegram bot that you created from @BotF
 #Lezioni
 def output_lezioni(item):
     daylist = list(calendar.day_name)
-    output = ""
 
-    output += "*Insegnamento:* " + item["insegnamento"]
+    output = "*Insegnamento:* " + item["insegnamento"]
     output += "\n*Aula:* " + item["aula"]
+
     for day in daylist:
         if(day.replace('ì','i') in item and item[day.replace('ì','i')] != ""):
             output += "\n*" + day.title() + ":* " + item[day.replace('ì','i')]
+
     output += "\n*Anno:* " + item["anno"] + "\n"
 
     return output
@@ -80,78 +81,85 @@ def condition_mult_lezioni(items, days, years):
                     output.add(output_lezioni(item))
     return output
 
-def lezioni_cmd(args):
-    output = Set()
-    r = requests.get('http://188.213.170.165/PHP-DMI-API/result/lezioni_dmi.json')
-    if(r.status_code == requests.codes.ok):
+def lezioni_cmd(args, link):
 
-        items = r.json()["items"]
-        daylist = list(calendar.day_name)
+    output_str = "Poffarbacco, qualcosa non va. Segnalalo ai dev \contributors \n"
 
-        args = [x.lower().encode('utf-8') for x in args if len(x) > 2]
-        if 'anno' in args: args.remove('anno')
+    if(args):
+        output = Set()
+        r = requests.get(link)
+        if(r.status_code == requests.codes.ok):
 
-        if(len(args) == 1):
+            items = r.json()["items"]
+            daylist = list(calendar.day_name)
 
-            if(args[0] in daylist):
-                output = condition_lezioni(items, args[0])
+            #Clear arguments - Trasform all to lower case utf-8 (ì) - Remove word 'anno' and len<2
+            args = [x.lower().encode('utf-8') for x in args if len(x) > 2]
+            if 'anno' in args: args.remove('anno')
 
-            elif(args[0] == "oggi"):
-                output = condition_lezioni(items, time.strftime("%A"))
+            #Study case
+            if(len(args) == 1):
 
-            elif(args[0] == "domani"):
-                tomorrow_date = datetime.datetime.today() + datetime.timedelta(1)
-                tomorrow_name = datetime.datetime.strftime(tomorrow_date,'%A')
-                output = condition_lezioni(items, tomorrow_name)
+                if(args[0] in daylist):
+                    output = condition_lezioni(items, args[0])
 
-            elif(args[0] in ("primo", "secondo", "terzo")):
-                output = condition_lezioni(items, "anno", args[0])
+                elif(args[0] == "oggi"):
+                    output = condition_lezioni(items, time.strftime("%A"))
 
-            elif([item["insegnamento"].lower().find(args[0]) for item in items]):
-                output = condition_lezioni(items, "insegnamento", args[0])
+                elif(args[0] == "domani"):
+                    tomorrow_date = datetime.datetime.today() + datetime.timedelta(1)
+                    tomorrow_name = datetime.datetime.strftime(tomorrow_date,'%A')
+                    output = condition_lezioni(items, tomorrow_name)
 
-            if(len(output)):
-                string = '\n'.join(list(output))
-                string += "\n_Risultati trovati: " + str(len(output)) + "/" + str(r.json()["status"]["length"]) + "_"
-                string += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
-            else:
-                string = "Nessun risultato trovato :(\n"
-        elif(len(args) > 1):
+                elif(args[0] in ("primo", "secondo", "terzo")):
+                    output = condition_lezioni(items, "anno", args[0])
 
-            days = list(set(args).intersection(daylist))
-            years = list(set(args).intersection(("primo", "secondo", "terzo")))
+                elif([item["insegnamento"].lower().find(args[0]) for item in items]):
+                    output = condition_lezioni(items, "insegnamento", args[0])
 
-            if(days and years):
-                output = condition_mult_lezioni(items, days, years)
+                if(len(output)):
+                    output_str = '\n'.join(list(output))
+                    output_str += "\n_Risultati trovati: " + str(len(output)) + "/" + str(r.json()["status"]["length"]) + "_"
+                    output_str += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
+                else:
+                    output_str = "Nessun risultato trovato :(\n"
+            elif(len(args) > 1):
 
-            elif("oggi" in args and years):
-                days = [time.strftime("%A")]
-                output = condition_mult_lezioni(items, days, years)
+                #Create an array of days and years if in arguments
+                days = list(set(args).intersection(daylist))
+                years = list(set(args).intersection(("primo", "secondo", "terzo")))
 
-            elif("domani" in args and years):
-                tomorrow_date = datetime.datetime.today() + datetime.timedelta(1)
-                tomorrow_name = datetime.datetime.strftime(tomorrow_date,'%A')
-                days = [tomorrow_name]
-                output = condition_mult_lezioni(items, days, years)
+                if(days and years):
+                    output = condition_mult_lezioni(items, days, years)
 
-            else:
-                for arg in args:
-                    output = output.union(condition_lezioni(items, "insegnamento", arg))
+                elif("oggi" in args and years):
+                    day = [time.strftime("%A")]
+                    output = condition_mult_lezioni(items, day, years)
 
-            if(len(output)):
-                string = '\n'.join(list(output))
-                string += "\n_Risultati trovati: " + str(len(output)) + "/" + str(r.json()["status"]["length"]) + "_"
-                string += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
-            else:
-                string = "Nessun risultato trovato :(\n"
-        else:
-            string = "Inserisci almeno un parametro.\n"
+                elif("domani" in args and years):
+                    tomorrow_date = datetime.datetime.today() + datetime.timedelta(1)
+                    tomorrow_name = datetime.datetime.strftime(tomorrow_date,'%A')
+                    day = [tomorrow_name]
+                    output = condition_mult_lezioni(items, day, years)
 
-    return string
+                else:
+                    for arg in args:
+                        output = output.union(condition_lezioni(items, "insegnamento", arg))
+
+                if(len(output)):
+                    output_str = '\n'.join(list(output))
+                    output_str += "\n_Risultati trovati: " + str(len(output)) + "/" + str(r.json()["status"]["length"]) + "_"
+                    output_str += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
+                else:
+                    output_str = "Nessun risultato trovato :(\n"
+    else:
+        output_str = "Inserisci almeno un parametro.\n"
+
+    return output_str
 
 def lezioni(bot, update, args):
     checkLog(bot, update, "lezioni")
-    messageText = lezioni_cmd(args)
+    messageText = lezioni_cmd(args, 'http://188.213.170.165/PHP-DMI-API/result/lezioni_dmi.json')
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
 #Esami
