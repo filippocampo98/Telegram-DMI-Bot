@@ -285,13 +285,14 @@ def mensa_cmd():
 	output += "cena dalle ore 19,00 alle ore 21,30"
 	return output
 
-def biblioteca_cmd():
+def biblioteca_cmd():	
 	output  = "Sala Lettura:\n"
-	output += "lunedì - venerdì 08.00 - 19.00 \n\n"
+	output += "lunedì - venerdì 08.00 - 19.00 \n\n"	
 	output += "Servizio Distribuzione: \n"
 	output += "lunedì - giovedì 08.30 - 14.00 \n"
 	output += "lunedì - giovedì 14.30 - 16.30 \n"
 	output += "venerdì  08.30 - 13.30"
+	
 	return output
 
 def cus_cmd():
@@ -300,6 +301,18 @@ def cus_cmd():
 	output += "📞 095336327- fax 095336478 \n"
 	output += "✉ info@cuscatania.it\n"
 	output += "http://www.cuscatania.it/Contatti.aspx";
+	return output
+
+def enablenews_cmd():
+	output = "Per confermare l'iscrizione alla newsletter del DMI digita /enablenews"
+	return output
+	
+def disablenews_cmd():
+	output = "Se sei sicuro di voler disiscriverti dalla newsletter del DMI digita /disablenews"
+	return output
+
+def drive_cmd():
+	output = "Per accedere alla cartella Google Drive del dipartimento digita /drive"
 	return output
 
 def esami_url():
@@ -577,16 +590,9 @@ def button_handler(bot, update):
 	message_id = query.message.message_id
 	data = query.data
 
-	#Menu
-	if data.startswith("m_"):
-		bot.editMessageText(text="Menù non supportati", chat_id=chat_id, message_id=message_id)
-	#Various Functions
-	else: 
-		if data.startswith("f_"):
-			bot.editMessageText(text="Funzioni non supportate", chat_id=chat_id, message_id=message_id)
-		#Text messages
-		else:
-			bot.editMessageText(text=data, chat_id=chat_id, message_id=message_id)
+	messageText = globals()[data]()
+
+	bot.editMessageText(text=messageText, chat_id=chat_id, message_id=message_id)
 
 def help(bot, update):
 	chat_id = update.message.chat_id
@@ -594,38 +600,61 @@ def help(bot, update):
 	messageText="@DMI_Bot risponde ai seguenti comandi:"
 
 	keyboard.append(
-		[InlineKeyboardButton("Esami (Triennale)", url=esami_url()),
-		InlineKeyboardButton("Esami (Magistrale)", url=mesami_url()),
-		InlineKeyboardButton("Aulario", url=aulario_url())]
-	)
-	'''
+		[
+			InlineKeyboardButton("📖 Esami (Triennale)", 	url=esami_url()),
+			InlineKeyboardButton("📖 Esami (Magistrale)", 	url=mesami_url()),
+			InlineKeyboardButton("🗓 Aulario", 			url=aulario_url())
+		]
+	)	
 	keyboard.append(
-		[InlineKeyboardButton("Mensa", callback_data=mensa_cmd()),
-		InlineKeyboardButton("Rappresentanti", callback_data="menu_rappresentanti"),
-		InlineKeyboardButton("Biblioteca", callback_data=biblioteca_cmd())]
+		[
+			InlineKeyboardButton("🍽 Mensa", 			callback_data="mensa_cmd"),
+			InlineKeyboardButton("👥 Rappresentanti", 	callback_data="rapp_cmd"),
+			InlineKeyboardButton("📚 Biblioteca", 		callback_data="biblioteca_cmd")
+		]
+	)
+	
+	keyboard.append(
+		[
+			InlineKeyboardButton("Seg. Didattica", 	callback_data="sdidattica_cmd"),
+			InlineKeyboardButton("Seg. Studenti", 	callback_data="sstudenti_cmd")
+		]
+	)
+	
+	
+	keyboard.append(
+		[
+			InlineKeyboardButton(CUSicon[random.randint(0,5)] + " CUS", callback_data="cus_cmd"),
+			InlineKeyboardButton("CEA", callback_data="cea_cmd")
+		]
+	)
+	
+	keyboard.append(
+		[
+			InlineKeyboardButton("ERSU", 		 callback_data="ersu_cmd"),
+			InlineKeyboardButton("Ufficio ERSU", callback_data="ufficio_ersu_cmd"),
+			InlineKeyboardButton("URP", 		 callback_data="urp_cmd")
+		]
 	)
 	keyboard.append(
-		[InlineKeyboardButton("Seg. Didattica", callback_data=sdidattica_cmd()),
-		InlineKeyboardButton("Seg. Studenti", callback_data=sstudenti_cmd())]
+		[
+			InlineKeyboardButton("Iscriviti alle news", 	callback_data="enablenews_cmd"),
+			InlineKeyboardButton("Disiscriviti dalle news", callback_data="disablenews_cmd")
+		]
 	)
 	keyboard.append(
-		[InlineKeyboardButton("CUS", callback_data=cus_cmd()),
-		InlineKeyboardButton("CEA", callback_data=cea_cmd())]
+		[
+			InlineKeyboardButton("📂 Drive", 	 	 callback_data="drive_cmd"),
+			InlineKeyboardButton("Contributors",	callback_data="contributors_cmd"),
+		]
 	)
+	
 	keyboard.append(
-		[InlineKeyboardButton("ERSU", callback_data=ersu_cmd()),
-		InlineKeyboardButton("Ufficio ERSU", callback_data=ufficio_ersu_cmd()),
-		InlineKeyboardButton("URP", callback_data=urp_cmd())]
+		[
+			InlineKeyboardButton("Tutti i comandi", 	callback_data="help_cmd")
+		]
 	)
-	keyboard.append(
-		[InlineKeyboardButton("Iscriviti alle news", callback_data="f_enablenews"),
-		InlineKeyboardButton("Disiscriviti dalle news", callback_data="f_disablenews")]
-	)
-	keyboard.append(
-		[InlineKeyboardButton("Drive", callback_data="f_drive"),
-		InlineKeyboardButton("Contributors", callback_data=contributors_cmd())]
-	)
-	'''
+		
 	reply_markup=InlineKeyboardMarkup(keyboard)
 
 	bot.sendMessage(chat_id=chat_id, text=messageText, reply_markup=reply_markup)
