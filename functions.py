@@ -315,6 +315,10 @@ def drive_cmd():
 	output = "Per accedere alla cartella Google Drive del dipartimento digita /drive"
 	return output
 
+def exit_cmd():
+	output = "."
+	return output
+
 def esami_url():
 	url = "http://web.dmi.unict.it/Didattica/Laurea%20Triennale%20in%20Informatica%20L-31/Calendario%20dEsami"
 	return url
@@ -590,45 +594,53 @@ def button_handler(bot, update):
 	message_id = query.message.message_id
 	data = query.data
 
-	messageText = globals()[data]()
+	#Submenu
+	if data.startswith("sm_"):
+		funcName = data[3:len(data)]
 
-	bot.editMessageText(text=messageText, chat_id=chat_id, message_id=message_id)
+		globals()[funcName](bot, chat_id, message_id)
+
+	#Simple text
+	elif data != "_div":
+		messageText = globals()[data]()
+
+		bot.editMessageText(text=messageText, chat_id=chat_id, message_id=message_id)
 
 def help(bot, update):
 	chat_id = update.message.chat_id
 	keyboard=[[]]
 	messageText="@DMI_Bot risponde ai seguenti comandi:"
 
+	keyboard.append([InlineKeyboardButton(" ~ Dipartimento e CdL ~ ", callback_data="_div")])
+	
 	keyboard.append(
 		[
 			InlineKeyboardButton("📖 Esami (Triennale)", 	url=esami_url()),
 			InlineKeyboardButton("📖 Esami (Magistrale)", 	url=mesami_url()),
-			InlineKeyboardButton("🗓 Aulario", 			url=aulario_url())
+			InlineKeyboardButton("🗓 Aulario", 				url=aulario_url())
 		]
 	)	
 	keyboard.append(
 		[
-			InlineKeyboardButton("🍽 Mensa", 			callback_data="mensa_cmd"),
-			InlineKeyboardButton("👥 Rappresentanti", 	callback_data="rapp_cmd"),
-			InlineKeyboardButton("📚 Biblioteca", 		callback_data="biblioteca_cmd")
+			InlineKeyboardButton("🍽 Mensa", 							 callback_data="mensa_cmd"),
+			InlineKeyboardButton("👥 Rappresentanti", 					 callback_data="sm_rapp_menu"),
+			InlineKeyboardButton("📚 Biblioteca", 						 callback_data="biblioteca_cmd"),			
+			InlineKeyboardButton(CUSicon[random.randint(0,5)] + " CUS", callback_data="cus_cmd")
 		]
 	)
+	
+	keyboard.append([InlineKeyboardButton(" ~ Segreteria orari e contatti ~ ", callback_data="_div")])
 	
 	keyboard.append(
 		[
 			InlineKeyboardButton("Seg. Didattica", 	callback_data="sdidattica_cmd"),
-			InlineKeyboardButton("Seg. Studenti", 	callback_data="sstudenti_cmd")
+			InlineKeyboardButton("Seg. Studenti", 	callback_data="sstudenti_cmd"),
+			InlineKeyboardButton("CEA", 			callback_data="cea_cmd")
 		]
 	)
-	
-	
-	keyboard.append(
-		[
-			InlineKeyboardButton(CUSicon[random.randint(0,5)] + " CUS", callback_data="cus_cmd"),
-			InlineKeyboardButton("CEA", callback_data="cea_cmd")
-		]
-	)
-	
+
+	keyboard.append([InlineKeyboardButton(" ~ ERSU orari e contatti ~ ", callback_data="_div")])
+
 	keyboard.append(
 		[
 			InlineKeyboardButton("ERSU", 		 callback_data="ersu_cmd"),
@@ -636,6 +648,9 @@ def help(bot, update):
 			InlineKeyboardButton("URP", 		 callback_data="urp_cmd")
 		]
 	)
+
+	keyboard.append([InlineKeyboardButton(" ~ Bot e varie ~ ", callback_data="_div")])
+
 	keyboard.append(
 		[
 			InlineKeyboardButton("Iscriviti alle news", 	callback_data="enablenews_cmd"),
@@ -651,13 +666,30 @@ def help(bot, update):
 	
 	keyboard.append(
 		[
-			InlineKeyboardButton("Tutti i comandi", 	callback_data="help_cmd")
+			InlineKeyboardButton("Tutti i comandi", 	callback_data="help_cmd"),
+			InlineKeyboardButton("Chiudi", 				callback_data="exit_cmd")
 		]
 	)
 		
 	reply_markup=InlineKeyboardMarkup(keyboard)
 
 	bot.sendMessage(chat_id=chat_id, text=messageText, reply_markup=reply_markup)
+	
+def rapp_menu(bot, chat_id, message_id):
+	keyboard=[[]]
+	messageText="Quali rappresentanti vuoi contattare?"
+
+	keyboard.append(
+		[
+			InlineKeyboardButton("Rapp. DMI", 	 	 	callback_data="rapp_dmi_cmd"),
+			InlineKeyboardButton("Rapp. Informatica",	callback_data="rapp_inf_cmd"),
+			InlineKeyboardButton("Rapp. Matematica",	callback_data="rapp_mat_cmd"),
+		]
+	)
+
+	reply_markup=InlineKeyboardMarkup(keyboard)
+
+	bot.editMessageText(text=messageText, chat_id=chat_id, message_id=message_id,reply_markup=reply_markup)
 
 def rappresentanti(bot, update):
 	checkLog(bot, update,"rappresentanti")
