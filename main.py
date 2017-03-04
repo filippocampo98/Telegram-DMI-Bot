@@ -32,30 +32,30 @@ def main():
 	dp.add_handler(RegexHandler('/prof',prof))
 	dp.add_handler(RegexHandler('/esami',esami))
 	dp.add_handler(RegexHandler('/mesami',mesami))
-	dp.add_handler(RegexHandler('/aulario',aulario))
-	dp.add_handler(RegexHandler('/mensa',mensa))
-	dp.add_handler(RegexHandler('/biblioteca',biblioteca))
-	dp.add_handler(RegexHandler('/cus',cus))
-	dp.add_handler(RegexHandler('/smonta_portoni',smonta_portoni))
-	dp.add_handler(RegexHandler('/santino',santino))
-	dp.add_handler(RegexHandler('/liste',liste))
-	dp.add_handler(RegexHandler('/contributors',contributors))
+	dp.add_handler(CommandHandler('aulario',aulario))
+	dp.add_handler(CommandHandler('mensa',mensa))
+	dp.add_handler(CommandHandler('biblioteca',biblioteca))
+	dp.add_handler(CommandHandler('cus',cus))
+	dp.add_handler(CommandHandler('smonta_portoni',smonta_portoni))
+	dp.add_handler(CommandHandler('santino',santino))
+	dp.add_handler(CommandHandler('liste',liste))
+	dp.add_handler(CommandHandler('contributors',contributors))
 	dp.add_handler(RegexHandler('/forum',forum_bot))
 
 	if (disable_drive == 0):
-	  dp.add_handler(RegexHandler('/drive',drive))
+	  dp.add_handler(CommandHandler('drive',drive))
 	  dp.add_handler(RegexHandler('/adddb',adddb))
 	  dp.add_handler(RegexHandler('/request',request))
 
 	if (disable_db == 0):
-	  dp.add_handler(RegexHandler('/stats',stats))
-	  dp.add_handler(RegexHandler('/statsT',statsTot))
+	  dp.add_handler(CommandHandler('stats',stats))
+	  dp.add_handler(CommandHandler('stats_tot',statsTot))
 
 	if (disable_chatid_logs == 0):
 	  dp.add_handler(RegexHandler('/news',news_))
-	  dp.add_handler(RegexHandler('/spamnews',spamnews))
-	  dp.add_handler(RegexHandler('/disablenews',disablenews))
-	  dp.add_handler(RegexHandler('/enablenews',enablenews))
+	  dp.add_handler(CommandHandler('spamnews',spamnews))
+	  dp.add_handler(CommandHandler('disablenews',disablenews))
+	  dp.add_handler(CommandHandler('enablenews',enablenews))
 
 
 	dp.add_handler(CallbackQueryHandler(callback))
