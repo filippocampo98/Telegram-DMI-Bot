@@ -302,6 +302,18 @@ def cus_cmd():
 	output += "http://www.cuscatania.it/Contatti.aspx";
 	return output
 
+def esami_url():
+	url = "http://web.dmi.unict.it/Didattica/Laurea%20Triennale%20in%20Informatica%20L-31/Calendario%20dEsami"
+	return url
+
+def mesami_url():
+	url = "http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20degli%20Esami"
+	return url
+
+def aulario_url():
+	url = 'http://aule.dmi.unict.it/aulario/roschedule.php'
+	return url
+
 #Easter egg
 def smonta_portoni_cmd():
 	r = random.randint(0,13)
@@ -559,12 +571,64 @@ def drive(bot, update):
     	else:
     		bot.sendMessage(chat_id=chat_id,text="🔒 Non hai i permessi per utilizzare la funzione /drive,\n Utilizzare il comando /request <nome> <cognome> <e-mail> (il nome e il cognome devono essere scritti uniti Es: Di mauro -> Dimauro) ")
 
+def button_handler(bot, update):
+	query = update.callback_query	
+	chat_id = query.message.chat_id
+	message_id = query.message.message_id
+	data = query.data
+
+	#Menu
+	if data.startswith("m_"):
+		bot.editMessageText(text="Menù non supportati", chat_id=chat_id, message_id=message_id)
+	#Various Functions
+	else: 
+		if data.startswith("f_"):
+			bot.editMessageText(text="Funzioni non supportate", chat_id=chat_id, message_id=message_id)
+		#Text messages
+		else:
+			bot.editMessageText(text=data, chat_id=chat_id, message_id=message_id)
 
 def help(bot, update):
-    checkLog(bot, update,"help")
-    messageText = help_cmd()
-    bot.sendMessage(chat_id=update.message.chat_id,text=messageText)
+	chat_id = update.message.chat_id
+	keyboard=[[]]
+	messageText="@DMI_Bot risponde ai seguenti comandi:"
 
+	keyboard.append(
+		[InlineKeyboardButton("Esami (Triennale)", url=esami_url()),
+		InlineKeyboardButton("Esami (Magistrale)", url=mesami_url()),
+		InlineKeyboardButton("Aulario", url=aulario_url())]
+	)
+	'''
+	keyboard.append(
+		[InlineKeyboardButton("Mensa", callback_data=mensa_cmd()),
+		InlineKeyboardButton("Rappresentanti", callback_data="menu_rappresentanti"),
+		InlineKeyboardButton("Biblioteca", callback_data=biblioteca_cmd())]
+	)
+	keyboard.append(
+		[InlineKeyboardButton("Seg. Didattica", callback_data=sdidattica_cmd()),
+		InlineKeyboardButton("Seg. Studenti", callback_data=sstudenti_cmd())]
+	)
+	keyboard.append(
+		[InlineKeyboardButton("CUS", callback_data=cus_cmd()),
+		InlineKeyboardButton("CEA", callback_data=cea_cmd())]
+	)
+	keyboard.append(
+		[InlineKeyboardButton("ERSU", callback_data=ersu_cmd()),
+		InlineKeyboardButton("Ufficio ERSU", callback_data=ufficio_ersu_cmd()),
+		InlineKeyboardButton("URP", callback_data=urp_cmd())]
+	)
+	keyboard.append(
+		[InlineKeyboardButton("Iscriviti alle news", callback_data="f_enablenews"),
+		InlineKeyboardButton("Disiscriviti dalle news", callback_data="f_disablenews")]
+	)
+	keyboard.append(
+		[InlineKeyboardButton("Drive", callback_data="f_drive"),
+		InlineKeyboardButton("Contributors", callback_data=contributors_cmd())]
+	)
+	'''
+	reply_markup=InlineKeyboardMarkup(keyboard)
+
+	bot.sendMessage(chat_id=chat_id, text=messageText, reply_markup=reply_markup)
 
 def rappresentanti(bot, update):
 	checkLog(bot, update,"rappresentanti")
@@ -623,17 +687,17 @@ def prof(bot, update):
 
 def esami(bot, update):
 	checkLog(bot, update,"esami")
-	messageText = "http://web.dmi.unict.it/Didattica/Laurea%20Triennale%20in%20Informatica%20L-31/Calendario%20dEsami"
+	messageText = esami_url()
 	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
 
 def mesami(bot, update):
 	checkLog(bot, update,"mesami")
-	messageText = 'http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20degli%20Esami'
+	messageText = mesami_url()
 	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
 
 def aulario(bot, update):
 	checkLog(bot, update,"aulario")
-	messageText = 'http://aule.dmi.unict.it/aulario/roschedule.php'
+	messageText = aulario_url()
 	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
 
 def mensa(bot, update):

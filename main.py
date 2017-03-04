@@ -14,7 +14,10 @@ def record_everything(bot, update):
 def main():
 	updater = Updater(TOKEN)
 	dp = updater.dispatcher
+
 	dp.add_handler(MessageHandler(Filters.all, record_everything),1)
+	dp.add_handler(CallbackQueryHandler(button_handler))
+
 	dp.add_handler(RegexHandler('/help',help))
 	dp.add_handler(RegexHandler('/rappresentanti',rappresentanti))
 	dp.add_handler(RegexHandler('/rappresentanti_dmi',rappresentanti_dmi))
