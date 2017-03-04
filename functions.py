@@ -81,7 +81,7 @@ def condition_mult_lezioni(items, days, years):
 
 def lezioni_cmd(args):
     output = Set()
-    r = requests.get('http://localhost/PHP-DMI-API/result/lezioni_dmi.json')
+    r = requests.get('http://188.213.170.165/PHP-DMI-API/result/lezioni_dmi.json')
     if(r.status_code == requests.codes.ok):
 
         items = r.json()["items"]
@@ -188,7 +188,7 @@ def esami_cmd(args):
     # /esami anno sessione
 
     output = Set()
-    r = requests.get('http://localhost/PHP-DMI-API/result/esami_dmi.json')
+    r = requests.get('http://188.213.170.165/PHP-DMI-API/result/esami_dmi.json')
     if(r.status_code == requests.codes.ok):
 
         items = r.json()["items"]
