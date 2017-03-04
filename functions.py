@@ -111,6 +111,7 @@ def lezioni_cmd(args):
 
             if(len(output)):
                 string = '\n'.join(list(output))
+                string += "\n_Risultati trovati: " + str(len(output)) + "/" + str(r.json()["status"]["length"]) + "_"
                 string += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
             else:
                 string = "Nessun risultato trovato :(\n"
@@ -138,6 +139,7 @@ def lezioni_cmd(args):
 
             if(len(output)):
                 string = '\n'.join(list(output))
+                string += "\n_Risultati trovati: " + str(len(output)) + "/" + str(r.json()["status"]["length"]) + "_"
                 string += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
             else:
                 string = "Nessun risultato trovato :(\n"
@@ -209,6 +211,7 @@ def esami_cmd(args):
 
             if(len(output)):
                 string = '\n'.join(list(output))
+                string += "\n_Risultati trovati: " + str(len(output)) + "/" + str(r.json()["status"]["length"]) + "_"
                 string += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
             else:
                 string = "Nessun risultato trovato :(\n"
@@ -226,13 +229,27 @@ def esami_cmd(args):
                                 output.add(output_esami(item, sessions))
 
             elif(sessions and not years):
-                print("sessioni e materie")
+                subjects = [x for x in args if x not in(sessions)]
+                for item in items:
+                    if(subjects):
+                        for subject in subjects:
+                            for ss in sessions:
+                                if([y for y in [x for x in item[ss] if x] if y]):
+                                    if(subject in item["insegnamento"].lower()):
+                                        output.add(output_esami(item, sessions))
+                    else:
+                        for ss in sessions:
+                            if([y for y in [x for x in item[ss] if x] if y]):
+                                output.add(output_esami(item, sessions))
+
+
             else:
                 for arg in args:
                     output = output.union(condition_esami(items, "insegnamento", arg, False))
 
             if(len(output)):
                 string = '\n'.join(list(output))
+                string += "\n_Risultati trovati: " + str(len(output)) + "/" + str(r.json()["status"]["length"]) + "_"
                 string += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
             else:
                 string = "Nessun risultato trovato :(\n"
