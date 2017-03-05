@@ -118,7 +118,7 @@ def lezioni_cmd(args, link):
                 else:
                     output_str = "Nessun risultato trovato :(\n"
     else:
-        output_str = "Inserisci almeno un parametro.\n"
+        output_str = "Inserisci almeno uno dei seguenti parametri: giorno, materia, anno."
 
     return output_str
     

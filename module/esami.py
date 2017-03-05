@@ -109,6 +109,6 @@ def esami_cmd(args, link):
                 else:
                     output_str = "Nessun risultato trovato :(\n"
     else:
-        output_str = "Inserisci almeno un parametro.\n"
+        output_str = "Inserisci almeno uno dei seguenti parametri: giorno, materia, sessione (prima, seconda, terza, straordinaria)."
 
     return output_str

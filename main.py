@@ -16,7 +16,7 @@ def main():
 	dp = updater.dispatcher
 	dp.add_handler(MessageHandler(Filters.all, record_everything),1)
 
-  	#Heaster eggd
+  	#Easter Egg
 	dp.add_handler(CommandHandler('smonta_portoni',smonta_portoni))
 	dp.add_handler(CommandHandler('santino',santino))
 

@@ -26,9 +26,9 @@ from module.esami import esami_cmd
 from module.professori import prof_cmd
 
 # Debug
-disable_chatid_logs = 1 #news, stats
-disable_db = 1          #stats, drive
-disable_drive = 1       #drive
+disable_chatid_logs = 0 #news, stats
+disable_db = 0          #stats, drive
+disable_drive = 0       #drive
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -92,7 +92,7 @@ CUSicon = {0 : "🏋",
 
 def help_cmd():
     output = "@DMI_Bot risponde ai seguenti comandi: \n\n"
-    output += "📖 /esami - /mesami - linka il calendario degli esami\n"
+    output += "📖 /esami - /mesami - 	linka il calendario degli esami\n"
     output += "🗓 /aulario - linka l\'aulario\n"
     output += "👔 /prof <nome> - es. /prof Milici\n"
     output += "🍽 /mensa - orario mensa\n"
@@ -115,7 +115,7 @@ def help_cmd():
     return output
 
 def contributors_cmd():
-	output = "@Helias, @adriano_effe, @Veenz, @simone989\n"
+	output = "@Helias, @adriano_effe, @Veenz, @simone989, @TkdAlex\n"
 	output +="https://github.com/UNICT-DMI/Telegram-DMI-Bot.git"
 	return output
 
