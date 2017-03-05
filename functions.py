@@ -26,9 +26,9 @@ from module.esami import esami_cmd
 from module.professori import prof_cmd
 
 # Debug
-disable_chatid_logs = 1 #news, stats
-disable_db = 1          #stats, drive
-disable_drive = 1       #drive
+disable_chatid_logs = 0 #news, stats
+disable_db = 0          #stats, drive
+disable_drive = 0       #drive
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -114,16 +114,6 @@ def help_cmd():
     output += "/contributors"
     return output
 
-def contributors_cmd():
-	output = "@Helias, @adriano_effe, @Veenz, @simone989, @TkdAlex, @aegroto\n"
-	output +="https://github.com/UNICT-DMI/Telegram-DMI-Bot.git"
-	return output
-
-def contributors(bot, update):
-	checkLog(bot, update, "contributors")
-	messageText = contributors_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
 def read_md(namefile):
     in_file = open("data/markdown/" + namefile + ".md","r")
     text = in_file.read()
@@ -135,137 +125,12 @@ def informative_callback(bot, update, cmd):
     messageText = read_md(cmd)
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
-def rapp_cmd():
-	output = "Usa uno dei seguenti comandi per mostrare i rispettivi rappresentanti\n"
-	output += "/rappresentanti_dmi\n"
-	output += "/rappresentanti_informatica\n"
-	output += "/rappresentanti_matematica"
-	return output
-
-def rapp_dmi_cmd():
-	output =  "Rappresentanti DMI\n"
-	output += "Aliperti Vincenzo - @VAliperti\n"
-	output += "Apa Marco - @MarcoApa\n"
-	output += "Borzì Stefano - @Helias\n"
-	output += "Costa Alberto - @knstrct\n"
-	output += "Marroccia Marco - @MarcoLebon\n"
-	output += "Mattia Ferdinando Alessandro - @AlessandroMattia\n"
-	output += "Presente Fabrizio\n"
-	output += "Petralia Luca- @lucapppla\n"
-	output += "Rapisarda Simone - @CarlinoMalvagio\n"
-	output += "Ricordo che per segnalare qualcosa a tutti i rappresentanti si può utilizzare l'email reportdmiunict@gmail.com"
-	return output
-
-def rapp_inf_cmd():
-	output =  "Rappresentanti Inforamtica\n"
-	output += "Aliperti Vincenzo - @VAliperti\n"
-	output += "Apa Marco - @MarcoApa\n"
-	output += "Borzì Stefano - @Helias\n"
-	output += "Costa Alberto - @knstrct\n"
-	output += "Giangreco Antonio - @Antonio0793\n"
-	output += "Marroccia Marco - @MarcoLebon\n"
-	return output
-
-def rapp_mat_cmd():
-	output =  "Rappresentanti Matematica\n"
-	output += "Alessandro Massimiliano - @massi_94\n"
-	output += "De Cristofaro Gaetano\n"
-	output += "Pratissoli Mirco - @Mirko291194\n"
-	output += "Sciuto Rita - @RitaSciuto"
-	return output
-
-def sdidattica_cmd():
-	output  = "Sede presso il Dipartimento di Matematica e Informatica (primo piano vicino al laboratorio) \n\n"
-	output += "Sig.ra Cristina Mele\n"
-	output += "📞 095/7337227\n"
-	output += "✉️ cmele@dmi.unict.it\n\n"
-	output += "🕑 Orari:\n"
-	output += "Martedì dalle 10:30 alle 12:30\n"
-	output += "Giovedì dalle 10:30 alle 12:30"
-	return output
-
-def sstudenti_cmd():
-	output  = "Segreteria studenti\n"
-	output += "Sede presso la Cittadella Universitaria (vicino la mensa)\n\n"
-	output += "Via S. Sofia, 64 ed. 11 - 95125 Catania\n"
-	output += "📞 095.7386103, 6119, 6109, 6125, 6129, 6123, 6122, 6106, 6107, 6121\n"
-	output += "✉️ settore.scientifico@unict.it\n\n"
-	output += "🕑 Orario invernale:\n"
-	output += "Lunedi\': 10:00 - 12.30\n"
-	output += "Martedi\': 10:00 -12:30 | 15:00 - 16:30\n"
-	output += "Giovedi\': 10:00 - 12:30 | 15:00 - 16:30\n"
-	output += "Venerdi\': 10:00 - 12:30"
-	return output
-
-def cea_cmd():
-	output  = "Centro per i sistemi di elaborazione e le applicazioni scientifiche e didattiche (CEA)\n"
-	output += "📞 0957307560 - fax: 0957307544\n"
-	output += "✉️ cea@unict.it\n"
-	output += "Via Santa Maria del Rosario, 9 - via Sangiuliano 257 (terzo piano) - 95131 Catania\n"
-	output += "http://archivio.unict.it/cea"
-	return output
-
-def ersu_cmd():
-	output  = "ERSU Catania - sede centrale\n"
-	output += "Sede presso Via Etnea, 570\n\n"
-	output += "📞 095/7517940 (ore 9:00/12:00)\n"
-	output += "✉️ urp@ersucatania.gov.it\n\n"
-	output += "🕑 Orari:\n"
-	output += "Lunedì: 09:00 - 12:00\n"
-	output += "Mercoledì: 15:30 - 18:00\n"
-	output += "Venerdì: 09:00 - 12:00"
-	return output
-
-def ufficio_ersu_cmd():
-	output  = "ERSU Catania - Ufficio Tesserini\n"
-	output += "Sede della Cittadella (accanto l\'ingresso della Casa dello Studente)\n\n"
-	output += "🕑 Orari:\n"
-	output += "martedì-giovedì dalle 9.00 alle 12.30 \n\n"
-	output += "UfficioErsu vicino la mensa Oberdan\n"
-	output += "lunedì-mercoledì-venerdì dalle 09.00 alle 12.30 \n"
-	output += "mercoledì 15:00 - 18.00:"
-	return output
-
-def urp_cmd():
-	output = "URP Studenti\n"
-	output += "Sede in Via A.di Sangiuliano, 44\n\n"
-	output += "📞 800894327 (da fisso), 095 6139202/1/0\n"
-	output += "✉️ urp-studenti@unict.it"
-	return output
-
-def mensa_cmd():
-	output  = "🕑 Orario Mensa\n"
-	output += "pranzo dalle ore 12,00 alle ore 14,30\n"
-	output += "cena dalle ore 19,00 alle ore 21,30"
-	return output
-
-def biblioteca_cmd():	
-	output  = "Sala Lettura:\n"
-	output += "lunedì - venerdì 08.00 - 19.00 \n\n"	
-	output += "Servizio Distribuzione: \n"
-	output += "lunedì - giovedì 08.30 - 14.00 \n"
-	output += "lunedì - giovedì 14.30 - 16.30 \n"
-	output += "venerdì  08.30 - 13.30"
-	return output
-
-def cus_cmd():
-	output = "CUS Catania\n"
-	output += "Viale A. Doria n° 6  - 95125 Catania \n"
-	output += "📞 095336327- fax 095336478 \n"
-	output += "✉ info@cuscatania.it\n"
-	output += "http://www.cuscatania.it/Contatti.aspx";
-	return output
-
 def enablenews_cmd():
 	output = "Per confermare l'iscrizione alla newsletter del DMI digita /enablenews"
 	return output
-	
+
 def disablenews_cmd():
 	output = "Se sei sicuro di voler disiscriverti dalla newsletter del DMI digita /disablenews"
-	return output
-
-def drive_cmd():
-	output = "Per accedere alla cartella Google Drive del dipartimento digita /drive"
 	return output
 
 def exit_cmd():
@@ -274,6 +139,10 @@ def exit_cmd():
 
 def esami_button():
 	output = "Scrivi /esami inserendo almeno uno dei seguenti parametri: giorno, materia, sessione (prima, seconda, terza, straordinaria)"
+	return output
+
+def lezioni_button():
+	output = "Scrivi /lezioni inserendo almeno uno dei seguenti parametri: giorno, materia"
 	return output
 
 def mesami_url():
@@ -327,6 +196,8 @@ def callback(bot, update):
 	NumberArray=0
 	update_id = update.update_id
 
+	update.callback_query.data = update.callback_query.data.replace("Drive_", "")
+
 	if len(update.callback_query.data)<13:
 		#conn.execute("DELETE FROM 'Chat_id_List'")
 		ArrayValue=update['callback_query']['message']['text'].split(" ")
@@ -368,11 +239,11 @@ def callback(bot, update):
 
 					if file2['mimeType']=="application/vnd.google-apps.folder":
 						if NumberRow>=1:
-							keyboard2.append([InlineKeyboardButton("🗂 "+file2['title'], callback_data=file2['id'])])
+							keyboard2.append([InlineKeyboardButton("🗂 "+file2['title'], callback_data="Drive_" + file2['id'])])
 							NumberRow=0
 							NumberArray+=1
 						else:
-							keyboard2[NumberArray].append(InlineKeyboardButton("🗂 "+file2['title'], callback_data=file2['id']))
+							keyboard2[NumberArray].append(InlineKeyboardButton("🗂 "+file2['title'], callback_data="Drive_" + file2['id']))
 							NumberRow+=1
 					else:
 						if  ".pdf" in file2['title']:
@@ -390,15 +261,15 @@ def callback(bot, update):
 						else:
 							icona="📄 "
 						if NumberRow>=1:
-							keyboard2.append([InlineKeyboardButton(icona+file2['title'], callback_data=file2['id'])])
+							keyboard2.append([InlineKeyboardButton(icona+file2['title'], callback_data="Drive_" + file2['id'])])
 							NumberRow=0
 							NumberArray+=1
 						else:
-							keyboard2[NumberArray].append(InlineKeyboardButton(icona+file2['title'], callback_data=file2['id']))
+							keyboard2[NumberArray].append(InlineKeyboardButton(icona+file2['title'], callback_data="Drive_" + file2['id']))
 							NumberRow+=1
 
 				if file1['parents'][0]['id'] != '0ADXK_Yx5406vUk9PVA':
-					keyboard2.append([InlineKeyboardButton("🔙", callback_data=file1['parents'][0]['id'])])
+					keyboard2.append([InlineKeyboardButton("🔙", callback_data="Drive_" + file1['parents'][0]['id'])])
 				reply_markup3 = InlineKeyboardMarkup(keyboard2)
 				bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'],text=file1['title']+":", reply_markup=reply_markup3)
 
@@ -443,7 +314,7 @@ def request(bot, update):
 				username=""
 			if(len(update.message.text.split(" "))==4) and ("@" in update.message.text.split(" ")[3]) and ("." in update.message.text.split( )[3]):
 				textSend=str(update.message.text)+" "+username
-				keyboard.append([InlineKeyboardButton("Accetta", callback_data=str(chat_id))])
+				keyboard.append([InlineKeyboardButton("Accetta", callback_data="Drive_"+str(chat_id))])
 				reply_markup2=InlineKeyboardMarkup(keyboard)
 				bot.sendMessage(chat_id=-1001095167198,text=textSend,reply_markup=reply_markup2)
 				bot.sendMessage(chat_id=chat_id, text=messageText)
@@ -508,19 +379,19 @@ def drive(bot, update):
                 fileN=""
                 if file1['mimeType']=="application/vnd.google-apps.folder":
                     if NumberRow>=3:
-                        keyboard2.append([InlineKeyboardButton("🗂 "+file1['title'], callback_data=file1['id'])])
+                        keyboard2.append([InlineKeyboardButton("🗂 "+file1['title'], callback_data="Drive_" + file1['id'])])
                         NumberRow=0
                         NumberArray+=1
                     else:
-                        keyboard2[NumberArray].append(InlineKeyboardButton("🗂 "+file1['title'],callback_data=file1['id']))
+                        keyboard2[NumberArray].append(InlineKeyboardButton("🗂 "+file1['title'],callback_data="Drive_" + file1['id']))
                         NumberRow+=1
                 else:
                     if NumberRow>=3:
-                        keyboard2.append([InlineKeyboardButton("📃 "+file1['title'], callback_data=file1['id'])])
+                        keyboard2.append([InlineKeyboardButton("📃 "+file1['title'], callback_data="Drive_" + file1['id'])])
                         NumberRow=0
                         NumberArray+=1
                     else:
-                        keyboard2[NumberArray].append(InlineKeyboardButton("📃 "+file1['title'],callback_data=file1['id']))
+                        keyboard2[NumberArray].append(InlineKeyboardButton("📃 "+file1['title'],callback_data="Drive_" + file1['id']))
                         NumberRow+=1
 
             reply_markup3 = InlineKeyboardMarkup(keyboard2)
@@ -529,8 +400,9 @@ def drive(bot, update):
     		bot.sendMessage(chat_id=chat_id,text="🔒 Non hai i permessi per utilizzare la funzione /drive,\n Utilizzare il comando /request <nome> <cognome> <e-mail> (il nome e il cognome devono essere scritti uniti Es: Di mauro -> Dimauro) ")
 
 
+# CallbackQueryHandler
 def button_handler(bot, update):
-	query = update.callback_query	
+	query = update.callback_query
 	chat_id = query.message.chat_id
 	message_id = query.message.message_id
 	data = query.data
@@ -541,42 +413,52 @@ def button_handler(bot, update):
 
 		globals()[funcName](bot, chat_id, message_id)
 
+	elif data == "esami_button" or data == "lezioni_button" or data == "help_cmd" or data == "exit_cmd":
+		messageText = globals()[data]()
+		bot.editMessageText(text=messageText, chat_id=chat_id, message_id=message_id)
+
+	elif data.startswith("Drive_"):
+		callback(bot,update)
+
 	#Simple text
 	elif data != "_div":
-		messageText = globals()[data]()
-
+		messageText = read_md(data)
+		checkLog(bot, update, data, 1)
 		bot.editMessageText(text=messageText, chat_id=chat_id, message_id=message_id)
 
 def help(bot, update):
+	checkLog(bot, update, "help")
+
 	chat_id = update.message.chat_id
 	keyboard=[[]]
 	messageText="@DMI_Bot risponde ai seguenti comandi:"
 
 	keyboard.append([InlineKeyboardButton(" ~ Dipartimento e CdL ~ ", callback_data="_div")])
-	
+
 	keyboard.append(
 		[
-			InlineKeyboardButton("📖 Esami (Triennale)", 	callback_data="esami_button"),
-			InlineKeyboardButton("📖 Esami (Magistrale)", 	url=mesami_url()),
-			InlineKeyboardButton("🗓 Aulario", 				url=aulario_url())
-		]
-	)	
-	keyboard.append(
-		[
-			InlineKeyboardButton("🍽 Mensa", 							 callback_data="mensa_cmd"),
-			InlineKeyboardButton("👥 Rappresentanti", 					 callback_data="sm_rapp_menu"),
-			InlineKeyboardButton("📚 Biblioteca", 						 callback_data="biblioteca_cmd"),			
-			InlineKeyboardButton(CUSicon[random.randint(0,5)] + " CUS", callback_data="cus_cmd")
+			InlineKeyboardButton("📖 Esami (Triennale)",   callback_data="esami_button"),
+			InlineKeyboardButton("📖 Esami (Magistrale)",  url=mesami_url()),
+			InlineKeyboardButton("🗓 Aulario",             url=aulario_url()),
+			InlineKeyboardButton("Lezioni",               callback_data="lezioni_button")
 		]
 	)
-	
-	keyboard.append([InlineKeyboardButton(" ~ Segreteria orari e contatti ~ ", callback_data="_div")])
-	
 	keyboard.append(
 		[
-			InlineKeyboardButton("Seg. Didattica", 	callback_data="sdidattica_cmd"),
-			InlineKeyboardButton("Seg. Studenti", 	callback_data="sstudenti_cmd"),
-			InlineKeyboardButton("CEA", 			callback_data="cea_cmd")
+			InlineKeyboardButton("🍽 Mensa",                             callback_data="mensa"),
+			InlineKeyboardButton("👥 Rappresentanti",                    callback_data="sm_rapp_menu"),
+			InlineKeyboardButton("📚 Biblioteca",                        callback_data="biblioteca"),
+			InlineKeyboardButton(CUSicon[random.randint(0,5)] + " CUS", callback_data="cus")
+		]
+	)
+
+	keyboard.append([InlineKeyboardButton(" ~ Segreteria orari e contatti ~ ", callback_data="_div")])
+
+	keyboard.append(
+		[
+			InlineKeyboardButton("Seg. Didattica",  callback_data="sdidattica"),
+			InlineKeyboardButton("Seg. Studenti",   callback_data="sstudenti"),
+			InlineKeyboardButton("CEA",             callback_data="cea")
 		]
 	)
 
@@ -584,9 +466,9 @@ def help(bot, update):
 
 	keyboard.append(
 		[
-			InlineKeyboardButton("ERSU", 		 callback_data="ersu_cmd"),
-			InlineKeyboardButton("Ufficio ERSU", callback_data="ufficio_ersu_cmd"),
-			InlineKeyboardButton("URP", 		 callback_data="urp_cmd")
+			InlineKeyboardButton("ERSU",          callback_data="ersu"),
+			InlineKeyboardButton("Ufficio ERSU",  callback_data="ufficioersu"),
+			InlineKeyboardButton("URP",           callback_data="urp")
 		]
 	)
 
@@ -594,103 +476,43 @@ def help(bot, update):
 
 	keyboard.append(
 		[
-			InlineKeyboardButton("Iscriviti alle news", 	callback_data="enablenews_cmd"),
-			InlineKeyboardButton("Disiscriviti dalle news", callback_data="disablenews_cmd")
+			InlineKeyboardButton("Iscriviti alle news",     callback_data="enablenews"),
+			InlineKeyboardButton("Disiscriviti dalle news", callback_data="disablenews")
 		]
 	)
 	keyboard.append(
 		[
-			InlineKeyboardButton("📂 Drive", 	 	callback_data="drive_cmd"),
-			InlineKeyboardButton("Contributors",	callback_data="contributors_cmd"),
+			InlineKeyboardButton("📂 Drive",          callback_data="drive"),
+			InlineKeyboardButton("Contributors",     callback_data="contributors"),
 		]
 	)
-	
+
 	keyboard.append(
 		[
-			InlineKeyboardButton("Tutti i comandi", 	callback_data="help_cmd"),
-			InlineKeyboardButton("Chiudi", 				callback_data="exit_cmd")
+			InlineKeyboardButton("Tutti i comandi", callback_data="help_cmd"),
+			InlineKeyboardButton("Chiudi",          callback_data="exit_cmd")
 		]
 	)
-		
+
 	reply_markup=InlineKeyboardMarkup(keyboard)
 
 	bot.sendMessage(chat_id=chat_id, text=messageText, reply_markup=reply_markup)
-	
+
 def rapp_menu(bot, chat_id, message_id):
 	keyboard=[[]]
 	messageText="Quali rappresentanti vuoi contattare?"
 
 	keyboard.append(
 		[
-			InlineKeyboardButton("Rapp. DMI", 	 	 	callback_data="rapp_dmi_cmd"),
-			InlineKeyboardButton("Rapp. Informatica",	callback_data="rapp_inf_cmd"),
-			InlineKeyboardButton("Rapp. Matematica",	callback_data="rapp_mat_cmd"),
+			InlineKeyboardButton("Rapp. DMI",         callback_data="rappresentanti_dmi"),
+			InlineKeyboardButton("Rapp. Informatica", callback_data="rappresentanti_informatica"),
+			InlineKeyboardButton("Rapp. Matematica",  callback_data="rappresentanti_matematica"),
 		]
 	)
 
 	reply_markup=InlineKeyboardMarkup(keyboard)
 
 	bot.editMessageText(text=messageText, chat_id=chat_id, message_id=message_id,reply_markup=reply_markup)
-
-def rappresentanti(bot, update):
-	checkLog(bot, update,"rappresentanti")
-	messageText = rapp_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def rappresentanti_dmi(bot, update):
-	checkLog(bot, update,"rappresentanti_dmi")
-	messageText = rapp_dmi_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def rappresentanti_info(bot, update):
-	checkLog(bot, update,"rappresentanti_info")
-	messageText = rapp_inf_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def rappresentanti_mate(bot, update):
-	checkLog(bot, update,"rappresentanti_mate")
-	messageText = rapp_mat_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def sdidattica(bot, update):
-	checkLog(bot, update,"sdidattica")
-	messageText = sdidattica_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def sstudenti(bot, update):
-	checkLog(bot, update,"sstudenti")
-	messageText = sstudenti_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def cea(bot, update):
-	checkLog(bot, update,"cea")
-	messageText = cea_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def ersu(bot, update):
-	checkLog(bot, update,"ersu")
-	messageText = ersu_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def ufficioersu(bot, update):
-	checkLog(bot, update,"ufficioersu")
-	messageText = ufficio_ersu_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def urp(bot, update):
-	checkLog(bot, update,"urp")
-	messageText = urp_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def prof(bot, update, args):
-	checkLog(bot, update, "prof")
-	messageText = prof_cmd(args)
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
-
-def aulario(bot, update):
-	checkLog(bot, update,"aulario")
-	messageText = aulario_url()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
 
 def smonta_portoni(bot, update):
 	checkLog(bot, update,"smonta_portoni")
@@ -702,13 +524,18 @@ def santino(bot, update):
 	messageText = santino_cmd()
 	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
+def prof(bot, update, args):
+	checkLog(bot, update, "prof")
+	messageText = prof_cmd(args)
+	bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
+
 def forum_bot(bot, update):
 	checkLog(bot, update,"forum_bot")
 	messageText = forum_cmd(update.message.text)
 	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
 def news_(bot, update):
-	if (update.message.chat_id == 26349488):
+	if (update.message.chat_id == 26349488 or update.message.chat_id == 37967664):
 		global news
 		news = update.message.text.replace("/news ", "")
 		messageText = "News Aggiornata!"
@@ -778,7 +605,11 @@ def statsTot(bot, update):
         text+=str(row[1])+": "+str(row[0])+"\n"
     bot.sendMessage(chat_id=chat_id,text=text)
 
-def checkLog(bot, update, type):
+def checkLog(bot, update, type, callback=0):
+
+    if callback:
+      update = update.callback_query
+
     if (disable_db == 0):
         chat_id = update.message.chat_id
         conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)

@@ -44,14 +44,14 @@ def main():
 
 	dp.add_handler(CommandHandler('prof', prof, pass_args=True))
 
-	dp.add_handler(CommandHandler('aulario', aulario))
+	dp.add_handler(CommandHandler('aulario', lambda bot, update: informative_callback(bot, update, 'aulario')))
 	dp.add_handler(CommandHandler('help',help))
-	dp.add_handler(CommandHandler('contributors',contributors))
+	dp.add_handler(CommandHandler('contributors', lambda bot, update: informative_callback(bot, update, 'contributors')))
 
-	dp.add_handler(CommandHandler('rappresentanti',rappresentanti))
-	dp.add_handler(CommandHandler('rappresentanti_dmi',rappresentanti_dmi))
-	dp.add_handler(CommandHandler('rappresentanti_informatica',rappresentanti_info))
-	dp.add_handler(CommandHandler('rappresentanti_matematica',rappresentanti_mate))
+	dp.add_handler(CommandHandler('rappresentanti', lambda bot, update: informative_callback(bot, update, 'rappresentanti')))
+	dp.add_handler(CommandHandler('rappresentanti_dmi', lambda bot, update: informative_callback(bot, update, 'rappresentanti_dmi')))
+	dp.add_handler(CommandHandler('rappresentanti_informatica', lambda bot, update: informative_callback(bot, update, 'rappresentanti_informatica')))
+	dp.add_handler(CommandHandler('rappresentanti_matematica', lambda bot, update: informative_callback(bot, update, 'rappresentanti_matematica')))
 
 	if (disable_drive == 0):
 	  dp.add_handler(CommandHandler('drive',drive))

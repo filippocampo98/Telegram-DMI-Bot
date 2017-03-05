@@ -34,7 +34,7 @@ def esami_condition(items, field, value, *session):
 
 def esami_cmd(args, link):
 
-    output_str = "Poffarbacco, qualcosa non va. Segnalalo ai dev \contributors \n"
+    output_str = "Poffarbacco, qualcosa non va. Segnalalo ai dev /contributors \n"
 
     if(args):
         output = Set()
