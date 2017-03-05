@@ -26,9 +26,9 @@ from module.esami import esami_cmd
 from module.professori import prof_cmd
 
 # Debug
-disable_chatid_logs = 0 #news, stats
-disable_db = 0          #stats, drive
-disable_drive = 0       #drive
+disable_chatid_logs = 1 #news, stats
+disable_db = 1          #stats, drive
+disable_drive = 1       #drive
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -44,7 +44,7 @@ TOKEN = tokenconf      		#Token of your telegram bot that you created from @BotF
 def lezioni(bot, update, args, *m):
     checkLog(bot, update, "lezioni")
     if(m):
-        messageText = "_Command under developement._\nControlla la risorsa da te richiesta sul [sito](http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20delle%20Lezioni)"
+        messageText = "_Command under development._\nControlla la risorsa da te richiesta sul [sito](http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20delle%20Lezioni)"
     else:
         messageText = lezioni_cmd(args, 'http://188.213.170.165/PHP-DMI-API/result/lezioni_dmi.json')
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
@@ -52,7 +52,7 @@ def lezioni(bot, update, args, *m):
 def esami(bot, update, args, *m):
     checkLog(bot, update, "esami")
     if(m):
-        messageText = "_Command under developement._\nControlla la risorsa da te richiesta sul [sito](http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20degli%20Esami)"
+        messageText = "_Command under development._\nControlla la risorsa da te richiesta sul [sito](http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20degli%20Esami)"
     else:
         messageText = esami_cmd(args, 'http://188.213.170.165/PHP-DMI-API/result/esami_dmi.json')
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
@@ -115,7 +115,7 @@ def help_cmd():
     return output
 
 def contributors_cmd():
-	output = "@Helias, @adriano_effe, @Veenz, @simone989, @TkdAlex\n"
+	output = "@Helias, @adriano_effe, @Veenz, @simone989, @TkdAlex, @aegroto\n"
 	output +="https://github.com/UNICT-DMI/Telegram-DMI-Bot.git"
 	return output
 
@@ -173,6 +173,116 @@ def rapp_mat_cmd():
 	output += "Pratissoli Mirco - @Mirko291194\n"
 	output += "Sciuto Rita - @RitaSciuto"
 	return output
+
+def sdidattica_cmd():
+	output  = "Sede presso il Dipartimento di Matematica e Informatica (primo piano vicino al laboratorio) \n\n"
+	output += "Sig.ra Cristina Mele\n"
+	output += "📞 095/7337227\n"
+	output += "✉️ cmele@dmi.unict.it\n\n"
+	output += "🕑 Orari:\n"
+	output += "Martedì dalle 10:30 alle 12:30\n"
+	output += "Giovedì dalle 10:30 alle 12:30"
+	return output
+
+def sstudenti_cmd():
+	output  = "Segreteria studenti\n"
+	output += "Sede presso la Cittadella Universitaria (vicino la mensa)\n\n"
+	output += "Via S. Sofia, 64 ed. 11 - 95125 Catania\n"
+	output += "📞 095.7386103, 6119, 6109, 6125, 6129, 6123, 6122, 6106, 6107, 6121\n"
+	output += "✉️ settore.scientifico@unict.it\n\n"
+	output += "🕑 Orario invernale:\n"
+	output += "Lunedi\': 10:00 - 12.30\n"
+	output += "Martedi\': 10:00 -12:30 | 15:00 - 16:30\n"
+	output += "Giovedi\': 10:00 - 12:30 | 15:00 - 16:30\n"
+	output += "Venerdi\': 10:00 - 12:30"
+	return output
+
+def cea_cmd():
+	output  = "Centro per i sistemi di elaborazione e le applicazioni scientifiche e didattiche (CEA)\n"
+	output += "📞 0957307560 - fax: 0957307544\n"
+	output += "✉️ cea@unict.it\n"
+	output += "Via Santa Maria del Rosario, 9 - via Sangiuliano 257 (terzo piano) - 95131 Catania\n"
+	output += "http://archivio.unict.it/cea"
+	return output
+
+def ersu_cmd():
+	output  = "ERSU Catania - sede centrale\n"
+	output += "Sede presso Via Etnea, 570\n\n"
+	output += "📞 095/7517940 (ore 9:00/12:00)\n"
+	output += "✉️ urp@ersucatania.gov.it\n\n"
+	output += "🕑 Orari:\n"
+	output += "Lunedì: 09:00 - 12:00\n"
+	output += "Mercoledì: 15:30 - 18:00\n"
+	output += "Venerdì: 09:00 - 12:00"
+	return output
+
+def ufficio_ersu_cmd():
+	output  = "ERSU Catania - Ufficio Tesserini\n"
+	output += "Sede della Cittadella (accanto l\'ingresso della Casa dello Studente)\n\n"
+	output += "🕑 Orari:\n"
+	output += "martedì-giovedì dalle 9.00 alle 12.30 \n\n"
+	output += "UfficioErsu vicino la mensa Oberdan\n"
+	output += "lunedì-mercoledì-venerdì dalle 09.00 alle 12.30 \n"
+	output += "mercoledì 15:00 - 18.00:"
+	return output
+
+def urp_cmd():
+	output = "URP Studenti\n"
+	output += "Sede in Via A.di Sangiuliano, 44\n\n"
+	output += "📞 800894327 (da fisso), 095 6139202/1/0\n"
+	output += "✉️ urp-studenti@unict.it"
+	return output
+
+def mensa_cmd():
+	output  = "🕑 Orario Mensa\n"
+	output += "pranzo dalle ore 12,00 alle ore 14,30\n"
+	output += "cena dalle ore 19,00 alle ore 21,30"
+	return output
+
+def biblioteca_cmd():	
+	output  = "Sala Lettura:\n"
+	output += "lunedì - venerdì 08.00 - 19.00 \n\n"	
+	output += "Servizio Distribuzione: \n"
+	output += "lunedì - giovedì 08.30 - 14.00 \n"
+	output += "lunedì - giovedì 14.30 - 16.30 \n"
+	output += "venerdì  08.30 - 13.30"
+	return output
+
+def cus_cmd():
+	output = "CUS Catania\n"
+	output += "Viale A. Doria n° 6  - 95125 Catania \n"
+	output += "📞 095336327- fax 095336478 \n"
+	output += "✉ info@cuscatania.it\n"
+	output += "http://www.cuscatania.it/Contatti.aspx";
+	return output
+
+def enablenews_cmd():
+	output = "Per confermare l'iscrizione alla newsletter del DMI digita /enablenews"
+	return output
+	
+def disablenews_cmd():
+	output = "Se sei sicuro di voler disiscriverti dalla newsletter del DMI digita /disablenews"
+	return output
+
+def drive_cmd():
+	output = "Per accedere alla cartella Google Drive del dipartimento digita /drive"
+	return output
+
+def exit_cmd():
+	output = "."
+	return output
+
+def esami_button():
+	output = "Scrivi /esami inserendo almeno uno dei seguenti parametri: giorno, materia, sessione (prima, seconda, terza, straordinaria)"
+	return output
+
+def mesami_url():
+	url = "http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20degli%20Esami"
+	return url
+
+def aulario_url():
+	url = 'http://aule.dmi.unict.it/aulario/roschedule.php'
+	return url
 
 #Easter egg
 def smonta_portoni_cmd():
@@ -235,9 +345,6 @@ def callback(bot, update):
 			conn.commit()
 		except Exception as error:
 			bot.sendMessage(chat_id=-1001095167198,text=str("ERRORE INSERIMENTO: ")+str(update['callback_query']['message']['text'])+" "+str(update['callback_query']['data']))
-
-
-
 
 		LAST_UPDATE_ID = update_id + 1
 		text = ""
@@ -350,8 +457,6 @@ def request(bot, update):
 			messageText="Hai già effettuato la richiesta di accesso"
 			bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
 
-
-
 	else:
 		messageText="Non è possibile utilizzare /request in un gruppo"
 		bot.sendMessage(chat_id=chat_id, text=messageText)
@@ -423,10 +528,109 @@ def drive(bot, update):
     	else:
     		bot.sendMessage(chat_id=chat_id,text="🔒 Non hai i permessi per utilizzare la funzione /drive,\n Utilizzare il comando /request <nome> <cognome> <e-mail> (il nome e il cognome devono essere scritti uniti Es: Di mauro -> Dimauro) ")
 
+
+def button_handler(bot, update):
+	query = update.callback_query	
+	chat_id = query.message.chat_id
+	message_id = query.message.message_id
+	data = query.data
+
+	#Submenu
+	if data.startswith("sm_"):
+		funcName = data[3:len(data)]
+
+		globals()[funcName](bot, chat_id, message_id)
+
+	#Simple text
+	elif data != "_div":
+		messageText = globals()[data]()
+
+		bot.editMessageText(text=messageText, chat_id=chat_id, message_id=message_id)
+
 def help(bot, update):
-    checkLog(bot, update,"help")
-    messageText = help_cmd()
-    bot.sendMessage(chat_id=update.message.chat_id,text=messageText)
+	chat_id = update.message.chat_id
+	keyboard=[[]]
+	messageText="@DMI_Bot risponde ai seguenti comandi:"
+
+	keyboard.append([InlineKeyboardButton(" ~ Dipartimento e CdL ~ ", callback_data="_div")])
+	
+	keyboard.append(
+		[
+			InlineKeyboardButton("📖 Esami (Triennale)", 	callback_data="esami_button"),
+			InlineKeyboardButton("📖 Esami (Magistrale)", 	url=mesami_url()),
+			InlineKeyboardButton("🗓 Aulario", 				url=aulario_url())
+		]
+	)	
+	keyboard.append(
+		[
+			InlineKeyboardButton("🍽 Mensa", 							 callback_data="mensa_cmd"),
+			InlineKeyboardButton("👥 Rappresentanti", 					 callback_data="sm_rapp_menu"),
+			InlineKeyboardButton("📚 Biblioteca", 						 callback_data="biblioteca_cmd"),			
+			InlineKeyboardButton(CUSicon[random.randint(0,5)] + " CUS", callback_data="cus_cmd")
+		]
+	)
+	
+	keyboard.append([InlineKeyboardButton(" ~ Segreteria orari e contatti ~ ", callback_data="_div")])
+	
+	keyboard.append(
+		[
+			InlineKeyboardButton("Seg. Didattica", 	callback_data="sdidattica_cmd"),
+			InlineKeyboardButton("Seg. Studenti", 	callback_data="sstudenti_cmd"),
+			InlineKeyboardButton("CEA", 			callback_data="cea_cmd")
+		]
+	)
+
+	keyboard.append([InlineKeyboardButton(" ~ ERSU orari e contatti ~ ", callback_data="_div")])
+
+	keyboard.append(
+		[
+			InlineKeyboardButton("ERSU", 		 callback_data="ersu_cmd"),
+			InlineKeyboardButton("Ufficio ERSU", callback_data="ufficio_ersu_cmd"),
+			InlineKeyboardButton("URP", 		 callback_data="urp_cmd")
+		]
+	)
+
+	keyboard.append([InlineKeyboardButton(" ~ Bot e varie ~ ", callback_data="_div")])
+
+	keyboard.append(
+		[
+			InlineKeyboardButton("Iscriviti alle news", 	callback_data="enablenews_cmd"),
+			InlineKeyboardButton("Disiscriviti dalle news", callback_data="disablenews_cmd")
+		]
+	)
+	keyboard.append(
+		[
+			InlineKeyboardButton("📂 Drive", 	 	callback_data="drive_cmd"),
+			InlineKeyboardButton("Contributors",	callback_data="contributors_cmd"),
+		]
+	)
+	
+	keyboard.append(
+		[
+			InlineKeyboardButton("Tutti i comandi", 	callback_data="help_cmd"),
+			InlineKeyboardButton("Chiudi", 				callback_data="exit_cmd")
+		]
+	)
+		
+	reply_markup=InlineKeyboardMarkup(keyboard)
+
+	bot.sendMessage(chat_id=chat_id, text=messageText, reply_markup=reply_markup)
+	
+def rapp_menu(bot, chat_id, message_id):
+	keyboard=[[]]
+	messageText="Quali rappresentanti vuoi contattare?"
+
+	keyboard.append(
+		[
+			InlineKeyboardButton("Rapp. DMI", 	 	 	callback_data="rapp_dmi_cmd"),
+			InlineKeyboardButton("Rapp. Informatica",	callback_data="rapp_inf_cmd"),
+			InlineKeyboardButton("Rapp. Matematica",	callback_data="rapp_mat_cmd"),
+		]
+	)
+
+	reply_markup=InlineKeyboardMarkup(keyboard)
+
+	bot.editMessageText(text=messageText, chat_id=chat_id, message_id=message_id,reply_markup=reply_markup)
 
 def rappresentanti(bot, update):
 	checkLog(bot, update,"rappresentanti")
@@ -448,6 +652,36 @@ def rappresentanti_mate(bot, update):
 	messageText = rapp_mat_cmd()
 	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
 
+def sdidattica(bot, update):
+	checkLog(bot, update,"sdidattica")
+	messageText = sdidattica_cmd()
+	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+
+def sstudenti(bot, update):
+	checkLog(bot, update,"sstudenti")
+	messageText = sstudenti_cmd()
+	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+
+def cea(bot, update):
+	checkLog(bot, update,"cea")
+	messageText = cea_cmd()
+	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+
+def ersu(bot, update):
+	checkLog(bot, update,"ersu")
+	messageText = ersu_cmd()
+	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+
+def ufficioersu(bot, update):
+	checkLog(bot, update,"ufficioersu")
+	messageText = ufficio_ersu_cmd()
+	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+
+def urp(bot, update):
+	checkLog(bot, update,"urp")
+	messageText = urp_cmd()
+	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+
 def prof(bot, update, args):
 	checkLog(bot, update, "prof")
 	messageText = prof_cmd(args)
@@ -455,7 +689,7 @@ def prof(bot, update, args):
 
 def aulario(bot, update):
 	checkLog(bot, update,"aulario")
-	messageText = 'http://aule.dmi.unict.it/aulario/roschedule.php'
+	messageText = aulario_url()
 	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
 
 def smonta_portoni(bot, update):

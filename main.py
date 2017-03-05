@@ -15,6 +15,7 @@ def main():
 	updater = Updater(TOKEN)
 	dp = updater.dispatcher
 	dp.add_handler(MessageHandler(Filters.all, record_everything),1)
+	dp.add_handler(CallbackQueryHandler(button_handler))
 
   	#Easter Egg
 	dp.add_handler(CommandHandler('smonta_portoni',smonta_portoni))
@@ -44,7 +45,7 @@ def main():
 	dp.add_handler(CommandHandler('prof', prof, pass_args=True))
 
 	dp.add_handler(CommandHandler('aulario', aulario))
-  	dp.add_handler(CommandHandler('help',help))
+	dp.add_handler(CommandHandler('help',help))
 	dp.add_handler(CommandHandler('contributors',contributors))
 
 	dp.add_handler(CommandHandler('rappresentanti',rappresentanti))
