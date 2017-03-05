@@ -26,9 +26,9 @@ from module.esami import esami_cmd
 from module.professori import prof_cmd
 
 # Debug
-disable_chatid_logs = 0 #news, stats
-disable_db = 0          #stats, drive
-disable_drive = 0       #drive
+disable_chatid_logs = 1 #news, stats
+disable_db = 1          #stats, drive
+disable_drive = 1       #drive
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -44,7 +44,7 @@ TOKEN = tokenconf      		#Token of your telegram bot that you created from @BotF
 def lezioni(bot, update, args, *m):
     checkLog(bot, update, "lezioni")
     if(m):
-        messageText = "_Command under developement._\nControlla la risorsa da te richiesta sul [sito](http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20delle%20Lezioni)"
+        messageText = "_Command under development._\nControlla la risorsa da te richiesta sul [sito](http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20delle%20Lezioni)"
     else:
         messageText = lezioni_cmd(args, 'http://188.213.170.165/PHP-DMI-API/result/lezioni_dmi.json')
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
@@ -52,7 +52,7 @@ def lezioni(bot, update, args, *m):
 def esami(bot, update, args, *m):
     checkLog(bot, update, "esami")
     if(m):
-        messageText = "_Command under developement._\nControlla la risorsa da te richiesta sul [sito](http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20degli%20Esami)"
+        messageText = "_Command under development._\nControlla la risorsa da te richiesta sul [sito](http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20degli%20Esami)"
     else:
         messageText = esami_cmd(args, 'http://188.213.170.165/PHP-DMI-API/result/esami_dmi.json')
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
@@ -115,7 +115,7 @@ def help_cmd():
     return output
 
 def contributors_cmd():
-	output = "@Helias, @adriano_effe, @Veenz, @simone989, @TkdAlex\n"
+	output = "@Helias, @adriano_effe, @Veenz, @simone989, @TkdAlex, @aegroto\n"
 	output +="https://github.com/UNICT-DMI/Telegram-DMI-Bot.git"
 	return output
 
@@ -198,8 +198,8 @@ def sstudenti_cmd():
 	return output
 
 def cea_cmd():
-  output  = "Centro per i sistemi di elaborazione e le applicazioni scientifiche e didattiche (CEA)\n"
-  output += "📞 0957307560 - fax: 0957307544\n"
+	output  = "Centro per i sistemi di elaborazione e le applicazioni scientifiche e didattiche (CEA)\n"
+	output += "📞 0957307560 - fax: 0957307544\n"
 	output += "✉️ cea@unict.it\n"
 	output += "Via Santa Maria del Rosario, 9 - via Sangiuliano 257 (terzo piano) - 95131 Catania\n"
 	output += "http://archivio.unict.it/cea"
@@ -272,9 +272,9 @@ def exit_cmd():
 	output = "."
 	return output
 
-def esami_url():
-	url = "http://web.dmi.unict.it/Didattica/Laurea%20Triennale%20in%20Informatica%20L-31/Calendario%20dEsami"
-	return url
+def esami_button():
+	output = "Scrivi /esami inserendo almeno uno dei seguenti parametri: giorno, materia, sessione (prima, seconda, terza, straordinaria)"
+	return output
 
 def mesami_url():
 	url = "http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20degli%20Esami"
@@ -556,7 +556,7 @@ def help(bot, update):
 	
 	keyboard.append(
 		[
-			InlineKeyboardButton("📖 Esami (Triennale)", 	url=esami_url()),
+			InlineKeyboardButton("📖 Esami (Triennale)", 	callback_data="esami_button"),
 			InlineKeyboardButton("📖 Esami (Magistrale)", 	url=mesami_url()),
 			InlineKeyboardButton("🗓 Aulario", 				url=aulario_url())
 		]
@@ -600,7 +600,7 @@ def help(bot, update):
 	)
 	keyboard.append(
 		[
-			InlineKeyboardButton("📂 Drive", 	 	 callback_data="drive_cmd"),
+			InlineKeyboardButton("📂 Drive", 	 	callback_data="drive_cmd"),
 			InlineKeyboardButton("Contributors",	callback_data="contributors_cmd"),
 		]
 	)
@@ -680,11 +680,6 @@ def ufficioersu(bot, update):
 def urp(bot, update):
 	checkLog(bot, update,"urp")
 	messageText = urp_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def esami(bot, update):
-	checkLog(bot, update,"esami")
-	messageText = esami_url()
 	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
 
 def prof(bot, update, args):
