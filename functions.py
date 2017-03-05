@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 #Telegram
 import telegram
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
@@ -8,10 +9,10 @@ from telegram.ext import Updater, Filters, MessageHandler, CommandHandler, Callb
 from pydrive.drive import GoogleDrive
 from pydrive.auth import GoogleAuth
 
-# custom classes
+#Custom classes
 from classes.StringParser import StringParser
 
-# system libraries
+#System libraries
 from datetime import date, datetime, timedelta
 import json,datetime,re,random,os,sys
 import requests
@@ -20,102 +21,41 @@ from bs4 import BeautifulSoup
 import sqlite3
 import logging
 
-# debug
-disable_chatid_logs = 0    #news, stats
-disable_db = 0      #stats, drive
-disable_drive = 0   #drive
+from module.lezioni import lezioni_cmd
+from module.esami import esami_cmd
+from module.professori import prof_cmd
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+# Debug
+disable_chatid_logs = 0 #news, stats
+disable_db = 0          #stats, drive
+disable_drive = 0       #drive
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 logger = logging.getLogger(__name__)
 
 conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
 
-#token
+#Token
 tokenconf = open('config/token.conf', 'r').read()
 tokenconf = tokenconf.replace("\n", "")
 TOKEN = tokenconf      		#Token of your telegram bot that you created from @BotFather, write it on token.conf
 
-def getProfessori(input):
-    with open("data/json/professori.json") as data_file:
-        professori_data = json.load(data_file)
-
-    output = ""
-    i = 0
-
-    while(professori_data[i]["ID"] != "-1"):
-        if (input == "/prof"):
-	    return "La sintassi del comando è: /prof <nomeprofessore>"
-	if len(input) < 3:
-            return "Inserisci almeno 3 caratteri come nome/cognome del professore"
-        elif (( input.lower() in professori_data[i]["Nome"].lower() ) or ( input.lower() in professori_data[i]["Cognome"].lower() )):
-            output += "Ruolo: " + professori_data[i]["Ruolo"] + "\n"
-            output += "Cognome: " + professori_data[i]["Cognome"] + "\n"
-            output += "Nome: " + professori_data[i]["Nome"] + "\n"
-            output += "Indirizzo email : " + professori_data[i]["Email"] + "\n"
-            output += "Sito web: " + professori_data[i]["Sito"] + "\n"
-            output += "Scheda DMI: " + professori_data[i]["SchedaDMI"] + "\n\n"
-        i += 1
-    if output == "":
-        return "\nNon sono stati trovati risultati :(\n\n"
-
-    return output #Redefine with @TkdAlex
-
-def getLezioni(anno,semestre,giorno,corso):
-    if (corso == "triennale"):
-        with open("data/json/lezioni.json") as data_file:
-            lezioni_data = json.load(data_file)
-    elif (corso == "magistrale"):
-        with open("data/json/mlezioni.json") as data_file:
-            lezioni_data = json.load(data_file)
-    output = ""
-    i = 0
-    risultati = 0
-    while(lezioni_data[i]["Nome"] != "nil") :
-        if(lezioni_data[i]["GiornoSettimana"] == str(giorno) and lezioni_data[i]["Anno"] == anno and lezioni_data[i]["Semestre"] == semestre):
-            output += "\nLezione di " + lezioni_data[i]["Nome"] + ", dalle ore " + lezioni_data[i]["OraInizio"] + " alle ore " + lezioni_data[i]["OraFine"] + ", in aula " + lezioni_data[i]["Aula"]
-            risultati += 1
-        i += 1
-    if (risultati == 0):
-        return "Nessuna lezione trovata per il giorno specificato"
-    return output #Redefine with @TkdAlex
-
-def lezioni(input,corso):
-    #Interpreta l'anno richiesto
-    inputArray = input.split(' ')
-    if (inputArray[0] == "primo"):
-        anno = "1"
-    elif (inputArray[0] == "secondo"):
-        anno = "2"
-    elif (inputArray[0] == "terzo"):
-        anno = "3"
+def lezioni(bot, update, args, *m):
+    checkLog(bot, update, "lezioni")
+    if(m):
+        messageText = "_Command under developement._\nControlla la risorsa da te richiesta sul [sito](http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20delle%20Lezioni)"
     else:
-        return "Non ho capito la richiesta. Digita /help per maggiori info"
-    #Interpreta il giorno della settimana
-    if (len(inputArray) == 1 or inputArray[1] == "oggi"):
-        giorno = datetime.datetime.today().weekday()+1
-    elif (inputArray[1] == "domani"):
-        giorno = datetime.datetime.today().weekday()+2
-        if (giorno == 8):
-            giorno = 1
-    elif ("lun" in inputArray[1]):
-        giorno = 1
-    elif ("mar" in inputArray[1]):
-        giorno = 2
-    elif ("mer" in inputArray[1]):
-        giorno = 3
-    elif ("gio" in inputArray[1]):
-        giorno = 4
-    elif ("ven" in inputArray[1]):
-        giorno = 5
-    else:
-        return "Non ho capito la richiesta. Digita /help per maggiori info"
-    #Imposta il semestre corrente
-    semestre = "1"
-    #Chiama la funzione apposita con gli argomenti correttamente interpretati
-    return getLezioni(anno,semestre,giorno,corso) #Redefine with @TkdAlex
+        messageText = lezioni_cmd(args, 'http://188.213.170.165/PHP-DMI-API/result/lezioni_dmi.json')
+    bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
+def esami(bot, update, args, *m):
+    checkLog(bot, update, "esami")
+    if(m):
+        messageText = "_Command under developement._\nControlla la risorsa da te richiesta sul [sito](http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20degli%20Esami)"
+    else:
+        messageText = esami_cmd(args, 'http://188.213.170.165/PHP-DMI-API/result/esami_dmi.json')
+    bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
 def forum(sezione):
 
@@ -141,7 +81,6 @@ def forum(sezione):
 
     return False #Redefine with @Veeenz API
 
-
 # Commands
 CUSicon = {0 : "🏋",
 	   1 : "⚽️",
@@ -153,27 +92,48 @@ CUSicon = {0 : "🏋",
 
 def help_cmd():
     output = "@DMI_Bot risponde ai seguenti comandi: \n\n"
-    output += "📖 /esami - /mesami - linka il calendario degli esami\n"
-    output+= "🗓 /aulario - linka l\'aulario\n"
-    output+= "👔 /prof <nome> - es. /prof Milici\n"
-    output+= "🍽 /mensa - orario mensa\n"
-    output+= "👥 /rappresentanti - elenco dei rappresentanti del DMI\n"
-    output+= "📚 /biblioteca - orario biblioteca DMI\n"
-    output+= CUSicon[random.randint(0,5)] + " /cus sede e contatti\n\n"
-    output+= "Segreteria orari e contatti:\n"
-    output+= "/sdidattica - segreteria didattica\n"
-    output+= "/sstudenti - segreteria studenti\n"
-    output+= "/cea - CEA\n"
-    output+= "\nERSU orari e contatti\n"
-    output+= "/ersu - sede centrale\n"
-    output+= "/ufficioersu - (ufficio tesserini)\n"
-    output+= "/urp - URP studenti\n\n"
-    output+= "~Bot~\n"
-    output+= "📂 /drive - accedi a drive\n"
-    output+= "/disablenews \n"
-    output+= "/enablenews\n"
-    output+= "/contributors"
+    output += "📖 /esami - /mesami - 	linka il calendario degli esami\n"
+    output += "🗓 /aulario - linka l\'aulario\n"
+    output += "👔 /prof <nome> - es. /prof Milici\n"
+    output += "🍽 /mensa - orario mensa\n"
+    output += "👥 /rappresentanti - elenco dei rappresentanti del DMI\n"
+    output += "📚 /biblioteca - orario biblioteca DMI\n"
+    output += CUSicon[random.randint(0,5)] + " /cus sede e contatti\n\n"
+    output += "Segreteria orari e contatti:\n"
+    output += "/sdidattica - segreteria didattica\n"
+    output += "/sstudenti - segreteria studenti\n"
+    output += "/cea - CEA\n"
+    output += "\nERSU orari e contatti\n"
+    output += "/ersu - sede centrale\n"
+    output += "/ufficioersu - (ufficio tesserini)\n"
+    output += "/urp - URP studenti\n\n"
+    output += "~Bot~\n"
+    output += "📂 /drive - accedi a drive\n"
+    output += "/disablenews \n"
+    output += "/enablenews\n"
+    output += "/contributors"
     return output
+
+def contributors_cmd():
+	output = "@Helias, @adriano_effe, @Veenz, @simone989, @TkdAlex\n"
+	output +="https://github.com/UNICT-DMI/Telegram-DMI-Bot.git"
+	return output
+
+def contributors(bot, update):
+	checkLog(bot, update, "contributors")
+	messageText = contributors_cmd()
+	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+
+def read_md(namefile):
+    in_file = open("data/markdown/" + namefile + ".md","r")
+    text = in_file.read()
+    in_file.close()
+    return text
+
+def informative_callback(bot, update, cmd):
+    checkLog(bot, update, cmd)
+    messageText = read_md(cmd)
+    bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
 def rapp_cmd():
 	output = "Usa uno dei seguenti comandi per mostrare i rispettivi rappresentanti\n"
@@ -238,8 +198,8 @@ def sstudenti_cmd():
 	return output
 
 def cea_cmd():
-        output  = "Centro per i sistemi di elaborazione e le applicazioni scientifiche e didattiche (CEA)\n"
-        output += "📞 0957307560 - fax: 0957307544\n"
+  output  = "Centro per i sistemi di elaborazione e le applicazioni scientifiche e didattiche (CEA)\n"
+  output += "📞 0957307560 - fax: 0957307544\n"
 	output += "✉️ cea@unict.it\n"
 	output += "Via Santa Maria del Rosario, 9 - via Sangiuliano 257 (terzo piano) - 95131 Catania\n"
 	output += "http://archivio.unict.it/cea"
@@ -273,12 +233,6 @@ def urp_cmd():
 	output += "✉️ urp-studenti@unict.it"
 	return output
 
-def prof_cmd(text):
-	text = text.replace("@dmi_bot", "")
-	text = text.replace("/prof ", "")
-	output = getProfessori(text)
-	return output
-
 def mensa_cmd():
 	output  = "🕑 Orario Mensa\n"
 	output += "pranzo dalle ore 12,00 alle ore 14,30\n"
@@ -292,7 +246,6 @@ def biblioteca_cmd():
 	output += "lunedì - giovedì 08.30 - 14.00 \n"
 	output += "lunedì - giovedì 14.30 - 16.30 \n"
 	output += "venerdì  08.30 - 13.30"
-	
 	return output
 
 def cus_cmd():
@@ -357,11 +310,6 @@ def santino_cmd():
 
     return output
 
-def contributors_cmd():
-	output = "@Helias, @adriano_effe, @Veenz, @simone989\n"
-	output +="https://github.com/UNICT-DMI/Telegram-DMI-Bot.git"
-	return output
-
 def forum_cmd(text):
 	text = text.replace("/forum ","")
 	dictUrlSezioni = forum(text)
@@ -371,7 +319,6 @@ def forum_cmd(text):
 	else:
 		output = "La sezione non e' stata trovata."
 	return output
-
 
 def callback(bot, update):
 	keyboard2=[[]];
@@ -398,9 +345,6 @@ def callback(bot, update):
 			conn.commit()
 		except Exception as error:
 			bot.sendMessage(chat_id=-1001095167198,text=str("ERRORE INSERIMENTO: ")+str(update['callback_query']['message']['text'])+" "+str(update['callback_query']['data']))
-
-
-
 
 		LAST_UPDATE_ID = update_id + 1
 		text = ""
@@ -513,13 +457,9 @@ def request(bot, update):
 			messageText="Hai già effettuato la richiesta di accesso"
 			bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
 
-
-
 	else:
 		messageText="Non è possibile utilizzare /request in un gruppo"
 		bot.sendMessage(chat_id=chat_id, text=messageText)
-
-
 
 def adddb(bot, update):
 	chat_id = update.message.chat_id
@@ -587,6 +527,7 @@ def drive(bot, update):
             bot.sendMessage(chat_id=chat_id,text="DMI UNICT - Appunti & Risorse:", reply_markup=reply_markup3)
     	else:
     		bot.sendMessage(chat_id=chat_id,text="🔒 Non hai i permessi per utilizzare la funzione /drive,\n Utilizzare il comando /request <nome> <cognome> <e-mail> (il nome e il cognome devono essere scritti uniti Es: Di mauro -> Dimauro) ")
+
 
 def button_handler(bot, update):
 	query = update.callback_query	
@@ -741,40 +682,20 @@ def urp(bot, update):
 	messageText = urp_cmd()
 	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
 
-def prof(bot, update):
-	checkLog(bot, update,"prof")
-	messageText = prof_cmd(update.message.text)
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
 def esami(bot, update):
 	checkLog(bot, update,"esami")
 	messageText = esami_url()
 	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
 
-def mesami(bot, update):
-	checkLog(bot, update,"mesami")
-	messageText = mesami_url()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+def prof(bot, update, args):
+	checkLog(bot, update, "prof")
+	messageText = prof_cmd(args)
+	bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
 def aulario(bot, update):
 	checkLog(bot, update,"aulario")
 	messageText = aulario_url()
 	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def mensa(bot, update):
-	checkLog(bot, update,"mensa")
-	messageText = mensa_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def biblioteca(bot, update):
-	checkLog(bot, update,"biblioteca")
-	messageText= biblioteca_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
-def cus(bot, update):
-	checkLog(bot, update,"cus")
-	messageText= cus_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
 def smonta_portoni(bot, update):
 	checkLog(bot, update,"smonta_portoni")
@@ -784,18 +705,6 @@ def smonta_portoni(bot, update):
 def santino(bot, update):
 	checkLog(bot, update,"santino")
 	messageText = santino_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
-
-def liste(bot, update):
-	checkLog(bot, update,"liste")
-	picture = open("data/img/liste.png", "rb")
-	messageText = "Liste e candidati"
-	bot.sendPhoto(chat_id=update.message.chat_id, photo=picture)
-	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
-
-def contributors(bot, update):
-	checkLog(bot, update,"contributors")
-	messageText = contributors_cmd()
 	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
 def forum_bot(bot, update):
@@ -835,7 +744,6 @@ def disablenews(bot, update):
 		messageText = "News già disabilitate!"
 	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
-
 def enablenews(bot, update):
 	checkLog(bot, update,"enablenews")
 	chat_ids = open('logs/chatid.txt', 'r').read()
@@ -850,7 +758,7 @@ def enablenews(bot, update):
 
 # check if user (chatid) is registered on chatid.txt
 
-def stats(bot,update):
+def stats(bot, update):
     chat_id = update.message.chat_id
     conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
     if(len(update['message']['text'].split(' '))==2):
@@ -866,7 +774,7 @@ def stats(bot,update):
         text+=str(row[1])+": "+str(row[0])+"\n"
     bot.sendMessage(chat_id=chat_id,text=text)
 
-def statsTot(bot,update):
+def statsTot(bot, update):
     chat_id = update.message.chat_id
     conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
     text=""
@@ -875,8 +783,7 @@ def statsTot(bot,update):
         text+=str(row[1])+": "+str(row[0])+"\n"
     bot.sendMessage(chat_id=chat_id,text=text)
 
-
-def checkLog(bot, update,type):
+def checkLog(bot, update, type):
     if (disable_db == 0):
         chat_id = update.message.chat_id
         conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
