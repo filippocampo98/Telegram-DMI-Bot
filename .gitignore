@@ -8,3 +8,7 @@ functions.pyc
 config/drive_credentials.json
 config/settings.yaml
 data/DMI_DB.db
+module/__init__.pyc
+module/professori.pyc
+module/esami.pyc
+module/lezioni.pyc
