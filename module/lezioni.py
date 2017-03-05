@@ -48,7 +48,7 @@ def lezioni_condition_mult(items, days, years):
 
 def lezioni_cmd(args, link):
 
-    output_str = "Poffarbacco, qualcosa non va. Segnalalo ai dev \contributors \n"
+    output_str = "Poffarbacco, qualcosa non va. Segnalalo ai dev /contributors \n"
 
     if(args):
         output = Set()
