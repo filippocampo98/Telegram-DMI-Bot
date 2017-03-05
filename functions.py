@@ -451,7 +451,7 @@ def rappresentanti_mate(bot, update):
 def prof(bot, update, args):
 	checkLog(bot, update, "prof")
 	messageText = prof_cmd(args)
-	bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+	bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
 def aulario(bot, update):
 	checkLog(bot, update,"aulario")
