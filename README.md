@@ -23,6 +23,7 @@ If you want to test the bot by creating your personal istance, follow this steps
 - python-pip
 - python-bs4
 - python-beautifulsoup
+- language-pack-it
 
 #### To install with *pip*
 

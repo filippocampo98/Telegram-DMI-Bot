@@ -98,7 +98,7 @@ def esami_cmd(args, link):
                                 output.add(esami_output(item, sessions))
                         '''
 
-                else:
+                elif(not sessions and not years):
                     for arg in args:
                         output = output.union(esami_condition(items, "insegnamento", arg, False))
 
