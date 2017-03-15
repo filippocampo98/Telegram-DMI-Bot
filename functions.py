@@ -39,7 +39,7 @@ conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
 #Token
 tokenconf = open('config/token.conf', 'r').read()
 tokenconf = tokenconf.replace("\n", "")
-TOKEN = tokenconf      		#Token of your telegram bot that you created from @BotFather, write it on token.conf
+TOKEN = tokenconf    		#Token of your telegram bot that you created from @BotFather, write it on token.conf
 
 def lezioni(bot, update, args, *m):
     checkLog(bot, update, "lezioni")
@@ -178,6 +178,11 @@ def santino_cmd():
         output = "https://s12.postimg.org/5d7y88pj1/photo_2016_11_24_11_04_29.jpg"
 
     return output
+
+def prof_sticker_id(data):
+	text = json.loads(open(data).read())
+	i=random.randint(0,len(text)-1)
+	return text[i]["id"]
 
 def forum_cmd(text):
 	text = text.replace("/forum ","")
@@ -512,6 +517,7 @@ def rapp_menu(bot, chat_id, message_id):
 
 	reply_markup=InlineKeyboardMarkup(keyboard)
 
+
 	bot.editMessageText(text=messageText, chat_id=chat_id, message_id=message_id,reply_markup=reply_markup)
 
 def smonta_portoni(bot, update):
@@ -523,6 +529,10 @@ def santino(bot, update):
 	checkLog(bot, update,"santino")
 	messageText = santino_cmd()
 	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
+
+def prof_sticker(bot,update):
+	checkLog(bot,update,"prof_sticker")
+	bot.sendSticker(chat_id=update.message.chat_id,sticker=prof_sticker_id('data/json/stickers.json'))
 
 def prof(bot, update, args):
 	checkLog(bot, update, "prof")
@@ -577,7 +587,7 @@ def enablenews(bot, update):
 	else:
 		messageText = "News già abilitate!"
 	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
-
+	
 # check if user (chatid) is registered on chatid.txt
 
 def stats(bot, update):
