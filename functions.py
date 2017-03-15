@@ -26,9 +26,9 @@ from module.esami import esami_cmd
 from module.professori import prof_cmd
 
 # Debug
-disable_chatid_logs = 1 #news, stats
-disable_db = 1          #stats, drive
-disable_drive = 1       #drive
+disable_chatid_logs = 0 #news, stats
+disable_db = 0          #stats, drive
+disable_drive = 0       #drive
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -181,7 +181,7 @@ def santino_cmd():
 
 def prof_sticker_id(data):
 	text = json.loads(open(data).read())
-	i=random.randint(0,len(text))
+	i=random.randint(0,len(text)-1)
 	return text[i]["id"]
 
 def forum_cmd(text):
