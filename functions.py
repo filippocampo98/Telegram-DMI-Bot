@@ -179,6 +179,9 @@ def santino_cmd():
 
     return output
 
+def bladrim_cmd():
+	return "Per maggiori informazioni parla con @bladrim"
+
 def prof_sticker_id(data):
 	text = json.loads(open(data).read())
 	i=random.randint(0,len(text)-1)
@@ -529,6 +532,11 @@ def santino(bot, update):
 	checkLog(bot, update,"santino")
 	messageText = santino_cmd()
 	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
+
+def bladrim(bot, update):
+	checkLog(bot, update, "bladrim")
+	messageText = bladrim_cmd()
+	bot.sendMessage(chat_id = update.message.chat_id, text = messageText)
 
 def prof_sticker(bot,update):
 	checkLog(bot,update,"prof_sticker")
