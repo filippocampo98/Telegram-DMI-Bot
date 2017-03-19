@@ -24,11 +24,8 @@ import logging
 from module.lezioni import lezioni_cmd
 from module.esami import esami_cmd
 from module.professori import prof_cmd
+import yaml
 
-# Debug
-disable_chatid_logs = 0 #news, stats
-disable_db = 0          #stats, drive
-disable_drive = 0       #drive
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -39,6 +36,8 @@ conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
 #Token
 tokenconf = open('config/token.conf', 'r').read()
 tokenconf = tokenconf.replace("\n", "")
+with open('config/settings.yaml') as yaml_config:
+	config_map = yaml.load(yaml_config)
 TOKEN = tokenconf    		#Token of your telegram bot that you created from @BotFather, write it on token.conf
 
 def lezioni(bot, update, args, *m):
@@ -46,15 +45,16 @@ def lezioni(bot, update, args, *m):
     if(m):
         messageText = "_Command under development._\nControlla la risorsa da te richiesta sul [sito](http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20delle%20Lezioni)"
     else:
-        messageText = lezioni_cmd(args, 'http://188.213.170.165/PHP-DMI-API/result/lezioni_dmi.json')
+        messageText = lezioni_cmd(args, config_map['api_uri']+'/PHP-DMI-API/result/lezioni_dmi.json')
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
 def esami(bot, update, args, *m):
+
     checkLog(bot, update, "esami")
     if(m):
         messageText = "_Command under development._\nControlla la risorsa da te richiesta sul [sito](http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20degli%20Esami)"
     else:
-        messageText = esami_cmd(args, 'http://188.213.170.165/PHP-DMI-API/result/esami_dmi.json')
+        messageText = esami_cmd(args, config_map['api_uri']+'/PHP-DMI-API/result/esami_dmi.json')
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
 def forum(sezione):
@@ -620,14 +620,14 @@ def checkLog(bot, update, type, callback=0):
     if callback:
       update = update.callback_query
 
-    if (disable_db == 0):
+    if (config_map['debug']['disable_db'] == 0):
         chat_id = update.message.chat_id
         conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
         today=unicode(date.today());
         conn.execute("INSERT INTO stat_list VALUES ('"+str(type)+"',"+str(chat_id)+",'"+str(today)+" ')");
         conn.commit()
 
-    if (disable_chatid_logs == 0):
+    if (config_map['debug']['disable_chatid_logs'] == 0):
         log = open("logs/chatid.txt", "a+")
         if not str(chat_id) in log.read():
             log.write(str(chat_id)+"\n")
