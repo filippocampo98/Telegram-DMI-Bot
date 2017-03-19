@@ -631,3 +631,9 @@ def checkLog(bot, update, type, callback=0):
         log = open("logs/chatid.txt", "a+")
         if not str(chat_id) in log.read():
             log.write(str(chat_id)+"\n")
+def giveChatId(bot, update):
+	update.message.reply_text(str(update.message.chat_id))
+def sendLog(bot, update):
+	if(update.message.chat_id == -1001095167198):
+		bot.sendDocument(chat_id=-1001095167198, document=open('logs/logs.txt', 'rb'))
+
