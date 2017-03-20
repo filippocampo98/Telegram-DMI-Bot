@@ -6,6 +6,9 @@ sys.setdefaultencoding('utf8')
 
 bot= telegram.Bot(TOKEN)
 
+with open('config/settings.yaml') as yaml_config:
+	config_map = yaml.load(yaml_config)
+
 def record_everything(bot, update):
 	message = str(update.message)
 	log_tmp = open("logs/logs.txt","a+")
@@ -21,6 +24,7 @@ def main():
 	dp.add_handler(CommandHandler('smonta_portoni',smonta_portoni))
 	dp.add_handler(CommandHandler('santino',santino))
 	dp.add_handler(CommandHandler('prof_sticker' ,prof_sticker))
+	dp.add_handler(RegexHandler('/lezioni cazzeggio',bladrim))
 	'''
 	dp.add_handler(RegexHandler('/forum',forum_bot))
 	'''
@@ -52,17 +56,18 @@ def main():
 	dp.add_handler(CommandHandler('rappresentanti_dmi', lambda bot, update: informative_callback(bot, update, 'rappresentanti_dmi')))
 	dp.add_handler(CommandHandler('rappresentanti_informatica', lambda bot, update: informative_callback(bot, update, 'rappresentanti_informatica')))
 	dp.add_handler(CommandHandler('rappresentanti_matematica', lambda bot, update: informative_callback(bot, update, 'rappresentanti_matematica')))
-
-	if (disable_drive == 0):
+	dp.add_handler(CommandHandler('chatid',giveChatId))
+	dp.add_handler(CommandHandler('sendlog', sendLog))
+	if (config_map['debug']['disable_drive'] == 0):
 	  dp.add_handler(CommandHandler('drive',drive))
 	  dp.add_handler(RegexHandler('/adddb',adddb))
 	  dp.add_handler(RegexHandler('/request',request))
 
-	if (disable_db == 0):
+	if (config_map['debug']['disable_db'] == 0):
 	  dp.add_handler(CommandHandler('stats',stats))
 	  dp.add_handler(CommandHandler('stats_tot',statsTot))
 
-	if (disable_chatid_logs == 0):
+	if (config_map['debug']['disable_chatid_logs'] == 0):
 	  dp.add_handler(RegexHandler('/news',news_))
 	  dp.add_handler(CommandHandler('spamnews',spamnews))
 	  dp.add_handler(CommandHandler('disablenews',disablenews))
