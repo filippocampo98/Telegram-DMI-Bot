@@ -10,6 +10,7 @@ from pydrive.drive import GoogleDrive
 from pydrive.auth import GoogleAuth
 
 #Custom classes
+from classes.EasterEgg import EasterEgg
 from classes.StringParser import StringParser
 
 #System libraries
@@ -43,7 +44,7 @@ TOKEN = tokenconf    		#Token of your telegram bot that you created from @BotFat
 def lezioni(bot, update, args, *m):
     checkLog(bot, update, "lezioni")
     if(m):
-        messageText = "_Command under development._\nControlla la risorsa da te richiesta sul [sito](http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20delle%20Lezioni)"
+        messageText = lezioni_cmd(args, config_map['api_uri']+'/PHP-DMI-API/result/lezioni_dmi_mag.json')
     else:
         messageText = lezioni_cmd(args, config_map['api_uri']+'/PHP-DMI-API/result/lezioni_dmi.json')
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
@@ -155,32 +156,13 @@ def aulario_url():
 
 #Easter egg
 def smonta_portoni_cmd():
-	r = random.randint(0,13)
-	if (r >= 0 and r <= 3):
-		output = "$ sudo umount portoni"
-	elif (r > 3 and r < 10):
-		output = "@TkdAlex"
-	elif (r == 11):
-		output = "https://s16.postimg.org/5a6khjb5h/smonta_portoni.jpg"
-	else:
-		output = "https://s16.postimg.org/rz8117y9x/idraulico.jpg"
-	return output
+	return EasterEgg.getSmontaPortoni()
 
 def santino_cmd():
-    r = random.randint(0,20)
-    if (r >= 0 and r <= 3):
-        output = "@Santinol"
-    elif (r > 3 and r < 10):
-        output = "https://s18.postimg.org/t13s9lai1/photo_2016_11_24_11_04_42.jpg"
-    elif (r >= 10 and r < 16):
-		output = "https://s11.postimg.org/yiwugh4ib/photo_2016_11_24_11_04_31.jpg"
-    elif (r >=16 and r < 21):
-        output = "https://s12.postimg.org/5d7y88pj1/photo_2016_11_24_11_04_29.jpg"
-
-    return output
+    return EasterEgg.getSantino()
 
 def bladrim_cmd():
-	return "Per maggiori informazioni parla con @bladrim"
+	return EasterEgg.getBladrim()
 
 def prof_sticker_id(data):
 	text = json.loads(open(data).read())
