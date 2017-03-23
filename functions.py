@@ -43,7 +43,7 @@ TOKEN = tokenconf    		#Token of your telegram bot that you created from @BotFat
 def lezioni(bot, update, args, *m):
     checkLog(bot, update, "lezioni")
     if(m):
-        messageText = "_Command under development._\nControlla la risorsa da te richiesta sul [sito](http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20delle%20Lezioni)"
+        messageText = lezioni_cmd(args, config_map['api_uri']+'/PHP-DMI-API/result/lezioni_dmi_mag.json')
     else:
         messageText = lezioni_cmd(args, config_map['api_uri']+'/PHP-DMI-API/result/lezioni_dmi.json')
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
