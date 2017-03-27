@@ -324,6 +324,7 @@ def request(bot, update):
 
 def adddb(bot, update):
 	chat_id = update.message.chat_id
+
 	if (chat_id==26349488 or chat_id==-1001095167198 or chat_id==46806104):
 		ArrayValue=update.message.text.split(" ") #/add nome cognome e-mail username chatid
 		if len(ArrayValue)==6:
@@ -407,7 +408,9 @@ def button_handler(bot, update):
 		messageText = globals()[data]()
 		bot.editMessageText(text=messageText, chat_id=chat_id, message_id=message_id)
 
-	elif data.startswith("Drive_"):
+	elif data.startswith("Drive_"):		
+		messageText = "Richiesta estinta"
+		bot.editMessageText(text=messageText, chat_id=chat_id, message_id=message_id)
 		callback(bot,update)
 
 	#Simple text
