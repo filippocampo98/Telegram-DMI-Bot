@@ -195,6 +195,10 @@ def callback(bot, update):
 			if len(ArrayValue)==5:
 				conn.execute("INSERT INTO 'Chat_id_List' VALUES ("+update.callback_query.data+",'"+ArrayValue[4]+"','"+ArrayValue[1]+"','"+ArrayValue[2]+"','"+ArrayValue[3]+"') ")
 				bot.sendMessage(chat_id=update.callback_query.data,text= "🔓 La tua richiesta è stata accettata")
+
+				request_elimination_text = "Richiesta di " + str(ArrayValue[1]) + " " + str(ArrayValue[2]) + " estinta"
+				bot.editMessageText(text=request_elimination_text, chat_id=update.callback_query.data, message_id=update.callback_query.message.message_id)
+
 				bot.sendMessage(chat_id=-1001095167198,text=str(ArrayValue[1])+" "+str(ArrayValue[2]+str(" è stato inserito nel database")))
 
 			elif len(ArrayValue)==4:
@@ -408,9 +412,7 @@ def button_handler(bot, update):
 		messageText = globals()[data]()
 		bot.editMessageText(text=messageText, chat_id=chat_id, message_id=message_id)
 
-	elif data.startswith("Drive_"):		
-		messageText = "Richiesta estinta"
-		bot.editMessageText(text=messageText, chat_id=chat_id, message_id=message_id)
+	elif data.startswith("Drive_"):					
 		callback(bot,update)
 
 	#Simple text
