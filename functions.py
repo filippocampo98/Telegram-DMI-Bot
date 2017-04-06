@@ -197,7 +197,7 @@ def callback(bot, update):
 				bot.sendMessage(chat_id=update.callback_query.data,text= "🔓 La tua richiesta è stata accettata")
 
 				request_elimination_text = "Richiesta di " + str(ArrayValue[1]) + " " + str(ArrayValue[2]) + " estinta"
-				bot.editMessageText(text=request_elimination_text, chat_id=update.callback_query.data, message_id=update.callback_query.message.message_id)
+				bot.editMessageText(text=request_elimination_text, chat_id=-1001095167198, message_id=update.callback_query.message.message_id)
 
 				bot.sendMessage(chat_id=-1001095167198,text=str(ArrayValue[1])+" "+str(ArrayValue[2]+str(" è stato inserito nel database")))
 
