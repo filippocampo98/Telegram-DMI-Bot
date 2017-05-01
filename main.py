@@ -25,6 +25,7 @@ def main():
 	dp.add_handler(CommandHandler('santino',santino))
 	dp.add_handler(CommandHandler('prof_sticker' ,prof_sticker))
 	dp.add_handler(RegexHandler('/lezioni cazzeggio',bladrim))
+	dp.add_handler(CommandHandler('leiCheNePensaSignorina',lei_che_ne_pensa_signorina))
 	'''
 	dp.add_handler(RegexHandler('/forum',forum_bot))
 	'''

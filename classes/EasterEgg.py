@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import random
 class EasterEgg(object):
     @staticmethod
@@ -29,5 +31,22 @@ class EasterEgg(object):
     @staticmethod
     def getBladrim():
         output = "Per maggiori informazioni contatta @bladrim"
+        return output
+
+    @staticmethod
+    def getLeiCheNePensaSignorina():
+        r = random.randint(0, 20)
+        if(r < 3):
+            output = "🎤 Pronto? Si sente?"
+        elif(r >= 3 and r < 6):
+            output = "Cosa ne pensa lei signorina?"
+        elif(r >= 6 and r < 10):
+            output = "Tranquilli che l'anno prossimo prendo la pensione e me ne vado a Cuba 🇨🇺"
+        elif(r >= 10 and r < 13):
+            output = "Che faccio me ne vado? Va bene me ne vado 🚪"
+        elif(r >= 13 and r < 16):
+            output = "Che ore sono? ⌚ ... Appena dite voi me ne vado"
+        else:
+            output = "Vieni tu a spiegare, così io mi riposo!"
         return output
 
