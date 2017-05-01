@@ -169,6 +169,9 @@ def prof_sticker_id(data):
 	i=random.randint(0,len(text)-1)
 	return text[i]["id"]
 
+def lei_che_ne_pensa_signorina_cmd():
+	return EasterEgg.getLeiCheNePensaSignorina()
+
 def forum_cmd(text):
 	text = text.replace("/forum ","")
 	dictUrlSezioni = forum(text)
@@ -528,6 +531,11 @@ def bladrim(bot, update):
 def prof_sticker(bot,update):
 	checkLog(bot,update,"prof_sticker")
 	bot.sendSticker(chat_id=update.message.chat_id,sticker=prof_sticker_id('data/json/stickers.json'))
+
+def lei_che_ne_pensa_signorina(bot, update):
+	checkLog(bot, update,"leiCheNePensaSignorina")
+	messageText = lei_che_ne_pensa_signorina_cmd()
+	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
 def prof(bot, update, args):
 	checkLog(bot, update, "prof")
