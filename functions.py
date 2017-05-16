@@ -555,7 +555,7 @@ def news_(bot, update):
 		bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
 def spamnews(bot, update):
-	if(update.message.chat_id==26349488):
+	if(update.message.chat_id==26349488 or update.message.chat_id == 37967664):
 		chat_ids = open('logs/chatid.txt', 'r').read()
 		chat_ids = chat_ids.split("\n")
 		for i in range((len(chat_ids)-1)):
