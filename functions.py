@@ -159,10 +159,7 @@ def smonta_portoni_cmd():
 	return EasterEgg.getSmontaPortoni()
 
 def santino_cmd():
-    chat_id = update.message.chat_id
-
-    if (chat_id==-1001031103640 or chat_id==-1001095167198):
-        return EasterEgg.getSantino()
+    return EasterEgg.getSantino()
 
 def bladrim_cmd():
 	return EasterEgg.getBladrim()
@@ -522,9 +519,13 @@ def smonta_portoni(bot, update):
 	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
 def santino(bot, update):
-	checkLog(bot, update,"santino")
-	messageText = santino_cmd()
-	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
+    chat_id = update.message.chat_id
+
+    if (chat_id==-1001031103640 or chat_id==-1001095167198):
+
+	    checkLog(bot, update,"santino")
+	    messageText = santino_cmd()
+	    bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
 def bladrim(bot, update):
 	checkLog(bot, update, "bladrim")
