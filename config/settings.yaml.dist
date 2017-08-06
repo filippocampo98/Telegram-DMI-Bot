@@ -14,4 +14,4 @@ api_uri: 'http://localhost'
 debug:
     disable_chatid_logs: 0
     disable_db: 0
-    disable_drive: 0
+    disable_drive: 1
