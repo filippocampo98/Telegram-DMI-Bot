@@ -10,7 +10,7 @@ save_credentials_file: config/drive_credentials.json
 
 get_refresh_token: True
 
-api_uri: 'http://188.213.170.165'
+api_uri: 'http://localhost'
 debug:
     disable_chatid_logs: 0
     disable_db: 0

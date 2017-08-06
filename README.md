@@ -2,7 +2,7 @@
 
 **Telegram-DMI-Bot** is the platform that powers **@DMI_bot**, a Telegram bot aided at helping students find informations about professors, classes' schedules, administration's office hours and more.
 
-###Using the live version
+### Using the live version
 The bot is live on Telegram with the username [@DMI_Bot](https://telegram.me/DMI_Bot).
 Send **'/start'** to start it, **'/help'** to see a list of commands.
 
@@ -10,7 +10,7 @@ Please note that the commands and their answers are in Italian.
 
 --- 
 
-###Setting up a local istance
+### Setting up a local istance
 If you want to test the bot by creating your personal istance, follow this steps:
 * **Clone this repository** or download it as zip.
 * **Copy config/token.conf.dist into "token.conf" and write your telegram bot token here.** (If you don't have a token, message Telegram's [@BotFather](http://telegram.me/Botfather) to create a bot and get a token for it)
@@ -65,5 +65,5 @@ You can enable these commands setting **disable_drive = 0**, configure the Googl
 ### License
 This open-source software is published under the GNU General Public License (GNU GPL) version 3. Please refer to the "LICENSE" file of this project for the full text.
 
-###Credits
-This project is made possible thanks to the contributions of [Stefano Borzì](https://github.com/Helias), [Adriano Ferraguto](https://github.com/adrianoferraguto),[Vincenzo Filetti](https://github.com/veeenz), [Simone Di Mauro](https://github.com/simone989), [Alessandro Maggio](https://github.com/Tkd-alex)
+### Credits
+This project is made possible thanks to the contributions of [Stefano Borzì](https://github.com/Helias), [Adriano Ferraguto](https://github.com/adrianoferraguto),[Vincenzo Filetti](https://github.com/veeenz), [Simone Di Mauro](https://github.com/simone989), [Alessandro Maggio](https://github.com/Tkd-alex), [Alessio Piazza](https://github.com/Squalex95)
