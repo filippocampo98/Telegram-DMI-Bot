@@ -1,4 +1,4 @@
-Sede presso il Dipartimento di Matematica e Informatica (primo piano vicino al laboratorio) 
+Sede presso il Dipartimento di Matematica e Informatica (primo piano vicino alla direzione) 
 
 Sig.ra Cristina Mele
 📞 095/7337227
