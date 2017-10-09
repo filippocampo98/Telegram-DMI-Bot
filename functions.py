@@ -552,14 +552,14 @@ def forum_bot(bot, update):
 	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
 def news_(bot, update):
-	if (update.message.chat_id == 26349488 or update.message.chat_id == 37967664):
+	if (update.message.chat_id == 26349488 or update.message.chat_id == 37967664 or update.message.chat_id == 58880997):
 		global news
 		news = update.message.text.replace("/news ", "")
 		messageText = "News Aggiornata!"
 		bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
 def spamnews(bot, update):
-	if(update.message.chat_id==26349488 or update.message.chat_id == 37967664):
+	if(update.message.chat_id==26349488 or update.message.chat_id == 37967664 or update.message.chat_id == 58880997):
 		chat_ids = open('logs/chatid.txt', 'r').read()
 		chat_ids = chat_ids.split("\n")
 		for i in range((len(chat_ids)-1)):
