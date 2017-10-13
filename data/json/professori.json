@@ -701,6 +701,15 @@
     "Sito": "",
     "SchedaDMI": ""
   },
+	{
+    "ID": "79",
+    "Ruolo": "",
+    "Nome": "Fabrizio",
+    "Cognome": "Messina",
+    "Email": "messina@dmi.unict.it",
+    "Sito": "http://www.dmi.unict.it/~messina",
+    "SchedaDMI": ""
+  },
   {
     "ID": "-1",
     "Ruolo": "nil",
