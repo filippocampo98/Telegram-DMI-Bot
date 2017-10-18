@@ -415,7 +415,7 @@ def button_handler(bot, update):
 		messageText = globals()[data]()
 		bot.editMessageText(text=messageText, chat_id=chat_id, message_id=message_id)
 
-	elif data.startswith("Drive_"):					
+	elif data.startswith("Drive_"):
 		callback(bot,update)
 
 	#Simple text
@@ -551,16 +551,38 @@ def forum_bot(bot, update):
 	messageText = forum_cmd(update.message.text)
 	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
+def get_short_link(url):
+	post_url = 'https://www.googleapis.com/urlshortener/v1/url?key={}'.format(config_map['shortener_key'])
+	payload = {'longUrl': url}
+	headers = {'content-type': 'application/json'}
+	r = requests.post(post_url, data=json.dumps(payload), headers=headers)
+	return r.json()['id']
+
+def shortit(message):
+    urlRegex = re.compile('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
+    urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message)
+    news = urlRegex.sub('{URL}', message)
+    urls.reverse()
+    updatedMessage = ''
+    for x in news.split(" "):
+        if x == '{URL}':
+            x = get_short_link(urls.pop())
+        updatedMessage += x+' '
+    return updatedMessage
+
 def news_(bot, update):
-	if (update.message.chat_id == 26349488 or update.message.chat_id == 37967664 or update.message.chat_id == 58880997):
+	if (1==1 or update.message.chat_id == 26349488 or update.message.chat_id == 37967664 or update.message.chat_id == 58880997):
 		global news
 		news = update.message.text.replace("/news ", "")
 		news = update.message.text.replace("/news", "")
+		news = shortit(news)
 		messageText = "News Aggiornata!"
 		bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
 def spamnews(bot, update):
-	if(update.message.chat_id==26349488 or update.message.chat_id == 37967664 or update.message.chat_id == 58880997):
+	if(1==1 or update.message.chat_id==26349488 or update.message.chat_id == 37967664 or update.message.chat_id == 58880997):
+		update.message.reply_text(news)
+		return
 		chat_ids = open('logs/chatid.txt', 'r').read()
 		chat_ids = chat_ids.split("\n")
 		for i in range((len(chat_ids)-1)):
@@ -595,7 +617,7 @@ def enablenews(bot, update):
 	else:
 		messageText = "News già abilitate!"
 	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
-	
+
 # check if user (chatid) is registered on chatid.txt
 
 def stats(bot, update):
@@ -644,4 +666,3 @@ def giveChatId(bot, update):
 def sendLog(bot, update):
 	if(update.message.chat_id == -1001095167198):
 		bot.sendDocument(chat_id=-1001095167198, document=open('logs/logs.txt', 'rb'))
-
