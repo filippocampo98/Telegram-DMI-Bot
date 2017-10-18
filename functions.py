@@ -564,10 +564,10 @@ def shortit(message):
     news = urlRegex.sub('{URL}', message)
     urls.reverse()
     updatedMessage = ''
-    for x in news.split(" "):
-        if x == '{URL}':
-            x = get_short_link(urls.pop())
-        updatedMessage += x+' '
+    for word in news.split(" "):
+        if word == '{URL}':
+            word = get_short_link(urls.pop())
+        updatedMessage += word+' '
     return updatedMessage
 
 def news_(bot, update):
@@ -581,16 +581,15 @@ def news_(bot, update):
 
 def spamnews(bot, update):
 	if(update.message.chat_id==26349488 or update.message.chat_id == 37967664 or update.message.chat_id == 58880997):
-		update.message.reply_text(news)
-		return
+
 		chat_ids = open('logs/chatid.txt', 'r').read()
 		chat_ids = chat_ids.split("\n")
-		for i in range((len(chat_ids)-1)):
+		for chat_id in chat_ids:
 			try:
-				if not "+" in chat_ids[i]:
-					bot.sendMessage(chat_id=chat_ids[i], text=news)
+				if not "+" in chat_id:
+					bot.sendMessage(chat_id=chat_id, text=news)
 			except Exception as error:
-				open("logs/errors.txt", "a+").write(str(error)+" "+str(chat_ids[i])+"\n")
+				open("logs/errors.txt", "a+").write(str(error)+" "+str(chat_id)+"\n")
 		messageText = "News spammata!"
 		bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
