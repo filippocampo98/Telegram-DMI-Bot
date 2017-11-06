@@ -703,11 +703,20 @@
   },
 	{
     "ID": "79",
-    "Ruolo": "",
+    "Ruolo": "Contratto",
     "Nome": "Fabrizio",
     "Cognome": "Messina",
     "Email": "messina@dmi.unict.it",
     "Sito": "http://www.dmi.unict.it/~messina",
+    "SchedaDMI": ""
+  },
+	{
+    "ID": "80",
+    "Ruolo": "Contratto",
+    "Nome": "Cristina",
+    "Cognome": "Milazzo",
+    "Email": "milazzo.cri@gmail.com",
+    "Sito": "",
     "SchedaDMI": ""
   },
   {
