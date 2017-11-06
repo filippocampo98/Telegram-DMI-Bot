@@ -7,7 +7,7 @@ def prof_output(prof):
     output = "*Ruolo:* " + prof["Ruolo"] + "\n"
     output += "*Cognome:* " + prof["Cognome"] + "\n"
     output += "*Nome:* " + prof["Nome"] + "\n"
-    output += "*Indirizzo email :* " + prof["Email"] + "\n"
+    output += "*Indirizzo email:* " + prof["Email"] + "\n"
     output += "*Sito web:* " + prof["Sito"] + "\n"
     output += "*Scheda DMI:* " + prof["SchedaDMI"] + "\n"
     return output
