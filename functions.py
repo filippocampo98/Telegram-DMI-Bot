@@ -190,11 +190,14 @@ def callback(bot, update):
 	update_id = update.update_id
 
 	update.callback_query.data = update.callback_query.data.replace("Drive_", "")
-
+	print('Callback query data: ' + str(update.callback_query.data))
 	if len(update.callback_query.data)<13:
 		#conn.execute("DELETE FROM 'Chat_id_List'")
 		ArrayValue=update['callback_query']['message']['text'].split(" ")
+                print(ArrayValue)
 		try:
+                        if len(ArrayValue) == 4:
+                                ArrayValue.insert(0, "None")
 			if len(ArrayValue)==5:
 				conn.execute("INSERT INTO 'Chat_id_List' VALUES ("+update.callback_query.data+",'"+ArrayValue[4]+"','"+ArrayValue[1]+"','"+ArrayValue[2]+"','"+ArrayValue[3]+"') ")
 				bot.sendMessage(chat_id=update.callback_query.data,text= "🔓 La tua richiesta è stata accettata")
@@ -212,6 +215,7 @@ def callback(bot, update):
 				bot.sendMessage(chat_id=-1001095167198,text=str("ERRORE INSERIMENTO: ")+str(update['callback_query']['message']['text'])+" "+str(update['callback_query']['data']))
 			conn.commit()
 		except Exception as error:
+                        print(error)
 			bot.sendMessage(chat_id=-1001095167198,text=str("ERRORE INSERIMENTO: ")+str(update['callback_query']['message']['text'])+" "+str(update['callback_query']['data']))
 
 		LAST_UPDATE_ID = update_id + 1
