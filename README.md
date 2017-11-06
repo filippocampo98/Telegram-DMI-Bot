@@ -61,6 +61,30 @@ You can enable these commands setting **disable_drive = 0**, configure the Googl
 - download the drive_credentials.json and put it on config/
 - copy **config/settings.yaml.dist** into **config/settings.yaml**, then configure it
 
+### Docker container
+
+#### How to use
+
+First of all configure the file Dockerfile, add the API TOKEN in \_TOKEN\_ (line 6).
+
+Build image dmibot with docker:
+
+```
+$ docker build -t dmibot .
+```
+
+Run the container dmibot:
+
+```
+$ docker run -it dmibot
+```
+
+Now you can go to the dmibot directory and run the bot (main.py or the restarter restarter.sh):
+
+```
+$ cd /usr/local/dmibot/
+$ python main.py
+```
 
 ### License
 This open-source software is published under the GNU General Public License (GNU GPL) version 3. Please refer to the "LICENSE" file of this project for the full text.
