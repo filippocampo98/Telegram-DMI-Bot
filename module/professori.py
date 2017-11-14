@@ -9,12 +9,10 @@ def prof_output(prof):
     output += "*Nome:* " + prof["Nome"] + "\n"
     output += "*Indirizzo email:* " + prof["Email"] + "\n"
     output += "*Sito web:* " + prof["Sito"] + "\n"
-    output += "*Scheda DMI:* " + prof["SchedaDMI"] + "\n"
+    output += "*Scheda DMI:* " + "http://web.dmi.unict.it/docenti/"+prof["Nome"].lower().replace(' ','.')+"."+prof["Cognome"].lower().replace(' ','')+"\n"
     return output
 
 def prof_cmd(profs):
-
-    output_str = "Poffarbacco, qualcosa non va. Segnalalo ai dev \contributors \n"
 
     if(profs):
 
