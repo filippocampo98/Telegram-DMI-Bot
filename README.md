@@ -14,8 +14,10 @@ Please note that the commands and their answers are in Italian.
 If you want to test the bot by creating your personal istance, follow this steps:
 * **Clone this repository** or download it as zip.
 * **Copy config/token.conf.dist into "token.conf" and write your telegram bot token here.** (If you don't have a token, message Telegram's [@BotFather](http://telegram.me/Botfather) to create a bot and get a token for it)
-* **Send a message to your bot** on Telegram, even '/start' will do. If you don't, you could get an error.
-* If your system supports bash shell scripting, **launch "restarter.sh"**. Alternatively, you can launch "main.py" with your Python interpreter, even if doing so will not restart the bot in the event of a crash.
+* **Send a message to your bot** on Telegram, even '/start' will do. If you don't, you could get an error
+* Copy the file data/DMI_DB.db.dist into data/DMI_DB.db to enable the database sqlite
+* Copy the file config/settings.yaml.dist into config/settings.yaml
+* Now you can launch "main.py" with your Python interpreter
 
 ### System requirements
 
@@ -79,7 +81,7 @@ Run the container dmibot:
 $ docker run -it dmibot
 ```
 
-Now you can go to the dmibot directory and run the bot (main.py or the restarter restarter.sh):
+Now you can go to the dmibot directory and run the bot:
 
 ```
 $ cd /usr/local/dmibot/
