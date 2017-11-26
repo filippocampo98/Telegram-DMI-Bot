@@ -669,3 +669,17 @@ def giveChatId(bot, update):
 def sendLog(bot, update):
 	if(update.message.chat_id == -1001095167198):
 		bot.sendDocument(chat_id=-1001095167198, document=open('logs/logs.txt', 'rb'))
+
+def avviso(bot,job):
+	if os.path.isfile("data/avviso.dat"):
+		testo = open("data/avviso.dat").read()
+		chat_ids = open("logs/chatid.txt","r").read()
+		chat_ids = chat_ids.split("\n")
+		for chat_id in chat_ids:
+			try:
+				if not "+" in chat_id:
+					bot.send_message(chat_id=chat_id,text=testo,parse_mode='HTML')
+			except Exception as error:
+				open("logs/errors.txt","a+").write(str(error)+" "+str(chat_id)+"\n")
+		os.remove("data/avviso.dat")
+
