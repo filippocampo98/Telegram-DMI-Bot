@@ -22,6 +22,9 @@ from bs4 import BeautifulSoup
 import sqlite3
 import logging
 
+#OS Library
+import os, os.path 
+
 from module.lezioni import lezioni_cmd
 from module.esami import esami_cmd
 from module.professori import prof_cmd
