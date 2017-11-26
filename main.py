@@ -59,6 +59,10 @@ def main():
 	dp.add_handler(CommandHandler('rappresentanti_matematica', lambda bot, update: informative_callback(bot, update, 'rappresentanti_matematica')))
 	dp.add_handler(CommandHandler('chatid',giveChatId))
 	dp.add_handler(CommandHandler('sendlog', sendLog))
+	
+	#JobQueue
+	j= updater.job_queue
+	job_minute = j.run_repeating(avviso, interval=60)
 
 	if (config_map['debug']['disable_drive'] == 0):
 	  dp.add_handler(CommandHandler('drive',drive))
