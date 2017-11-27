@@ -8,3 +8,5 @@ config/drive_credentials.json
 config/settings.yaml
 data/DMI_DB.db
 module/*.pyc
+data/data/archivioAvvisi.dat
+data/avviso.dat
