@@ -92,5 +92,12 @@ $ python main.py
 This open-source software is published under the GNU General Public License (GNU GPL) version 3. Please refer to the "LICENSE" file of this project for the full text.
 
 ### Credits
-This project is made possible thanks to the contributions of [Stefano Borzì](https://github.com/Helias), [Adriano Ferraguto](https://github.com/adrianoferraguto),[Vincenzo Filetti](https://github.com/veeenz), [Simone Di Mauro](https://github.com/simone989), [Alessandro Maggio](https://github.com/Tkd-alex), [Alessio Piazza](https://github.com/Squalex95)
-[Pierpaolo](https://github.com/Pierpaolo791)
+This project is made possible thanks to the contributions of:
+
+- [Stefano Borzì](https://github.com/Helias)
+- [Adriano Ferraguto](https://github.com/adrianoferraguto)
+- [Vincenzo Filetti](https://github.com/veeenz)
+- [Simone Di Mauro](https://github.com/simone989)
+- [Alessandro Maggio](https://github.com/Tkd-alex)
+- [Alessio Piazza](https://github.com/Squalex95)
+- [Pierpaolo](https://github.com/Pierpaolo791)
