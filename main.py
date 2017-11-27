@@ -41,7 +41,7 @@ def main():
 	dp.add_handler(CommandHandler('biblioteca', lambda bot, update: informative_callback(bot, update, 'biblioteca')))
 	dp.add_handler(CommandHandler('cus', lambda bot, update: informative_callback(bot, update, 'cus')))
 
-	dp.add_handler(CommandHandler('lezioni', lambda bot, update, args: lezioni(bot, update, args), pass_args=True)) 
+	dp.add_handler(CommandHandler('lezioni', lambda bot, update, args: lezioni(bot, update, args), pass_args=True))
 	dp.add_handler(CommandHandler('esami', lambda bot, update, args: esami(bot, update, args), pass_args=True))
 
 	dp.add_handler(CommandHandler('mlezioni', lambda bot, update, args: lezioni(bot, update, args, True), pass_args=True))
@@ -59,7 +59,8 @@ def main():
 	dp.add_handler(CommandHandler('rappresentanti_matematica', lambda bot, update: informative_callback(bot, update, 'rappresentanti_matematica')))
 	dp.add_handler(CommandHandler('chatid',giveChatId))
 	dp.add_handler(CommandHandler('sendlog', sendLog))
-	
+	dp.add_handler(CommandHandler('sendChatids', sendChatIds))
+
 	#JobQueue
 	j= updater.job_queue
 	job_minute = j.run_repeating(avviso, interval=60)

@@ -23,7 +23,7 @@ import sqlite3
 import logging
 
 #OS Library
-import os, os.path 
+import os, os.path
 
 from module.lezioni import lezioni_cmd
 from module.esami import esami_cmd
@@ -673,6 +673,11 @@ def sendLog(bot, update):
 	if(update.message.chat_id == -1001095167198):
 		bot.sendDocument(chat_id=-1001095167198, document=open('logs/logs.txt', 'rb'))
 
+def sendChatIds(bot, update):
+	if(update.message.chat_id == -1001095167198):
+		bot.sendDocument(chat_id=-1001095167198, document=open('logs/chatid.txt', 'rb'))
+
+
 def avviso(bot,job):
 	if os.path.isfile("data/avviso.dat"):
 		testo = open("data/avviso.dat").read()
@@ -685,4 +690,3 @@ def avviso(bot,job):
 			except Exception as error:
 				open("logs/errors.txt","a+").write(str(error)+" "+str(chat_id)+"\n")
 		os.remove("data/avviso.dat")
-
