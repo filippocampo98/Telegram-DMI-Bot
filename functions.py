@@ -200,7 +200,8 @@ def callback(bot, update):
                                 ArrayValue.insert(0, "None")
 			if len(ArrayValue)==5:
 				conn.execute("INSERT INTO 'Chat_id_List' VALUES ("+update.callback_query.data+",'"+ArrayValue[4]+"','"+ArrayValue[1]+"','"+ArrayValue[2]+"','"+ArrayValue[3]+"') ")
-				bot.sendMessage(chat_id=update.callback_query.data,text= "🔓 La tua richiesta è stata accettata")
+				bot.sendMessage(chat_id=update.callback_query.data,text= "🔓 La tua richiesta è stata accettata. Leggi il file README")
+				bot.sendDocument(chat_id=update.callback_query.data, document=open('data/README.pdf', 'rb'))
 
 				request_elimination_text = "Richiesta di " + str(ArrayValue[1]) + " " + str(ArrayValue[2]) + " estinta"
 				bot.editMessageText(text=request_elimination_text, chat_id=-1001095167198, message_id=update.callback_query.message.message_id)
@@ -209,7 +210,8 @@ def callback(bot, update):
 
 			elif len(ArrayValue)==4:
 				conn.execute("INSERT INTO 'Chat_id_List'('Chat_id','Nome','Cognome','Email') VALUES ("+update.callback_query.data+",'"+ArrayValue[1]+"','"+ArrayValue[2]+"','"+ArrayValue[3]+"')")
-				bot.sendMessage(chat_id=update.callback_query.data,text= "🔓 La tua richiesta è stata accettata")
+				bot.sendMessage(chat_id=update.callback_query.data,text= "🔓 La tua richiesta è stata accettata. Leggi il file README")
+				bot.sendDocument(chat_id=update.callback_query.data, document=open('data/README.pdf', 'rb'))
 
 			else:
 				bot.sendMessage(chat_id=-1001095167198,text=str("ERRORE INSERIMENTO: ")+str(update['callback_query']['message']['text'])+" "+str(update['callback_query']['data']))
@@ -345,7 +347,8 @@ def adddb(bot, update):
 			conn.commit()
 		elif len(ArrayValue)==5:
 			conn.execute("INSERT INTO 'Chat_id_List'('Chat_id','Nome','Cognome','Email') VALUES ("+ArrayValue[4]+",'"+ArrayValue[1]+"','"+ArrayValue[2]+"','"+ArrayValue[3]+"')")
-			bot.sendMessage(chat_id=int(ArrayValue[4]),text= "🔓 La tua richiesta è stata accettata")
+			bot.sendMessage(chat_id=int(ArrayValue[4]),text= "🔓 La tua richiesta è stata accettata. Leggi il file README")
+			bot.sendDocument(chat_id=int(ArrayValue[4]), document=open('data/README.pdf', 'rb'))
 			conn.commit()
 		else:
 			bot.sendMessage(chat_id=chat_id,text="/adddb <nome> <cognome> <e-mail> <username> <chat_id>")
