@@ -60,7 +60,7 @@ def main():
 	dp.add_handler(CommandHandler('chatid',giveChatId))
 	dp.add_handler(CommandHandler('sendlog', sendLog))
 	dp.add_handler(CommandHandler('sendChatids', sendChatIds))
-
+	dp.add_handler(CommandHandler('errors', sendErrors))
 	#JobQueue
 	j= updater.job_queue
 	job_minute = j.run_repeating(avviso, interval=60)
