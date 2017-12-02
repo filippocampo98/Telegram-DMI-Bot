@@ -340,7 +340,8 @@ def adddb(bot, update):
 		ArrayValue=update.message.text.split(" ") #/add nome cognome e-mail username chatid
 		if len(ArrayValue)==6:
 			conn.execute("INSERT INTO 'Chat_id_List' VALUES ("+ArrayValue[5]+",'"+ArrayValue[4]+"','"+ArrayValue[1]+"','"+ArrayValue[2]+"','"+ArrayValue[3]+"') ")
-			bot.sendMessage(chat_id=ArrayValue[5],text= "🔓 La tua richiesta è stata accettata")
+			bot.sendMessage(chat_id=ArrayValue[5],text= "🔓 La tua richiesta è stata accettata. Leggi il file README")
+			bot.sendDocument(chat_id=ArrayValue[5], document=open('data/README.pdf', 'rb'))
 			conn.commit()
 		elif len(ArrayValue)==5:
 			conn.execute("INSERT INTO 'Chat_id_List'('Chat_id','Nome','Cognome','Email') VALUES ("+ArrayValue[4]+",'"+ArrayValue[1]+"','"+ArrayValue[2]+"','"+ArrayValue[3]+"')")
