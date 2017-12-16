@@ -225,7 +225,8 @@ def callback(bot, update):
 		messageText = ""
 
 	else:
-		if(os.fork()==0):
+		pid = os.fork()
+		if (pid == 0):
 			settings_file = "config/settings.yaml"
 			gauth2 = GoogleAuth(settings_file=settings_file)
 			gauth2.CommandLineAuth()
@@ -299,6 +300,7 @@ def callback(bot, update):
 					open("logs/errors.txt","a+").write(str(e)+str(fileD['title'])+"\n")
 
 			sys.exit(0)
+		os.waitpid(pid, 0)
 
 def request(bot, update):
 	chat_id = update.message.chat_id
