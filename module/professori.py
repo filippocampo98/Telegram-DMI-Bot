@@ -9,7 +9,12 @@ def prof_output(prof):
     output += "*Nome:* " + prof["Nome"] + "\n"
     output += "*Indirizzo email:* " + prof["Email"] + "\n"
     output += "*Sito web:* " + prof["Sito"] + "\n"
-    output += "*Scheda DMI:* " + "http://web.dmi.unict.it/docenti/"+prof["Nome"].lower().replace(' ','.')+"."+prof["Cognome"].lower().replace(' ','')+"\n"
+    if prof["ID"]=="81":
+	output += ""
+    elif prof["ID"]=="28":
+	output += "*Scheda DMI:* " + "http://web.dmi.unict.it/docenti/"+prof["Cognome"].lower().replace(' ','')+"."+prof["Nome"].lower().replace(' ','.')+"\n"
+    else:
+	output += "*Scheda DMI:* " + "http://web.dmi.unict.it/docenti/"+prof["Nome"].lower().replace(' ','.')+"."+prof["Cognome"].lower().replace(' ','')+"\n"
     return output
 
 def prof_cmd(profs):
@@ -21,7 +26,6 @@ def prof_cmd(profs):
 
         with open("data/json/professori.json") as data_file:
             professori_data = json.load(data_file)
-
         for prof in profs:
             professori = [professore for professore in professori_data if (prof in professore["Nome"].lower() or prof in professore["Cognome"].lower())]
             for professore in professori:
