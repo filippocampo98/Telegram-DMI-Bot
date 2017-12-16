@@ -221,7 +221,7 @@
     "Nome": "Giovanni",
     "Cognome": "Gallo",
     "Email": "gallo@dmi.unict.it",
-    "Sito": "http:\/\/http\/\/www.dmi.unict.it\/~gallo\/"
+    "Sito": "http:\/\/www.dmi.unict.it\/~gallo\/"
   },
   {
     "ID": "29",
@@ -333,7 +333,7 @@
     "Nome": "Salvatore",
     "Cognome": "Milici",
     "Email": "milici@dmi.unict.it",
-    "Sito": "http:\/\/www.dmi.unict.it\/~milici\/milicisalv\/"
+    "Sito": ""
   },
   {
     "ID": "43",
@@ -624,7 +624,7 @@
     "Email": "danisaitta@unict.it",
     "Sito": ""
   },
-	{
+  {
     "ID": "79",
     "Ruolo": "Contratto",
     "Nome": "Fabrizio",
@@ -632,13 +632,21 @@
     "Email": "messina@dmi.unict.it",
     "Sito": "http://www.dmi.unict.it/~messina"
   },
-	{
+  {
     "ID": "80",
     "Ruolo": "Contratto",
     "Nome": "Cristina",
     "Cognome": "Milazzo",
     "Email": "milazzo.cri@gmail.com",
     "Sito": ""
+  },
+  {
+    "ID": "81",
+    "Ruolo": "Dottorando",
+    "Nome": "Andrea",
+    "Cognome": "Scapellato",
+    "Email": "scapellato@dmi.unict.it",
+    "Sito": "https://andreascapellato.wordpress.com"
   },
   {
     "ID": "-1",
