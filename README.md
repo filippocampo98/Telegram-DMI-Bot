@@ -101,3 +101,4 @@ This project is made possible thanks to the contributions of:
 - [Alessandro Maggio](https://github.com/Tkd-alex)
 - [Alessio Piazza](https://github.com/Squalex95)
 - [Pierpaolo](https://github.com/Pierpaolo791)
+- [Alessandro Catalano](https://github.com/Wornairz)
