@@ -272,8 +272,9 @@ def callback(bot, update):
 							keyboard2[NumberArray].append(InlineKeyboardButton(icona+file2['title'], callback_data="Drive_" + file2['id']))
 							NumberRow+=1
 
-				if file1['parents'][0]['id'] != '0ADXK_Yx5406vUk9PVA':
+				if len(file1['parents']) > 0 and file1['parents'][0]['id'] != '0ADXK_Yx5406vUk9PVA':
 					keyboard2.append([InlineKeyboardButton("🔙", callback_data="Drive_" + file1['parents'][0]['id'])])
+				
 				reply_markup3 = InlineKeyboardMarkup(keyboard2)
 				bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'],text=file1['title']+":", reply_markup=reply_markup3)
 
@@ -300,7 +301,8 @@ def callback(bot, update):
 					open("logs/errors.txt","a+").write(str(e)+str(fileD['title'])+"\n")
 
 			sys.exit(0)
-		os.waitpid(pid, 0)
+		
+		#os.waitpid(pid, 0)
 
 def request(bot, update):
 	chat_id = update.message.chat_id
