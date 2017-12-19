@@ -302,7 +302,7 @@ def callback(bot, update):
 
 			sys.exit(0)
 		
-		#os.waitpid(pid, 0)
+		os.waitpid(pid, 0)
 
 def request(bot, update):
 	chat_id = update.message.chat_id
