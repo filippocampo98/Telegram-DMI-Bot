@@ -643,7 +643,7 @@ def statsGen(bot, update, days):
         text+="Record di "+str(days)+" giorni:\n"
         query = "SELECT Type, count(chat_id) FROM stat_list WHERE DateCommand > '"+unicode(date.today()-timedelta(days=days))+"' GROUP BY Type ORDER BY Type;"
     for row in conn.execute(query):
-        if str(row[0]) != "leiCheNePensaSignorina" and str(row[0]) != "smonta_portoni" and str(row[0]) != "santino" and str(row[0]) != "bladrim":
+        if str(row[0]) != "leiCheNePensaSignorina" and str(row[0]) != "smonta_portoni" and str(row[0]) != "santino" and str(row[0]) != "bladrim" and str(row[0]) != "prof_sticker":
 	    text+=str(row[1])+": "+str(row[0])+"\n"
     bot.sendMessage(chat_id=chat_id,text=text)
 
