@@ -24,7 +24,6 @@ If you want to test the bot by creating your personal istance, follow this steps
 - Python 2
 - python-pip
 - python-bs4
-- python-beautifulsoup
 - language-pack-it
 
 #### To install with *pip*
@@ -100,5 +99,5 @@ This project is made possible thanks to the contributions of:
 - [Simone Di Mauro](https://github.com/simone989)
 - [Alessandro Maggio](https://github.com/Tkd-alex)
 - [Alessio Piazza](https://github.com/Squalex95)
-- [Pierpaolo](https://github.com/Pierpaolo791)
+- [Pierpaolo Pecoraio](https://github.com/Pierpaolo791)
 - [Alessandro Catalano](https://github.com/Wornairz)
