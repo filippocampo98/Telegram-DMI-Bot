@@ -405,7 +405,7 @@ def button_handler(bot, update):
 		bot.editMessageText(text=messageText, chat_id=chat_id, message_id=message_id)
 
 	elif data.startswith("Drive_"):
-		callback(bot, query)
+		callback(bot, update)
 
 	elif data == "enablenews" or data == "disablenews":
 		globals()[data](bot, query)
