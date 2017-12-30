@@ -62,8 +62,6 @@ def forum(sezione):
 
     response = urllib2.urlopen("http://forum.informatica.unict.it/")
     html_doc = response.read()
-
-    #print(html_doc)
     s = BeautifulSoup(html_doc, 'html.parser')
     s.prettify()
     dictionary = {}
@@ -126,14 +124,6 @@ def informative_callback(bot, update, cmd):
     messageText = read_md(cmd)
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
-def enablenews_cmd():
-	output = "Per confermare l'iscrizione alla newsletter del DMI digita /enablenews"
-	return output
-
-def disablenews_cmd():
-	output = "Se sei sicuro di voler disiscriverti dalla newsletter del DMI digita /disablenews"
-	return output
-
 def exit_cmd():
 	output = "."
 	return output
@@ -155,22 +145,10 @@ def aulario_url():
 	return url
 
 #Easter egg
-def smonta_portoni_cmd():
-	return EasterEgg.getSmontaPortoni()
-
-def santino_cmd():
-    return EasterEgg.getSantino()
-
-def bladrim_cmd():
-	return EasterEgg.getBladrim()
-
 def prof_sticker_id(data):
 	text = json.loads(open(data).read())
 	i=random.randint(0,len(text)-1)
 	return text[i]["id"]
-
-def lei_che_ne_pensa_signorina_cmd():
-	return EasterEgg.getLeiCheNePensaSignorina()
 
 def forum_cmd(text):
 	text = text.replace("/forum ","")
@@ -420,7 +398,6 @@ def button_handler(bot, update):
 	#Submenu
 	if data.startswith("sm_"):
 		funcName = data[3:len(data)]
-
 		globals()[funcName](bot, chat_id, message_id)
 
 	elif data == "esami_button" or data == "lezioni_button" or data == "help_cmd" or data == "exit_cmd":
@@ -428,7 +405,10 @@ def button_handler(bot, update):
 		bot.editMessageText(text=messageText, chat_id=chat_id, message_id=message_id)
 
 	elif data.startswith("Drive_"):
-		callback(bot,update)
+		callback(bot, query)
+
+	elif data == "enablenews" or data == "disablenews":
+		globals()[data](bot, query)
 
 	#Simple text
 	elif data != "_div":
@@ -438,7 +418,6 @@ def button_handler(bot, update):
 
 def help(bot, update):
 	checkLog(bot, update, "help")
-
 	chat_id = update.message.chat_id
 	keyboard=[[]]
 	messageText="@DMI_Bot risponde ai seguenti comandi:"
@@ -527,7 +506,7 @@ def rapp_menu(bot, chat_id, message_id):
 
 def smonta_portoni(bot, update):
 	checkLog(bot, update,"smonta_portoni")
-	messageText = smonta_portoni_cmd()
+	messageText = EasterEgg.getSmontaPortoni()
 	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
 def santino(bot, update):
@@ -536,12 +515,12 @@ def santino(bot, update):
     if (chat_id==-1001031103640 or chat_id==-1001095167198):
 
 	    checkLog(bot, update,"santino")
-	    messageText = santino_cmd()
+	    messageText = EasterEgg.getSantino()
 	    bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
 def bladrim(bot, update):
 	checkLog(bot, update, "bladrim")
-	messageText = bladrim_cmd()
+	messageText = EasterEgg.getBladrim()
 	bot.sendMessage(chat_id = update.message.chat_id, text = messageText)
 
 def prof_sticker(bot,update):
@@ -550,7 +529,7 @@ def prof_sticker(bot,update):
 
 def lei_che_ne_pensa_signorina(bot, update):
 	checkLog(bot, update,"leiCheNePensaSignorina")
-	messageText = lei_che_ne_pensa_signorina_cmd()
+	messageText = EasterEgg.getLeiCheNePensaSignorina()
 	bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
 def prof(bot, update, args):
@@ -643,7 +622,7 @@ def statsGen(bot, update, days):
         text+="Record di "+str(days)+" giorni:\n"
         query = "SELECT Type, count(chat_id) FROM stat_list WHERE DateCommand > '"+unicode(date.today()-timedelta(days=days))+"' GROUP BY Type ORDER BY Type;"
     for row in conn.execute(query):
-        if str(row[0]) != "leiCheNePensaSignorina" and str(row[0]) != "smonta_portoni" and str(row[0]) != "santino" and str(row[0]) != "bladrim":
+        if str(row[0]) != "leiCheNePensaSignorina" and str(row[0]) != "smonta_portoni" and str(row[0]) != "santino" and str(row[0]) != "bladrim" and str(row[0]) != "prof_sticker":
 	    text+=str(row[1])+": "+str(row[0])+"\n"
     bot.sendMessage(chat_id=chat_id,text=text)
 
@@ -662,10 +641,10 @@ def statsTot(bot, update):
 def checkLog(bot, update, type, callback=0):
 
     if callback:
-      update = update.callback_query
+		update = update.callback_query
 
     if (config_map['debug']['disable_db'] == 0):
-        chat_id = update.message.chat_id
+    	chat_id = update.message.chat_id
         conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
         today=unicode(date.today());
         conn.execute("INSERT INTO stat_list VALUES ('"+str(type)+"',"+str(chat_id)+",'"+str(today)+" ')");
@@ -675,6 +654,7 @@ def checkLog(bot, update, type, callback=0):
         log = open("logs/chatid.txt", "a+")
         if not str(chat_id) in log.read():
             log.write(str(chat_id)+"\n")
+
 def giveChatId(bot, update):
 	update.message.reply_text(str(update.message.chat_id))
 def sendLog(bot, update):
