@@ -219,10 +219,10 @@ def callback(bot, update):
 				try:
 					file_list2 = drive2.ListFile({'q': "'"+file1['id']+"' in parents and trashed=false",'orderBy':'folder,title'}).GetList()
 				except Exception as e: 
-        			print("- Drive error: {}".format(e))
+					print("- Drive error: {}".format(e))
 					bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text="Si è verificato un errore, ci scusiamo per il disagio. Contatta i devs. /help")
 					sys.exit(0)
-					
+
 				for file2 in file_list2:
 
 					fileN=""
