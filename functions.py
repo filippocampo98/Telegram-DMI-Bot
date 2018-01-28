@@ -25,7 +25,7 @@ import logging
 from module.lezioni import lezioni_cmd
 from module.esami import esami_cmd
 from module.professori import prof_cmd
-#from module.esamitest import esamitest_cmd 
+from module.scraperesami import scrape_esami 
 import yaml
 
 
@@ -677,8 +677,7 @@ def sendErrors(bot, update):
 	if(update.message.chat_id == -1001095167198):
 		bot.sendDocument(chat_id=-1001095167198, document=open('logs/errors.txt', 'rb'))
 
-
-def avviso(bot,job):
+def avviso(bot, job):
 	if os.path.isfile("data/avviso.dat"):
 		testo = open("data/avviso.dat").read()
 		chat_ids = open("logs/chatid.txt","r").read()
@@ -690,3 +689,7 @@ def avviso(bot,job):
 			except Exception as error:
 				open("logs/errors.txt","a+").write(str(error)+" "+str(chat_id)+"\n")
 		os.remove("data/avviso.dat")
+
+def update_esami(bot, job):
+	scrape_esami()
+	os.rename("esami.json", "data/json/esami.json")

@@ -23,23 +23,65 @@
         }, 
         {
             "anno": "1\u00b0 anno", 
-            "docenti": "F. Barbanera", 
-            "insegnamento": "FONDAMENTI DI INFORMATICA corso A-L", 
+            "docenti": "M.A. Ragusa", 
+            "insegnamento": "ELEMENTI DI ANALISI MATEMATICA corso unico", 
             "prima": [
-                "30/01/2018 09:00", 
-                "27/02/2018 09:00"
+                "29/01/2018 08:00", 
+                "12/02/2018 08:00"
             ], 
             "seconda": [
-                "19/06/2018 09:00", 
-                "04/07/2018 09:00"
+                "", 
+                ""
             ], 
             "straordinaria": [
                 "", 
                 ""
             ], 
             "terza": [
-                "17/09/2018 09:00", 
-                "03/10/2018 09:00"
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "1\u00b0 anno", 
+            "docenti": "M.A. Ragusa", 
+            "insegnamento": "ELEMENTI DI ANALISI MATEMATICA 1 corso unico", 
+            "prima": [
+                "29/01/2018 09:00", 
+                "12/02/2018 09:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "1\u00b0 anno", 
+            "docenti": "F. Barbanera", 
+            "insegnamento": "FONDAMENTI DI INFORMATICA corso A-L", 
+            "prima": [
+                "30/01/2018 10:00", 
+                "27/02/2018 10:00"
+            ], 
+            "seconda": [
+                "19/06/2018 10:00", 
+                "04/07/2018 10:00"
+            ], 
+            "straordinaria": [
+                "", 
+                ""
+            ], 
+            "terza": [
+                "17/09/2018 10:00", 
+                "03/10/2018 10:00"
             ]
         }, 
         {
@@ -47,8 +89,8 @@
             "docenti": "M.S. Madonia", 
             "insegnamento": "FONDAMENTI DI INFORMATICA corso M-Z", 
             "prima": [
-                "30/01/2018 09:00", 
-                "27/02/2018 09:00"
+                "30/01/2018 10:00", 
+                "27/02/2018 10:00"
             ], 
             "seconda": [
                 "19/06/2018 09:00", 
@@ -72,16 +114,16 @@
                 "28/02/2018 08:00"
             ], 
             "seconda": [
-                "", 
-                ""
+                "27/06/2018 09:00", 
+                "18/07/2018 09:00"
             ], 
             "straordinaria": [
                 "18/04/2018 15:00", 
                 ""
             ], 
             "terza": [
-                "", 
-                ""
+                "05/09/2018 09:00", 
+                "26/09/2018 09:00"
             ]
         }, 
         {
@@ -93,16 +135,16 @@
                 "28/02/2018 09:00"
             ], 
             "seconda": [
-                "", 
-                ""
+                "27/06/2018 09:00", 
+                "18/07/2018 09:00"
             ], 
             "straordinaria": [
                 "18/04/2018 15:00", 
                 ""
             ], 
             "terza": [
-                "", 
-                ""
+                "05/09/2018 09:00", 
+                "26/09/2018 09:00"
             ]
         }, 
         {
@@ -198,16 +240,58 @@
                 "26/02/2018 15:00"
             ], 
             "seconda": [
-                "", 
-                ""
+                "20/06/2018 09:00", 
+                "11/07/2018 09:00"
             ], 
             "straordinaria": [
                 "11/04/2018 15:00", 
                 ""
             ], 
             "terza": [
+                "10/09/2018 00:00", 
+                "01/10/2018 15:00"
+            ]
+        }, 
+        {
+            "anno": "1\u00b0 anno", 
+            "docenti": "E.A. Alparone", 
+            "insegnamento": "ULTERIORI CONOSCENZE LINGUISTICHE Corso M-Z", 
+            "prima": [
+                "07/02/2018 15:00", 
+                "26/02/2018 15:00"
+            ], 
+            "seconda": [
+                "20/06/2018 15:00", 
+                "11/07/2018 15:00"
+            ], 
+            "straordinaria": [
                 "", 
                 ""
+            ], 
+            "terza": [
+                "10/09/2018 15:00", 
+                "01/10/2018 15:00"
+            ]
+        }, 
+        {
+            "anno": "2\u00b0 anno", 
+            "docenti": "D. Cantone", 
+            "insegnamento": "ALGORITMI corso unico", 
+            "prima": [
+                "07/02/2018 09:00", 
+                "28/02/2018 09:00"
+            ], 
+            "seconda": [
+                "18/06/2018 09:00", 
+                "06/07/2018 09:00"
+            ], 
+            "straordinaria": [
+                "", 
+                ""
+            ], 
+            "terza": [
+                "12/09/2018 09:00", 
+                "03/10/2018 09:00"
             ]
         }, 
         {
@@ -254,6 +338,27 @@
         }, 
         {
             "anno": "2\u00b0 anno", 
+            "docenti": "M.A. Ragusa", 
+            "insegnamento": "ELEMENTI DI ANALISI MATEMATICA 2 corso unico", 
+            "prima": [
+                "29/01/2018 08:00", 
+                ""
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "2\u00b0 anno", 
             "docenti": "E. Tramontana", 
             "insegnamento": "INGEGNERIA DEL SOFTWARE corso unico", 
             "prima": [
@@ -278,7 +383,7 @@
             "docenti": "F. Stanco", 
             "insegnamento": "INTERAZIONE E MULTIMEDIA corso unico", 
             "prima": [
-                "09/02/2018 09:00", 
+                "09/02/2018 11:00", 
                 "05/03/2018 09:00"
             ], 
             "seconda": [
@@ -324,16 +429,16 @@
                 "06/03/2018 15:00"
             ], 
             "seconda": [
-                "", 
-                ""
+                "02/07/2018 09:00", 
+                "23/07/2018 09:00"
             ], 
             "straordinaria": [
                 "08/05/2018 15:00", 
                 ""
             ], 
             "terza": [
-                "", 
-                ""
+                "03/09/2018 09:00", 
+                "25/09/2018 09:00"
             ]
         }, 
         {
@@ -345,16 +450,37 @@
                 "26/02/2018 15:00"
             ], 
             "seconda": [
-                "", 
-                ""
+                "20/06/2018 09:00", 
+                "11/07/2018 09:00"
             ], 
             "straordinaria": [
                 "11/04/2018 15:00", 
                 ""
             ], 
             "terza": [
+                "10/09/2018 00:00", 
+                "01/10/2018 15:00"
+            ]
+        }, 
+        {
+            "anno": "2\u00b0 anno", 
+            "docenti": "E.A. Alparone", 
+            "insegnamento": "ULTERIORI CONOSCENZE LINGUISTICHE Corso M-Z", 
+            "prima": [
+                "07/02/2018 15:00", 
+                "26/02/2018 15:00"
+            ], 
+            "seconda": [
+                "20/06/2018 15:00", 
+                "11/07/2018 15:00"
+            ], 
+            "straordinaria": [
                 "", 
                 ""
+            ], 
+            "terza": [
+                "10/09/2018 15:00", 
+                "01/10/2018 15:00"
             ]
         }, 
         {
@@ -366,16 +492,16 @@
                 "08/03/2018 09:00"
             ], 
             "seconda": [
-                "", 
-                ""
+                "19/06/2018 09:00", 
+                "18/07/2018 09:00"
             ], 
             "straordinaria": [
                 "19/04/2018 15:00", 
                 ""
             ], 
             "terza": [
-                "", 
-                ""
+                "12/09/2018 09:00", 
+                "09/10/2018 09:00"
             ]
         }, 
         {
@@ -401,18 +527,18 @@
         }, 
         {
             "anno": "3\u00b0 anno", 
-            "docenti": "G. Bella", 
-            "insegnamento": "INTERNET SECURITY corso unico", 
+            "docenti": "M.M. Salfi", 
+            "insegnamento": "INFORMATICA MUSICALE corso uico", 
             "prima": [
-                "30/01/2018 09:00", 
-                "15/02/2018 09:00"
+                "30/01/2018 16:00", 
+                "26/02/2018 16:00"
             ], 
             "seconda": [
                 "", 
                 ""
             ], 
             "straordinaria": [
-                "27/03/2018 09:00", 
+                "", 
                 ""
             ], 
             "terza": [
@@ -422,11 +548,53 @@
         }, 
         {
             "anno": "3\u00b0 anno", 
+            "docenti": "G. Bella", 
+            "insegnamento": "INTERNET SECURITY corso unico", 
+            "prima": [
+                "30/01/2018 09:00", 
+                "15/02/2018 09:00"
+            ], 
+            "seconda": [
+                "25/06/2018 09:00", 
+                "10/07/2018 09:00"
+            ], 
+            "straordinaria": [
+                "27/03/2018 09:00", 
+                ""
+            ], 
+            "terza": [
+                "03/09/2018 09:00", 
+                "18/09/2018 09:00"
+            ]
+        }, 
+        {
+            "anno": "3\u00b0 anno", 
             "docenti": "A. Ferro", 
             "insegnamento": "INTRODUZIONE AL DATA MINING corso unico", 
             "prima": [
                 "07/02/2018 09:00", 
                 "01/03/2018 09:00"
+            ], 
+            "seconda": [
+                "21/06/2018 09:00", 
+                "11/07/2018 09:00"
+            ], 
+            "straordinaria": [
+                "", 
+                ""
+            ], 
+            "terza": [
+                "17/09/2018 09:00", 
+                "04/10/2018 09:00"
+            ]
+        }, 
+        {
+            "anno": "3\u00b0 anno", 
+            "docenti": "A.S. Calanducci", 
+            "insegnamento": "LABORATORIO AVANZATO DI PROGRAMMAZIONE II corso unico", 
+            "prima": [
+                "08/02/2018 16:30", 
+                "07/03/2018 16:30"
             ], 
             "seconda": [
                 "", 
@@ -450,16 +618,16 @@
                 "20/02/2018 09:00"
             ], 
             "seconda": [
-                "", 
-                ""
+                "27/06/2018 09:00", 
+                "19/07/2018 09:00"
             ], 
             "straordinaria": [
                 "26/04/2018 15:00", 
                 ""
             ], 
             "terza": [
-                "", 
-                ""
+                "04/09/2018 09:00", 
+                "19/09/2018 09:00"
             ]
         }, 
         {
@@ -527,6 +695,27 @@
         }, 
         {
             "anno": "3\u00b0 anno", 
+            "docenti": "A. Basile", 
+            "insegnamento": "STARTUP DI IMPRESA E MODELLI DI BUSINESS corso unico", 
+            "prima": [
+                "06/02/2018 09:00", 
+                "27/02/2018 09:00"
+            ], 
+            "seconda": [
+                "19/06/2018 09:00", 
+                "05/07/2018 09:00"
+            ], 
+            "straordinaria": [
+                "", 
+                ""
+            ], 
+            "terza": [
+                "27/09/2018 09:00", 
+                "\u00a0"
+            ]
+        }, 
+        {
+            "anno": "3\u00b0 anno", 
             "docenti": "F. Stanco", 
             "insegnamento": "SVILUPPO DI GIOCHI DIGITALI corso unico", 
             "prima": [
@@ -555,21 +744,21 @@
                 "28/02/2018 09:00"
             ], 
             "seconda": [
-                "", 
-                ""
+                "18/06/2018 09:00", 
+                "05/07/2018 09:00"
             ], 
             "straordinaria": [
-                "", 
+                "23/04/2018 15:00", 
                 ""
             ], 
             "terza": [
-                "", 
-                ""
+                "18/09/2018 09:00", 
+                "03/10/2018 09:00"
             ]
         }
     ], 
     "status": {
-        "lastupdate": "2017-26-12 16:59:21", 
-        "length": 27
+        "lastupdate": "2018-28-01 21:00:51", 
+        "length": 36
     }
 }

@@ -63,8 +63,8 @@ def main():
 	dp.add_handler(CommandHandler('errors', sendErrors))
 	#JobQueue
 	j= updater.job_queue
-	job_minute = j.run_repeating(avviso, interval=60)
-
+	job_dmi_news = j.run_repeating(avviso, interval=60)
+	job_updater_esami = j.run_repeating(update_esami, interval=86400) #24h
 	if (config_map['debug']['disable_drive'] == 0):
 	  dp.add_handler(CommandHandler('drive',drive))
 	  dp.add_handler(RegexHandler('/adddb',adddb))
