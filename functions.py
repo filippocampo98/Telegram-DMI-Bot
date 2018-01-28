@@ -25,6 +25,7 @@ import logging
 from module.lezioni import lezioni_cmd
 from module.esami import esami_cmd
 from module.professori import prof_cmd
+#from module.esamitest import esamitest_cmd 
 import yaml
 
 
@@ -55,7 +56,7 @@ def esami(bot, update, args, *m):
     if(m):
         messageText = "_Command under development._\nControlla la risorsa da te richiesta sul [sito](http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20degli%20Esami)"
     else:
-        messageText = esami_cmd(args, config_map['api_uri']+'/PHP-DMI-API/result/esami_dmi.json')
+        messageText = esami_cmd(args, "data/json/esami.json")
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
 def forum(sezione):

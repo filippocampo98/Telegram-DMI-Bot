@@ -1,0 +1,575 @@
+{
+    "items": [
+        {
+            "anno": "1\u00b0 anno", 
+            "docenti": "G. Scollo", 
+            "insegnamento": "ARCHITETTURA DEGLI ELABORATORI corso unico", 
+            "prima": [
+                "12/02/2018 08:30", 
+                "01/03/2018 08:30"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "04/04/2018 15:00", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "1\u00b0 anno", 
+            "docenti": "F. Barbanera", 
+            "insegnamento": "FONDAMENTI DI INFORMATICA corso A-L", 
+            "prima": [
+                "30/01/2018 09:00", 
+                "27/02/2018 09:00"
+            ], 
+            "seconda": [
+                "19/06/2018 09:00", 
+                "04/07/2018 09:00"
+            ], 
+            "straordinaria": [
+                "", 
+                ""
+            ], 
+            "terza": [
+                "17/09/2018 09:00", 
+                "03/10/2018 09:00"
+            ]
+        }, 
+        {
+            "anno": "1\u00b0 anno", 
+            "docenti": "M.S. Madonia", 
+            "insegnamento": "FONDAMENTI DI INFORMATICA corso M-Z", 
+            "prima": [
+                "30/01/2018 09:00", 
+                "27/02/2018 09:00"
+            ], 
+            "seconda": [
+                "19/06/2018 09:00", 
+                "04/07/2018 09:00"
+            ], 
+            "straordinaria": [
+                "", 
+                ""
+            ], 
+            "terza": [
+                "17/09/2018 09:00", 
+                "03/10/2018 09:00"
+            ]
+        }, 
+        {
+            "anno": "1\u00b0 anno", 
+            "docenti": "S. Milici", 
+            "insegnamento": "MATEMATICA  DISCRETA corso A - L", 
+            "prima": [
+                "31/01/2018 08:00", 
+                "28/02/2018 08:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "18/04/2018 15:00", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "1\u00b0 anno", 
+            "docenti": "C.L.R. Milazzo", 
+            "insegnamento": "MATEMATICA  DISCRETA corso M- Z", 
+            "prima": [
+                "31/01/2018 09:00", 
+                "28/02/2018 09:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "18/04/2018 15:00", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "1\u00b0 anno", 
+            "docenti": "G. Cincotti", 
+            "insegnamento": "PROGRAMMAZIONE I corso A-L", 
+            "prima": [
+                "01/02/2018 09:00", 
+                "08/03/2018 09:00"
+            ], 
+            "seconda": [
+                "18/06/2018 09:00", 
+                "10/07/2018 09:00"
+            ], 
+            "straordinaria": [
+                "17/04/2018 09:00", 
+                ""
+            ], 
+            "terza": [
+                "04/09/2018 09:00", 
+                "25/09/2018 09:00"
+            ]
+        }, 
+        {
+            "anno": "1\u00b0 anno", 
+            "docenti": "G. Gallo", 
+            "insegnamento": "PROGRAMMAZIONE I corso M-Z", 
+            "prima": [
+                "01/02/2018 09:00", 
+                "08/03/2018 09:00"
+            ], 
+            "seconda": [
+                "18/06/2018 09:00", 
+                "10/07/2018 09:00"
+            ], 
+            "straordinaria": [
+                "17/04/2018 09:00", 
+                ""
+            ], 
+            "terza": [
+                "04/09/2018 09:00", 
+                "25/09/2018 09:00"
+            ]
+        }, 
+        {
+            "anno": "1\u00b0 anno", 
+            "docenti": "D. Catalano", 
+            "insegnamento": "PROGRAMMAZIONE II corso A-L", 
+            "prima": [
+                "08/02/2018 09:00", 
+                "21/02/2018 09:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "09/04/2018 15:00", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "1\u00b0 anno", 
+            "docenti": "S. Faro", 
+            "insegnamento": "PROGRAMMAZIONE II corso M-Z", 
+            "prima": [
+                "08/02/2018 09:00", 
+                "21/02/2018 09:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "09/04/2018 15:00", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "1\u00b0 anno", 
+            "docenti": "D. Saitta", 
+            "insegnamento": "ULTERIORI CONOSCENZE LINGUISTICHE corso A-L", 
+            "prima": [
+                "07/02/2018 15:00", 
+                "26/02/2018 15:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "11/04/2018 15:00", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "2\u00b0 anno", 
+            "docenti": "D. Cantone", 
+            "insegnamento": "ALGORITMI E LABORATORIO corso modulare", 
+            "prima": [
+                "07/02/2018 09:00", 
+                "28/02/2018 09:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "2\u00b0 anno", 
+            "docenti": "A. Pulvirenti", 
+            "insegnamento": "BASI DI DATI corso unico", 
+            "prima": [
+                "08/02/2018 09:00", 
+                "02/03/2018 09:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "2\u00b0 anno", 
+            "docenti": "E. Tramontana", 
+            "insegnamento": "INGEGNERIA DEL SOFTWARE corso unico", 
+            "prima": [
+                "01/02/2018 09:00", 
+                "16/02/2018 09:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "24/05/2018 15:00", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "2\u00b0 anno", 
+            "docenti": "F. Stanco", 
+            "insegnamento": "INTERAZIONE E MULTIMEDIA corso unico", 
+            "prima": [
+                "09/02/2018 09:00", 
+                "05/03/2018 09:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "04/05/2018 15:00", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "2\u00b0 anno", 
+            "docenti": "S.A. Riccobene", 
+            "insegnamento": "RETI DI CALCOLATORI corso unico", 
+            "prima": [
+                "30/01/2018 09:00", 
+                "20/02/2018 09:00"
+            ], 
+            "seconda": [
+                "21/06/2018 09:00", 
+                "09/07/2018 09:00"
+            ], 
+            "straordinaria": [
+                "03/05/2018 09:00", 
+                ""
+            ], 
+            "terza": [
+                "10/09/2018 09:00", 
+                "24/09/2018 09:00"
+            ]
+        }, 
+        {
+            "anno": "2\u00b0 anno", 
+            "docenti": "M. Di Raimondo", 
+            "insegnamento": "SISTEMI OPERATIVI corso unico", 
+            "prima": [
+                "12/02/2018 15:00", 
+                "06/03/2018 15:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "08/05/2018 15:00", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "2\u00b0 anno", 
+            "docenti": "D. Saitta", 
+            "insegnamento": "ULTERIORI CONOSCENZE LINGUISTICHE corso A-L", 
+            "prima": [
+                "07/02/2018 15:00", 
+                "26/02/2018 15:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "11/04/2018 15:00", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "3\u00b0 anno", 
+            "docenti": "G. Gallo", 
+            "insegnamento": "COMPUTER GRAFICA corso unico", 
+            "prima": [
+                "01/02/2018 09:00", 
+                "08/03/2018 09:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "19/04/2018 15:00", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "3\u00b0 anno", 
+            "docenti": "A. Scordino", 
+            "insegnamento": "FISICA corso unico", 
+            "prima": [
+                "02/02/2018 09:00", 
+                "23/02/2018 09:00"
+            ], 
+            "seconda": [
+                "20/06/2018 09:00", 
+                "12/07/2018 09:00"
+            ], 
+            "straordinaria": [
+                "20/04/2018 15:00", 
+                ""
+            ], 
+            "terza": [
+                "06/09/2018 09:00", 
+                "01/10/2018 09:00"
+            ]
+        }, 
+        {
+            "anno": "3\u00b0 anno", 
+            "docenti": "G. Bella", 
+            "insegnamento": "INTERNET SECURITY corso unico", 
+            "prima": [
+                "30/01/2018 09:00", 
+                "15/02/2018 09:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "27/03/2018 09:00", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "3\u00b0 anno", 
+            "docenti": "A. Ferro", 
+            "insegnamento": "INTRODUZIONE AL DATA MINING corso unico", 
+            "prima": [
+                "07/02/2018 09:00", 
+                "01/03/2018 09:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "3\u00b0 anno", 
+            "docenti": "O. Muscato", 
+            "insegnamento": "METODI MATEMATICI E STATISTICI corso unico", 
+            "prima": [
+                "29/01/2018 09:00", 
+                "20/02/2018 09:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "26/04/2018 15:00", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "3\u00b0 anno", 
+            "docenti": "G. Bilotta", 
+            "insegnamento": "PROGRAMMAZIONE PARALLELA SU ARCHITETTURE GPU corso unico", 
+            "prima": [
+                "08/02/2018 09:00", 
+                "02/03/2018 09:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "3\u00b0 anno", 
+            "docenti": "S. Barbarino", 
+            "insegnamento": "SISTEMI CENTRALI corso unico", 
+            "prima": [
+                "23/02/2018 15:00", 
+                ""
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "3\u00b0 anno", 
+            "docenti": "G.M. Farinella", 
+            "insegnamento": "SOCIAL MEDIA MANAGEMENT corso unico", 
+            "prima": [
+                "16/02/2018 15:00", 
+                "06/03/2018 15:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "13/04/2018 15:00", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "3\u00b0 anno", 
+            "docenti": "F. Stanco", 
+            "insegnamento": "SVILUPPO DI GIOCHI DIGITALI corso unico", 
+            "prima": [
+                "09/02/2018 09:00", 
+                "05/03/2018 11:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "04/05/2018 15:00", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }, 
+        {
+            "anno": "Altri insegnamenti", 
+            "docenti": "G. Pappalardo", 
+            "insegnamento": "TECNOLOGIE PER I SISTEMI DISTRIBUITI E IL WEB corso unico", 
+            "prima": [
+                "13/02/2018 09:00", 
+                "28/02/2018 09:00"
+            ], 
+            "seconda": [
+                "", 
+                ""
+            ], 
+            "straordinaria": [
+                "", 
+                ""
+            ], 
+            "terza": [
+                "", 
+                ""
+            ]
+        }
+    ], 
+    "status": {
+        "lastupdate": "2017-26-12 16:59:21", 
+        "length": 27
+    }
+}
