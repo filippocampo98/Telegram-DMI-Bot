@@ -26,9 +26,7 @@ def main():
 	dp.add_handler(CommandHandler('prof_sticker' ,prof_sticker))
 	dp.add_handler(RegexHandler('/lezioni cazzeggio',bladrim))
 	dp.add_handler(CommandHandler('leiCheNePensaSignorina',lei_che_ne_pensa_signorina))
-	'''
-	dp.add_handler(RegexHandler('/forum',forum_bot))
-	'''
+	# dp.add_handler(RegexHandler('/forum',forum_bot))
 
   	#Informative command
 	dp.add_handler(CommandHandler('sdidattica', lambda bot, update: informative_callback(bot, update, 'sdidattica')))
@@ -61,10 +59,14 @@ def main():
 	dp.add_handler(CommandHandler('sendlog', sendLog))
 	dp.add_handler(CommandHandler('sendChatids', sendChatIds))
 	dp.add_handler(CommandHandler('errors', sendErrors))
+
 	#JobQueue
-	j= updater.job_queue
+	j = updater.job_queue
+
 	job_dmi_news = j.run_repeating(avviso, interval=60)
 	job_updater_esami = j.run_repeating(update_esami, interval=86400) #24h
+
+
 	if (config_map['debug']['disable_drive'] == 0):
 	  dp.add_handler(CommandHandler('drive',drive))
 	  dp.add_handler(RegexHandler('/adddb',adddb))
@@ -88,3 +90,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

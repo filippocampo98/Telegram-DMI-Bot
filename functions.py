@@ -692,4 +692,4 @@ def avviso(bot, job):
 
 def update_esami(bot, job):
 	scrape_esami()
-	os.rename("esami.json", "data/json/esami.json")
+

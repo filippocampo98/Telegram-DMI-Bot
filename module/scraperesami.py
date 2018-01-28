@@ -42,6 +42,6 @@ def scrape_esami():
 					anno = firstd.b.text
 	status["length"] = len(items);
 	finaljson = {"status" : status, "items" : items}
-	with open('esami.json', 'w') as outfile:
+	with open('data/json/esami.json', 'w') as outfile:
 		json.dump(finaljson, outfile, sort_keys=True, indent=4)
 
