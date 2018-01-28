@@ -25,6 +25,7 @@ import logging
 from module.lezioni import lezioni_cmd
 from module.esami import esami_cmd
 from module.professori import prof_cmd
+from module.scraperesami import scrape_esami 
 import yaml
 
 
@@ -55,7 +56,7 @@ def esami(bot, update, args, *m):
     if(m):
         messageText = "_Command under development._\nControlla la risorsa da te richiesta sul [sito](http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20degli%20Esami)"
     else:
-        messageText = esami_cmd(args, config_map['api_uri']+'/PHP-DMI-API/result/esami_dmi.json')
+        messageText = esami_cmd(args, "data/json/esami.json")
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
 def forum(sezione):
@@ -676,8 +677,7 @@ def sendErrors(bot, update):
 	if(update.message.chat_id == -1001095167198):
 		bot.sendDocument(chat_id=-1001095167198, document=open('logs/errors.txt', 'rb'))
 
-
-def avviso(bot,job):
+def avviso(bot, job):
 	if os.path.isfile("data/avviso.dat"):
 		testo = open("data/avviso.dat").read()
 		chat_ids = open("logs/chatid.txt","r").read()
@@ -689,3 +689,7 @@ def avviso(bot,job):
 			except Exception as error:
 				open("logs/errors.txt","a+").write(str(error)+" "+str(chat_id)+"\n")
 		os.remove("data/avviso.dat")
+
+def update_esami(bot, job):
+	scrape_esami()
+
