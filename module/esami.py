@@ -20,6 +20,10 @@ def esami_output(item, sessions):
 
 def esami_condition(items, field, value, *session):
     output = Set()
+    if(field == "anno"):
+        if(value == "primo"):       value = "1° anno"
+        elif(value == "secondo"):   value = "2° anno"
+        elif(value == "terzo"):     value = "3° anno"
     if(session):
         for item in items:
             if([appeal for appeal in item[value] if appeal]):
@@ -33,7 +37,7 @@ def esami_condition(items, field, value, *session):
 
 def esami_cmd(args, link):
 
-    output_str = "Poffarbacco, qualcosa non va. Segnalalo ai dev /contributors \n"
+    output_str = "Inserisci un parametro valido\n"
 
     if(args):
         output = Set()
@@ -71,10 +75,13 @@ def esami_cmd(args, link):
 		        #Create an array of session and years if in arguments
 		        sessions = list(set(args).intersection(("prima", "seconda", "terza", "straordinaria")))
 		        years = list(set(args).intersection(("primo", "secondo", "terzo")))
-
+		        for i in range(len(years)):
+		            if(years[i] == "primo"): years[i] = "1° anno"
+		            elif(years[i] == "secondo"): years[i] = "2° anno"
+		            elif(years[i] == "terzo"): years[i] = "3° anno"
 		        if(sessions and years):
 		            for item in items:
-		                if(item["anno"].lower().replace("anno","").replace(" ", "") in years):
+		                if(item["anno"] in years):
 		                    if( [session for session in sessions if [appeal for appeal in item[session] if appeal]] ):
 		                        output.add(esami_output(item, sessions))
 
