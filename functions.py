@@ -25,7 +25,7 @@ import logging
 from module.lezioni import lezioni_cmd
 from module.esami import esami_cmd
 from module.professori import prof_cmd
-from module.scraperesami import scrape_esami 
+from module.scraperesami import scrape_esami
 import yaml
 
 
@@ -41,6 +41,8 @@ tokenconf = tokenconf.replace("\n", "")
 with open('config/settings.yaml') as yaml_config:
 	config_map = yaml.load(yaml_config)
 TOKEN = tokenconf    		#Token of your telegram bot that you created from @BotFather, write it on token.conf
+
+news = ""
 
 def lezioni(bot, update, args, *m):
     checkLog(bot, update, "lezioni")
@@ -222,7 +224,7 @@ def callback(bot, update):
 
 				try:
 					file_list2 = drive2.ListFile({'q': "'"+file1['id']+"' in parents and trashed=false",'orderBy':'folder,title'}).GetList()
-				except Exception as e: 
+				except Exception as e:
 					print("- Drive error: {}".format(e))
 					bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text="Si è verificato un errore, ci scusiamo per il disagio. Contatta i devs. /help")
 					sys.exit(0)
@@ -264,7 +266,7 @@ def callback(bot, update):
 
 				if len(file1['parents']) > 0 and file1['parents'][0]['id'] != '0ADXK_Yx5406vUk9PVA':
 					keyboard2.append([InlineKeyboardButton("🔙", callback_data="Drive_" + file1['parents'][0]['id'])])
-				
+
 				reply_markup3 = InlineKeyboardMarkup(keyboard2)
 				bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'],text=file1['title']+":", reply_markup=reply_markup3)
 
@@ -291,7 +293,7 @@ def callback(bot, update):
 					open("logs/errors.txt","a+").write(str(e)+str(fileD['title'])+"\n")
 
 			sys.exit(0)
-		
+
 		os.waitpid(pid, 0)
 
 def request(bot, update):
@@ -683,16 +685,16 @@ def sendErrors(bot, update):
 def avviso(bot, job):
 	if os.path.isfile("data/avviso.dat"):
 		testo = open("data/avviso.dat").read()
-		chat_ids = open("logs/chatid.txt","r").read()
-		chat_ids = chat_ids.split("\n")
-		for chat_id in chat_ids:
-			try:
-				if not "+" in chat_id:
-					bot.send_message(chat_id=chat_id,text=testo,parse_mode='HTML')
-			except Exception as error:
-				open("logs/errors.txt","a+").write(str(error)+" "+str(chat_id)+"\n")
+		if testo != "":
+			chat_ids = open("logs/chatid.txt","r").read()
+			chat_ids = chat_ids.split("\n")
+			for chat_id in chat_ids:
+				try:
+					if not "+" in chat_id:
+						bot.send_message(chat_id=chat_id,text=testo,parse_mode='HTML')
+				except Exception as error:
+					open("logs/errors.txt","a+").write(str(error)+" "+str(chat_id)+"\n")
 		os.remove("data/avviso.dat")
 
 def update_esami(bot, job):
 	scrape_esami()
-
