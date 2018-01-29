@@ -64,7 +64,7 @@ def main():
 	j = updater.job_queue
 
 	job_dmi_news = j.run_repeating(avviso, interval=60)
-	job_updater_esami = j.run_repeating(update_esami, interval=86400) #24h
+	job_updater_esami = j.run_repeating(update_esami, interval=86400, first=0) #24h
 
 
 	if (config_map['debug']['disable_drive'] == 0):
@@ -90,4 +90,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

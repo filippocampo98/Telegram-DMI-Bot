@@ -10,3 +10,4 @@ data/DMI_DB.db
 module/*.pyc
 data/archivioAvvisi.dat
 data/avviso.dat
+data/json/esami.json
