@@ -1,4 +1,5 @@
 config/token.conf
+logs/debugDrive.txt
 logs/errors.txt
 logs/logs.txt
 logs/chatid.txt
@@ -11,3 +12,5 @@ module/*.pyc
 data/archivioAvvisi.dat
 data/avviso.dat
 data/json/esami.json
+pydrive
+pydrive/*

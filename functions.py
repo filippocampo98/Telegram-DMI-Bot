@@ -172,7 +172,7 @@ def callback(bot, update):
 	update_id = update.update_id
 
 	update.callback_query.data = update.callback_query.data.replace("Drive_", "")
-	print('Callback query data: ' + str(update.callback_query.data))
+	#print('Callback query data: ' + str(update.callback_query.data))
 	if len(update.callback_query.data)<13:
 		#conn.execute("DELETE FROM 'Chat_id_List'")
 		ArrayValue=update['callback_query']['message']['text'].split(" ")
@@ -221,8 +221,19 @@ def callback(bot, update):
 				file_list2 = None
 
 				try:
-					file_list2 = drive2.ListFile({'q': "'"+file1['id']+"' in parents and trashed=false",'orderBy':'folder,title'}).GetList()
+					istanceFile = drive2.ListFile({'q': "'"+file1['id']+"' in parents and trashed=false",'orderBy':'folder,title'})
+					file_list2 = istanceFile.GetList()
+					with open("./logs/debugDrive.txt", "a") as debugfile:
+						debugfile.write("- Log time:\n {}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+						debugfile.write("- File:\n {}".format(str(json.dumps(file1))))
+						debugfile.write("- IstanceFile:\n".format(str(json.dumps(istanceFile))))
+						debugfile.write("- FileList:\n".format(str(json.dumps(file_list2))))
+						debugfile.write("\n------------\n")
 				except Exception as e: 
+					with open("./logs/debugDrive.txt", "a") as debugfile:
+						debugfile.write("- Log time:\n {}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+						debugfile.write("- Error:\n {}".format(e))
+						debugfile.write("\n------------\n")
 					print("- Drive error: {}".format(e))
 					bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text="Si è verificato un errore, ci scusiamo per il disagio. Contatta i devs. /help")
 					sys.exit(0)
@@ -286,7 +297,7 @@ def callback(bot, update):
 						bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text="File troppo grande per il download diretto, scarica dal seguente link")
 						bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'],text=fileD['alternateLink']) ##fileD['downloadUrl']
 				except Exception as e:
-					print str(e)
+					print("- Drive error: {}".format(e))
 					bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'],text="Impossibile scaricare questo file, contattare gli sviluppatori del bot")
 					open("logs/errors.txt","a+").write(str(e)+str(fileD['title'])+"\n")
 
