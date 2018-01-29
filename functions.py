@@ -50,14 +50,17 @@ def lezioni(bot, update, args, *m):
         messageText = lezioni_cmd(args, config_map['api_uri']+'/PHP-DMI-API/result/lezioni_dmi.json')
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
-def esami(bot, update, args, *m):
+def esami(bot, update, args):
 
     checkLog(bot, update, "esami")
-    if(m):
-        messageText = "_Command under development._\nControlla la risorsa da te richiesta sul [sito](http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20degli%20Esami)"
+    if(len(args)==1 and args[0]=="prima"):
+        messageText1 = esami_cmd(["prima", "primo"], "data/json/esami.json")
+        messageText2 = esami_cmd(["prima", "secondo", "terzo"], "data/json/esami.json")
+        bot.sendMessage(chat_id=update.message.chat_id, text=messageText1, parse_mode='Markdown')
+        bot.sendMessage(chat_id=update.message.chat_id, text=messageText2, parse_mode='Markdown')
     else:
         messageText = esami_cmd(args, "data/json/esami.json")
-    bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
+        bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
 def forum(sezione):
 
