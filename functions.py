@@ -4,6 +4,8 @@
 import telegram
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, Filters, MessageHandler, CommandHandler, CallbackQueryHandler, RegexHandler
+from telegram.error import (TelegramError, Unauthorized, BadRequest, 
+                            TimedOut, ChatMigrated, NetworkError)
 
 #Drive
 from pydrive.drive import GoogleDrive
@@ -596,6 +598,7 @@ def news_(bot, update):
 		bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 
 def spamnews(bot, update):
+    	#admins = [58880997, 26349488, 37967664]
 	if(update.message.chat_id==26349488 or update.message.chat_id == 37967664 or update.message.chat_id == 58880997):
 
 		chat_ids = open('logs/chatid.txt', 'r').read()
@@ -604,10 +607,20 @@ def spamnews(bot, update):
 			try:
 				if not "+" in chat_id:
 					bot.sendMessage(chat_id=chat_id, text=news)
+			except Unauthorized:
+				logger.error('Unauthorized id. Trying to remove from the chat_id list...')
+				chat_ids.remove(chat_id)
+				if chat_id not in chat_ids:
+					logger.info('Succesfully removed {} from the list!!'.format(chat_id))
+				with open('logs/chatid.txt','w') as target:
+					for id in chat_ids:
+						target.write(id+'\n')
 			except Exception as error:
 				open("logs/errors.txt", "a+").write(str(error)+" "+str(chat_id)+"\n")
 		messageText = "News spammata!"
 		bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
+
+
 
 def disablenews(bot, update):
 	checkLog(bot, update,"disablenews")
