@@ -21,9 +21,9 @@ def esami_output(item, sessions):
 def esami_condition(items, field, value, *session):
     output = Set()
     if(field == "anno"):
-		if(value == "primo"): value = "1° anno"
-		elif(value == "secondo"): value = "2° anno"
-		elif(value == "terzo"): value = "3° anno"
+        if(value == "primo"):       value = "1° anno"
+        elif(value == "secondo"):   value = "2° anno"
+        elif(value == "terzo"):     value = "3° anno"
     if(session):
         for item in items:
             if([appeal for appeal in item[value] if appeal]):
