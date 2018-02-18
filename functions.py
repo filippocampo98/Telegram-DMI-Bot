@@ -23,6 +23,9 @@ import urllib2
 from bs4 import BeautifulSoup
 import sqlite3
 import logging
+import xlrd
+from collections import OrderedDict
+
 
 from module.lezioni import lezioni_cmd
 from module.esami import esami_cmd
@@ -722,6 +725,45 @@ def avviso(bot, job):
 
 def update_esami(bot, job):
 	scrape_esami()
-def start(bot,update):
+def start(bot, update):
 	bot.sendMessage(chat_id=update.message.chat_id, text="Benvenuto! Questo bot è stato realizzato dagli studenti del Corso di Laurea in Informatica al fine di suppotare gli studenti del DMI! Per scoprire cosa puoi fare usa /help")
 	
+def mensa(bot,update):
+
+	wb = xlrd.open_workbook("prova.xls")
+	sh = wb.sheet_by_index(0)
+	#Week menu
+	weekx =  (2,8,14,21,28,35,41)
+	weeky = (6,12,18,25,32,39,45)
+	rprimi = range(weekx[datetime.date.today().weekday()] , weeky[datetime.date.today().weekday()])
+	rsecont = range(weekx[datetime.date.today().weekday()], weeky[datetime.date.today().weekday()] + 1)
+
+	if(datetime.datetime.hour < 15):
+		cprimi = 1
+		csecondi = 3
+		ccontorni = 5
+		ind =  "MENÙ PRANZO: %d/%d/%d \n" % (datetime.datetime.now().day, datetime.datetime.now().month,datetime.datetime.now().year) 
+	else:
+		cprimi = 7
+		csecondi = 9
+		ccontorni = 11
+		ind = "MENÙ CENA: %d/%d/%d \n" % (datetime.datetime.now().day, datetime.datetime.now().month,datetime.datetime.now().year) 
+	messagep = ""
+	messages = ""
+	messagec = ""
+	#Orari mensa
+	timemensa = "🕑 Orario Mensa \nPranzo dalle ore 12,15 alle ore 14,30 \nCena dalle ore 19,00 alle ore 21,30 \n "
+	#Primi
+	for count in rprimi:
+		messagep += sh.cell(count,cprimi).value
+		messagep += "\n"
+	#Secondi
+	for count in rsecont:
+		messages += sh.cell(count,csecondi).value
+		messages += "\n"
+	#Contorni
+	for count in rsecont:
+		messagec += sh.cell(count,ccontorni).value
+		messagec += "\n"
+	
+	bot.sendMessage(chat_id=update.message.chat_id, text = timemensa + "\n🍽" + ind + messagep+ "\n" + messages + "\n" + messagec)
