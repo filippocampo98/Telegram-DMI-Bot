@@ -59,6 +59,7 @@ def main():
 	dp.add_handler(CommandHandler('sendlog', sendLog))
 	dp.add_handler(CommandHandler('sendChatids', sendChatIds))
 	dp.add_handler(CommandHandler('errors', sendErrors))
+	dp.add_handler(CommandHandler('start', start))
 
 	#JobQueue
 	j = updater.job_queue
