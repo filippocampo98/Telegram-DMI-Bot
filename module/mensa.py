@@ -5,6 +5,7 @@ from os.path import exists, join
 import xlrd
 import datetime
 from collections import OrderedDict
+
 def scrap():
 
     url = "http://www.ersucatania.gov.it/menu-mensa/"
@@ -75,3 +76,4 @@ def mensa(bot,update):
 		messagec += "\n"
 	
 	bot.sendMessage(chat_id=update.message.chat_id, text = timemensa + "\n🍽" + ind + messagep+ "\n" + messages + "\n" + messagec)
+
