@@ -31,6 +31,7 @@ If you want to test the bot by creating your personal istance, follow this steps
 - python-telegram-bot
 - pydrive
 - requests
+- xlrd
 
 ### Special functions
 
