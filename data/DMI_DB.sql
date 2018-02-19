@@ -24,6 +24,6 @@ CREATE TABLE IF NOT EXISTS stat_list (
 -- subscriptions
 CREATE TABLE IF NOT EXISTS `subscriptions` (
   `chatid` INT(11) NOT NULL,
-  `mensa` INT(11) NOT NULL,
-  `news` INT(11) NOT NULL
+  `mensa` INT(11),
+  `news` INT(11)
 );

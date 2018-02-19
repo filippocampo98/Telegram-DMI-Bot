@@ -3,7 +3,7 @@ from functions import *
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-bot= telegram.Bot(TOKEN)
+bot = telegram.Bot(TOKEN)
 
 with open('config/settings.yaml') as yaml_config:
 	config_map = yaml.load(yaml_config)
@@ -74,6 +74,8 @@ def main():
 	job_dmi_news = j.run_repeating(avviso, interval=60)
 	job_updater_esami = j.run_repeating(update_esami, interval=86400, first=0) #24h
 	job_mensa = j.run_repeating(scrap, interval=3600, first=0)
+	job_mensa_lunch = j.run_daily(mensa_notify_lunch, datetime.time(11, 45, 00), name='At 11:45')
+	job_mensa_dinner = j.run_daily(mensa_notify_dinner, datetime.time(18, 45, 00), name='At 18:45')
 
 	if (config_map['debug']['disable_drive'] == 0):
 	  dp.add_handler(CommandHandler('drive',drive))

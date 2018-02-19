@@ -437,6 +437,12 @@ def button_handler(bot, update):
 	elif data.startswith("Drive_"):
 		callback(bot, update)
 
+	elif (data == "mensa_help"):
+		mensa_cmd(bot, update.callback_query)
+
+	elif data.startswith("mensa_"):
+		mensa_subscription(bot, update)
+
 	elif data == "enablenews" or data == "disablenews":
 		globals()[data](bot, query)
 
@@ -464,7 +470,7 @@ def help(bot, update):
 	)
 	keyboard.append(
 		[
-			InlineKeyboardButton("🍽 Mensa",                             callback_data="mensa"),
+			InlineKeyboardButton("🍽 Mensa",                             callback_data="mensa_help"),
 			InlineKeyboardButton("👥 Rappresentanti",                    callback_data="sm_rapp_menu"),
 			InlineKeyboardButton("📚 Biblioteca",                        callback_data="biblioteca"),
 			InlineKeyboardButton(CUSicon[random.randint(0,5)] + " CUS", callback_data="cus")
