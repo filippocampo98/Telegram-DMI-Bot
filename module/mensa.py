@@ -6,7 +6,7 @@ import xlrd
 import datetime
 from collections import OrderedDict
 
-def scrap():
+def scrap(bot,job):
 
     url = "http://www.ersucatania.gov.it/menu-mensa/"
 
@@ -51,12 +51,12 @@ def mensa(bot,update):
 		cprimi = 1
 		csecondi = 3
 		ccontorni = 5
-		ind =  "MENÙ PRANZO: %d/%d/%d \n" % (datetime.datetime.now().day, datetime.datetime.now().month,datetime.datetime.now().year) 
+		ind =  "MENÙ PRANZO: %d/%d/%d \n" % (datetime.datetime.now().day, datetime.datetime.now().month,datetime.datetime.now().year)
 	else:
 		cprimi = 7
 		csecondi = 9
 		ccontorni = 11
-		ind = "MENÙ CENA: %d/%d/%d \n" % (datetime.datetime.now().day, datetime.datetime.now().month,datetime.datetime.now().year) 
+		ind = "MENÙ CENA: %d/%d/%d \n" % (datetime.datetime.now().day, datetime.datetime.now().month,datetime.datetime.now().year)
 	messagep = ""
 	messages = ""
 	messagec = ""
@@ -74,6 +74,5 @@ def mensa(bot,update):
 	for count in rsecont:
 		messagec += sh.cell(count,ccontorni).value
 		messagec += "\n"
-	
-	bot.sendMessage(chat_id=update.message.chat_id, text = timemensa + "\n🍽" + ind + messagep+ "\n" + messages + "\n" + messagec)
 
+	bot.sendMessage(chat_id=update.message.chat_id, text = timemensa + "\n🍽" + ind + messagep+ "\n" + messages + "\n" + messagec)
