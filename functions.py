@@ -31,7 +31,7 @@ from module.professori import prof_cmd
 from module.scraperesami import scrape_esami
 import yaml
 
-from mensa import*
+from module.mensa import*
 
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
