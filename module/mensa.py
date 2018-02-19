@@ -36,7 +36,7 @@ def scrap():
         f.write(result.content)
         f1.write(result.content)
 
-def mensamessage(bot,update):
+def mensa(bot,update):
 
 	wb = xlrd.open_workbook("data/mensa.xls")
 	sh = wb.sheet_by_index(0)
