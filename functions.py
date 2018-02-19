@@ -4,7 +4,7 @@
 import telegram
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, Filters, MessageHandler, CommandHandler, CallbackQueryHandler, RegexHandler
-from telegram.error import (TelegramError, Unauthorized, BadRequest, 
+from telegram.error import (TelegramError, Unauthorized, BadRequest,
                             TimedOut, ChatMigrated, NetworkError)
 
 #Drive
@@ -236,7 +236,7 @@ def callback(bot, update):
 						debugfile.write("- IstanceFile:\n".format(str(json.dumps(istanceFile))))
 						debugfile.write("- FileList:\n".format(str(json.dumps(file_list2))))
 						debugfile.write("\n------------\n")
-				except Exception as e: 
+				except Exception as e:
 					with open("./logs/debugDrive.txt", "a") as debugfile:
 						debugfile.write("- Log time:\n {}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
 						debugfile.write("- Error:\n {}".format(e))
@@ -727,6 +727,11 @@ def update_esami(bot, job):
 	scrape_esami()
 def start(bot, update):
 	bot.sendMessage(chat_id=update.message.chat_id, text="Benvenuto! Questo bot è stato realizzato dagli studenti del Corso di Laurea in Informatica al fine di suppotare gli studenti del DMI! Per scoprire cosa puoi fare usa /help")
-	
 
-	
+def mensa_cmd(bot, update):
+    checkLog(bot, update, "mensa")
+    mensa(bot, update)
+
+def mensa_plus_cmd(bot, update):
+    checkLog(bot, update, "mensa_plus")
+    mensa_plus(bot, update)

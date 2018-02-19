@@ -1,10 +1,11 @@
 # encoding=utf8
 import requests
 import bs4
-from os.path import exists, join
 import xlrd
 import datetime
+from os.path import exists, join
 from collections import OrderedDict
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 def scrap(bot,job):
 
@@ -76,3 +77,23 @@ def mensa(bot,update):
 		messagec += "\n"
 
 	bot.sendMessage(chat_id=update.message.chat_id, text = timemensa + "\n🍽" + ind + messagep+ "\n" + messages + "\n" + messagec)
+
+def mensa_plus(bot, update):
+	chat_id = update.message.chat_id
+	keyboard=[[]]
+	messageText="Scegli un'opzione per ricevere giornalmente il menu della mensa:"
+
+	keyboard.append(
+		[
+			InlineKeyboardButton("Pranzo",           callback_data="mensa_pranzo"),
+			InlineKeyboardButton("Pranzo e cena)",   callback_data="mensa_pranzo_cena")
+		]
+	)
+	keyboard.append(
+		[
+			InlineKeyboardButton("Cena",             callback_data="mensa_cena"),
+			InlineKeyboardButton("Disabilita",       callback_data="mensa_disabilita")
+		]
+	)
+	reply_markup=InlineKeyboardMarkup(keyboard)
+	bot.sendMessage(chat_id=chat_id, text=messageText, reply_markup=reply_markup)

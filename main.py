@@ -20,9 +20,6 @@ def record_everything(bot, update):
 	log_tmp.write("\n"+message)
 
 
-
-
-
 def main():
 	updater = Updater(TOKEN)
 	dp = updater.dispatcher
@@ -44,7 +41,8 @@ def main():
 	dp.add_handler(CommandHandler('ersu', lambda bot, update: informative_callback(bot, update, 'ersu')))
 	dp.add_handler(CommandHandler('ufficioersu', lambda bot, update: informative_callback(bot, update, 'ufficioersu')))
 	dp.add_handler(CommandHandler('urp', lambda bot, update: informative_callback(bot, update, 'urp')))
-	dp.add_handler(CommandHandler('mensa', mensa))
+	dp.add_handler(CommandHandler('mensa', mensa_cmd))
+	dp.add_handler(CommandHandler('mensa_plus', mensa_plus_cmd))
 	dp.add_handler(CommandHandler('biblioteca', lambda bot, update: informative_callback(bot, update, 'biblioteca')))
 	dp.add_handler(CommandHandler('cus', lambda bot, update: informative_callback(bot, update, 'cus')))
 
@@ -91,7 +89,6 @@ def main():
 	  dp.add_handler(CommandHandler('spamnews',spamnews))
 	  dp.add_handler(CommandHandler('disablenews',disablenews))
 	  dp.add_handler(CommandHandler('enablenews',enablenews))
-
 
 	dp.add_handler(CallbackQueryHandler(callback))
 
