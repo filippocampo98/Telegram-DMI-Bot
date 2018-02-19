@@ -728,7 +728,5 @@ def update_esami(bot, job):
 def start(bot, update):
 	bot.sendMessage(chat_id=update.message.chat_id, text="Benvenuto! Questo bot è stato realizzato dagli studenti del Corso di Laurea in Informatica al fine di suppotare gli studenti del DMI! Per scoprire cosa puoi fare usa /help")
 	
-def mensa(bot,update):
-	mensamessage(bot, update)
 
 	
