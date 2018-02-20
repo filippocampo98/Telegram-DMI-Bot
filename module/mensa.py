@@ -93,7 +93,7 @@ def mensa_plus(bot, update):
 	keyboard.append(
 		[
 			InlineKeyboardButton("Pranzo",           callback_data="mensa_pranzo"),
-			InlineKeyboardButton("Pranzo e cena)",   callback_data="mensa_pranzo_cena")
+			InlineKeyboardButton("Pranzo e cena",    callback_data="mensa_pranzo_cena")
 		]
 	)
 	keyboard.append(
