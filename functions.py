@@ -602,7 +602,7 @@ def news_(bot, update):
 		global news
 		news = update.message.text.replace("/news ", "")
 		news = update.message.text.replace("/news", "")
-		news = shortit(news)
+#		news = shortit(news)
 		messageText = "News Aggiornata!"
 		bot.sendMessage(chat_id=update.message.chat_id, text= messageText)
 

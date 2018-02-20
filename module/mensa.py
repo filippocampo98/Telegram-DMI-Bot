@@ -112,14 +112,17 @@ def mensa_subscription(bot, update):
     data = query.data
 
     flag_mensa = 0
-    if data == "mensa_pranzo": flag_mensa=1
-    elif data == "mensa_pranzo_cena": flag_mensa=2
-    elif data == "mensa_cena": flag_mensa=3
+    message_text = "Notifiche disabilitate!"
 
-    if flag_mensa == 0:
-        message_text = "Notifiche disabilitate!"
-    else:
-        message_text = "Notifiche abilitate!"
+    if data == "mensa_pranzo":
+        flag_mensa = 1
+        message_text = "Notifiche abilitate! Da ora in avanti riceverai alle 11:45 il menu del pranzo."
+    elif data == "mensa_pranzo_cena":
+        flag_mensa = 2
+        message_text = "Notifiche abilitate! Da ora in avanti riceverai alle 11:45 il menu del pranzo ed alle 18:45 il menu della cena."
+    elif data == "mensa_cena":
+        flag_mensa = 3
+        message_text = "Notifiche abilitate! Da ora in avanti riceverai alle 18:45 il menu della cena."
 
     conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
 
@@ -134,7 +137,8 @@ def mensa_subscription(bot, update):
         conn.execute("UPDATE 'subscriptions' SET `mensa`={} WHERE `chatid`={};".format(flag_mensa, chat_id))
     conn.commit()
 
-    bot.sendMessage(chat_id=chat_id, text=message_text)
+    bot.editMessageText(chat_id=chat_id, text=message_text, message_id=update.callback_query.message.message_id)
+
 
 def mensa_notify_lunch(bot, update):
     wb, sh, weekx, weeky, rprimi, rsecont = mensa_get_menu()
