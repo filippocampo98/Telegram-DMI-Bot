@@ -134,6 +134,8 @@ def mensa_subscription(bot, update):
         conn.execute("UPDATE 'subscriptions' SET `mensa`={} WHERE `chatid`={};".format(flag_mensa, chat_id))
     conn.commit()
 
+    bot.sendMessage(chat_id=chat_id, text=message_text)
+
 def mensa_notify_lunch(bot, update):
     wb, sh, weekx, weeky, rprimi, rsecont = mensa_get_menu()
     cprimi = 1

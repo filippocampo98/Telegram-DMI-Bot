@@ -102,3 +102,4 @@ This project is made possible thanks to the contributions of:
 - [Alessio Piazza](https://github.com/Squalex95)
 - [Pierpaolo Pecoraio](https://github.com/Pierpaolo791)
 - [Alessandro Catalano](https://github.com/Wornairz)
+- [Davide Carnemolla](https://github.com/daxcpp)
