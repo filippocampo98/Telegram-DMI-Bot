@@ -55,7 +55,7 @@ def mensa_get_menu():
 
 def mensa(bot,update):
 	wb, sh, weekx, weeky, rprimi, rsecont = mensa_get_menu()
-	if(datetime.datetime.hour < 15):
+	if(datetime.datetime.now().hour < 15):
 		cprimi = 1
 		csecondi = 3
 		ccontorni = 5
