@@ -440,6 +440,9 @@ def button_handler(bot, update):
 	elif (data == "mensa_help"):
 		mensa_cmd(bot, update.callback_query)
 
+	elif data.startswith("mensa_weekend"):
+		mensa_weekend(bot, update)
+
 	elif data.startswith("mensa_"):
 		mensa_subscription(bot, update)
 

@@ -129,7 +129,7 @@ def mensa_subscription(bot, update):
     flag = 0
     for row in conn.execute("SELECT chatid FROM subscriptions"):
         if row[0] == chat_id:
-            flag=1
+            flag = 1
 
     if flag == 0:
         conn.execute("INSERT INTO 'subscriptions' (`chatid`, `mensa`) VALUES ({}, {});".format(chat_id, flag_mensa))
@@ -137,8 +137,44 @@ def mensa_subscription(bot, update):
         conn.execute("UPDATE 'subscriptions' SET `mensa`={} WHERE `chatid`={};".format(flag_mensa, chat_id))
     conn.commit()
 
-    bot.editMessageText(chat_id=chat_id, text=message_text, message_id=update.callback_query.message.message_id)
+    if flag_mensa != 0:
+        keyboard = [[]]
+        message_text += "\n Abilita o disabilita le notifiche nel weekend:"
 
+        keyboard.append(
+            [
+                InlineKeyboardButton("Abilita nel Weekend",     callback_data="mensa_weekend"),
+                InlineKeyboardButton("Disabilita nel Weekend",  callback_data="mensa_weekend_no")
+            ]
+        )
+        reply_markup=InlineKeyboardMarkup(keyboard)
+        bot.editMessageText(chat_id=chat_id, text=message_text, message_id=update.callback_query.message.message_id, reply_markup=reply_markup)
+    else:
+        bot.editMessageText(chat_id=chat_id, text=message_text, message_id=update.callback_query.message.message_id, reply_markup=reply_markup)
+
+def mensa_weekend(bot, update):
+    query = update.callback_query
+    chat_id = query.message.chat_id
+    message_id = query.message.message_id
+    data = query.data
+
+    conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
+
+    for row in conn.execute("SELECT mensa FROM subscriptions WHERE chatid=%s"% chat_id):
+    	mensa = row[0]
+
+    if data == "mensa_weekend_no":
+        if mensa > 3:
+            mensa -= 3
+        message_text = "Notifiche disabilitate nel weekend!"
+        conn.execute("UPDATE 'subscriptions' SET `mensa`={} WHERE `chatid`={};".format(mensa, chat_id))
+    else:
+        if mensa <= 3:
+            mensa += 3
+        message_text = "Notifiche abilitate nel weekend!"
+        conn.execute("UPDATE 'subscriptions' SET `mensa`={} WHERE `chatid`={};".format(mensa, chat_id))
+    conn.commit()
+    bot.editMessageText(chat_id=chat_id, text=message_text, message_id=update.callback_query.message.message_id)
 
 def mensa_notify_lunch(bot, update):
     wb, sh, weekx, weeky, rprimi, rsecont = mensa_get_menu()
@@ -165,7 +201,14 @@ def mensa_notify_lunch(bot, update):
         messagec += "\n"
 
     conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
-    for row in conn.execute("SELECT chatid FROM subscriptions WHERE mensa = 1 OR mensa == 2"):
+
+    x = 1
+    y = 2
+    if datetime.datetime.today().weekday() == 5 or datetime.datetime.today().weekday() == 6:
+        x += 3
+        y += 3
+
+    for row in conn.execute("SELECT chatid FROM subscriptions WHERE mensa = {} OR mensa = {}".format(x,y)):
     	try:
             bot.sendMessage(chat_id=row[0], text="🍽 " + ind + messagep+ "\n" + messages + "\n" + messagec)
     	except Unauthorized:
@@ -196,8 +239,14 @@ def mensa_notify_dinner(bot, update):
         messagec += sh.cell(count,ccontorni).value
         messagec += "\n"
 
+    x = 2
+    y = 3
+    if datetime.datetime.today().weekday() == 5 or datetime.datetime.today().weekday() == 6:
+        x += 3
+        y += 3
+
     conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
-    for row in conn.execute("SELECT chatid FROM subscriptions WHERE mensa = 2 OR mensa == 3"):
+    for row in conn.execute("SELECT chatid FROM subscriptions WHERE mensa = {} OR mensa = {}".format(x,y)):
     	try:
             bot.sendMessage(chat_id=row[0], text="🍽" + ind + messagep+ "\n" + messages + "\n" + messagec)
     	except Unauthorized:
