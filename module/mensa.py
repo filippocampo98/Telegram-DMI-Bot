@@ -150,7 +150,7 @@ def mensa_subscription(bot, update):
         reply_markup=InlineKeyboardMarkup(keyboard)
         bot.editMessageText(chat_id=chat_id, text=message_text, message_id=update.callback_query.message.message_id, reply_markup=reply_markup)
     else:
-        bot.editMessageText(chat_id=chat_id, text=message_text, message_id=update.callback_query.message.message_id, reply_markup=reply_markup)
+        bot.editMessageText(chat_id=chat_id, text=message_text, message_id=update.callback_query.message.message_id)
 
 def mensa_weekend(bot, update):
     query = update.callback_query
