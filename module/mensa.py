@@ -208,7 +208,7 @@ def mensa_notify_lunch(bot, update):
         x += 3
         y += 3
 
-    for row in conn.execute("SELECT chatid FROM subscriptions WHERE mensa = {} OR mensa = {}".format(x,y)):
+    for row in conn.execute("SELECT chatid FROM subscriptions WHERE mensa = {} OR mensa = {} OR mensa = {} OR mensa = {}".format(x, y, x+3, y+3)):
     	try:
             bot.sendMessage(chat_id=row[0], text="🍽 " + ind + messagep+ "\n" + messages + "\n" + messagec)
     	except Unauthorized:
@@ -246,7 +246,7 @@ def mensa_notify_dinner(bot, update):
         y += 3
 
     conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
-    for row in conn.execute("SELECT chatid FROM subscriptions WHERE mensa = {} OR mensa = {}".format(x,y)):
+    for row in conn.execute("SELECT chatid FROM subscriptions WHERE mensa = {} OR mensa = {} OR mensa = {} OR mensa = {}".format(x, y, x+3, y+3)):
     	try:
             bot.sendMessage(chat_id=row[0], text="🍽" + ind + messagep+ "\n" + messages + "\n" + messagec)
     	except Unauthorized:
