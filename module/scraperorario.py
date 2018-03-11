@@ -50,14 +50,11 @@ def scrape_orario():
                             giorno = getGiorno(orario[0:3])
                             orario = orario.replace(orario[0:3],'') #GIORNO
                             oraInizio = orario[1:6] #ORA INIZIO
-                            print oraInizio
-                            oraFine = orario[7:12]
-                            print oraFine # ORA FINE
+                            oraFine = orario[7:12] #ORA FINE
                             orario = orario.replace(oraInizio+"-"+oraFine,'')
                             aula = orario[2:]
-                            print aula #AULA
 
-                            materia = {"Nome": td_all[0].text, "GiornoSettimana": giorno, "OraInizio": oraInizio, "OraFine": oraFine, "Aula": aula, "Anno": anno, "Semestre": semestre}
+                            materia = {"Nome": td_all[0].text, "GiornoSettimana": str(giorno), "OraInizio": oraInizio, "OraFine": oraFine, "Aula": str(aula), "Anno": str(anno), "Semestre": str(semestre)}
                             materie.append(materia)
 
 
