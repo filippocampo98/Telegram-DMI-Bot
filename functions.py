@@ -46,8 +46,8 @@ tokenconf = tokenconf.replace("\n", "")
 with open('config/settings.yaml') as yaml_config:
 	config_map = yaml.load(yaml_config)
 TOKEN = tokenconf    		#Token of your telegram bot that you created from @BotFather, write it on token.conf
-
 news = ""
+
 
 def lezioni(bot, update, args, *m):
     checkLog(bot, update, "lezioni")
@@ -744,3 +744,13 @@ def mensa_cmd(bot, update):
 def mensa_plus_cmd(bot, update):
     checkLog(bot, update, "mensa_plus")
     mensa_plus(bot, update)
+
+def newscommand(bot, update):
+	global news
+	if news == "":
+		bot.sendMessage(chat_id=update.message.chat_id, text="Non ho nulla da mostrarti.")
+	else:
+		bot.sendMessage(chat_id=update.message.chat_id, text=news)
+	
+
+
