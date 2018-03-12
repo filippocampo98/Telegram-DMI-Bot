@@ -29,6 +29,7 @@ from module.lezioni import lezioni_cmd
 from module.esami import esami_cmd
 from module.professori import prof_cmd
 from module.scraperesami import scrape_esami
+from module.scraperorario import scrape_orario
 import yaml
 
 from module.mensa import*
@@ -734,6 +735,7 @@ def avviso(bot, job):
 
 def update_esami(bot, job):
 	scrape_esami()
+	scrape_orario()
 def start(bot, update):
 	bot.sendMessage(chat_id=update.message.chat_id, text="Benvenuto! Questo bot è stato realizzato dagli studenti del Corso di Laurea in Informatica al fine di suppotare gli studenti del DMI! Per scoprire cosa puoi fare usa /help")
 
