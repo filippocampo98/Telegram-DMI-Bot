@@ -746,11 +746,9 @@ def mensa_plus_cmd(bot, update):
     mensa_plus(bot, update)
 
 def newscommand(bot, update):
+    checkLog(bot, update, "avvisi")
 	global news
 	if news == "":
 		bot.sendMessage(chat_id=update.message.chat_id, text="Non ho nulla da mostrarti.")
 	else:
 		bot.sendMessage(chat_id=update.message.chat_id, text=news)
-	
-
-
