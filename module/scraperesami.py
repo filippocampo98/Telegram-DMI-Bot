@@ -23,7 +23,7 @@ def scrape_esami():
 					all_td = tr.find_all("td")
 					sessione = arr[count]
 					if count == 0:
-						item = {"insegnamento" : "", "docenti" : "", "prima" : ["", ""], "seconda" : ["", ""], "terza" : ["", ""], "straordinaria" : ["", ""], "anno" : anno}
+						item = {"insegnamento" : "", "docenti" : "", "prima" : ["", "", ""], "seconda" : ["", "", ""], "terza" : ["", "", ""], "straordinaria" : ["", ""], "anno" : anno}
 						item["insegnamento"] = (all_td[1]).text
 						item["docenti"] = (all_td[2]).text
 						for i in range(len(all_td))[3:]:

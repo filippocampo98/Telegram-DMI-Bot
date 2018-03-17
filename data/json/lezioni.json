@@ -1,46 +1,1246 @@
-[
-    {"Nome": "Basi di Dati", "GiornoSettimana": "1", "OraInizio": "10:00", "OraFine": "13:00", "Aula": "23", "Anno": "2", "Semestre": "1"}, 
-    {"Nome": "Algoritmi", "GiornoSettimana": "2", "OraInizio": "8:00", "OraFine": "11:00", "Aula": "23", "Anno": "2", "Semestre": "1"}, 
-    {"Nome": "Interazione e Multimedia", "GiornoSettimana": "2", "OraInizio": "11:00", "OraFine": "13:00", "Aula": "23", "Anno": "2", "Semestre": "1"}, 
-    {"Nome": "Basi di Dati", "GiornoSettimana": "3", "OraInizio": "10:00", "OraFine": "13:00", "Aula": "23", "Anno": "2", "Semestre": "1"}, 
-    {"Nome": "Algoritmi", "GiornoSettimana": "4", "OraInizio": "8:00", "OraFine": "11:00", "Aula": "23", "Anno": "2", "Semestre": "1"}, 
-    {"Nome": "Interazione e Multimedia", "GiornoSettimana": "4", "OraInizio": "11:00", "OraFine": "13:00", "Aula": "23", "Anno": "2", "Semestre": "1"}, 
-    {"Nome": "Interazione e Multimedia", "GiornoSettimana": "5", "OraInizio": "11:00", "OraFine": "13:00", "Aula": "23", "Anno": "2", "Semestre": "1"}, 
-    {"Nome": "Matematica Discreta", "GiornoSettimana": "1", "OraInizio": "8:00", "OraFine": "10:00", "Aula": "4", "Anno": "1", "Semestre": "1"}, 
-    {"Nome": "Fondamenti di Informatica", "GiornoSettimana": "1", "OraInizio": "10:00", "OraFine": "13:00", "Aula": "4", "Anno": "1", "Semestre": "1"}, 
-    {"Nome": "Elementi di Analisi Matematica A-L", "GiornoSettimana": "2", "OraInizio": "8:00", "OraFine": "10:00", "Aula": "4", "Anno": "1", "Semestre": "1"}, 
-    {"Nome": "Programmazione 1 A-L", "GiornoSettimana": "2", "OraInizio": "10:00", "OraFine": "13:00", "Aula": "4", "Anno": "1", "Semestre": "1"}, 
-    {"Nome": "Elementi di Analisi Matematica M-Z", "GiornoSettimana": "2", "OraInizio": "8:00", "OraFine": "10:00", "Aula": "3", "Anno": "1", "Semestre": "1"}, 
-    {"Nome": "Programmazione 1 M-Z", "GiornoSettimana": "2", "OraInizio": "10:00", "OraFine": "13:00", "Aula": "3", "Anno": "1", "Semestre": "1"}, 
-    {"Nome": "Matematica Discreta", "GiornoSettimana": "3", "OraInizio": "8:00", "OraFine": "10:00", "Aula": "4", "Anno": "1", "Semestre": "1"}, 
-    {"Nome": "Fondamenti di Informatica", "GiornoSettimana": "3", "OraInizio": "10:00", "OraFine": "13:00", "Aula": "4", "Anno": "1", "Semestre": "1"}, 
-    {"Nome": "Laboratorio di Analisi Matematica", "GiornoSettimana": "3", "OraInizio": "14:30", "OraFine": "17:30", "Aula": "F/25", "Anno": "1", "Semestre": "1"}, 
-    {"Nome": "Elementi di Analisi Matematica A-L", "GiornoSettimana": "4", "OraInizio": "8:00", "OraFine": "10:00", "Aula": "4", "Anno": "1", "Semestre": "1"}, 
-    {"Nome": "Programmazione 1 A-L", "GiornoSettimana": "4", "OraInizio": "10:00", "OraFine": "13:00", "Aula": "4", "Anno": "1", "Semestre": "1"}, 
-    {"Nome": "Elementi di Analisi Matematica M-Z", "GiornoSettimana": "4", "OraInizio": "8:00", "OraFine": "10:00", "Aula": "3", "Anno": "1", "Semestre": "1"}, 
-    {"Nome": "Programmazione 1 M-Z", "GiornoSettimana": "4", "OraInizio": "10:00", "OraFine": "13:00", "Aula": "3", "Anno": "1", "Semestre": "1"}, 
-    {"Nome": "Laboratorio di Fondamenti di Informatica", "GiornoSettimana": "4", "OraInizio": "14:30", "OraFine": "17:30", "Aula": "Anile/25", "Anno": "1", "Semestre": "1"}, 
-    {"Nome": "Laboratorio di Analisi Matematica", "GiornoSettimana": "5", "OraInizio": "14:30", "OraFine": "17:30", "Aula": "4", "Anno": "1", "Semestre": "1"}, 
-    {"Nome": "Laboratorio Avanzato di Programmazione 1", "GiornoSettimana": "1", "OraInizio": "9:00", "OraFine": "11:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "Fisica", "GiornoSettimana": "1", "OraInizio": "11:00", "OraFine": "13:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "Introduzione al Data Mining", "GiornoSettimana": "1", "OraInizio": "15:00", "OraFine": "17:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "Social Media Management", "GiornoSettimana": "1", "OraInizio": "17:00", "OraFine": "19:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "Metodi Matematici e Statistici", "GiornoSettimana": "2", "OraInizio": "8:00", "OraFine": "10:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "Tecniche di Programmazione Concorrente e Distribuita", "GiornoSettimana": "2", "OraInizio": "10:00", "OraFine": "13:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "Programmazione GPU", "GiornoSettimana": "2", "OraInizio": "15:00", "OraFine": "17:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "Startup d'impresa", "GiornoSettimana": "2", "OraInizio": "17:00", "OraFine": "19:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "Informatica Musicale", "GiornoSettimana": "2", "OraInizio": "17:00", "OraFine": "19:00", "Aula": "4", "Anno": "3", "Semestre": "1"}, 
-	{"Nome": "Laboratorio Avanzato di Programmazione 1", "GiornoSettimana": "3", "OraInizio": "9:00", "OraFine": "11:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "Fisica", "GiornoSettimana": "3", "OraInizio": "11:00", "OraFine": "13:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "Introduzione al Data Mining", "GiornoSettimana": "3", "OraInizio": "15:00", "OraFine": "17:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "Social Media Management", "GiornoSettimana": "3", "OraInizio": "17:00", "OraFine": "19:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "Metodi Matematici e Statistici", "GiornoSettimana": "4", "OraInizio": "8:00", "OraFine": "10:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "Laboratorio Avanzato di Programmazione 1", "GiornoSettimana": "4", "OraInizio": "9:00", "OraFine": "11:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "Tecniche di Programmazione Concorrente e Distribuita", "GiornoSettimana": "4", "OraInizio": "10:00", "OraFine": "13:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "Programmazione GPU", "GiornoSettimana": "4", "OraInizio": "15:00", "OraFine": "17:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "Startup d'impresa", "GiornoSettimana": "4", "OraInizio": "17:00", "OraFine": "19:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "Fisica", "GiornoSettimana": "5", "OraInizio": "11:00", "OraFine": "13:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "Introduzione al Data Mining", "GiornoSettimana": "5", "OraInizio": "15:00", "OraFine": "17:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "Informatica Musicale", "GiornoSettimana": "4", "OraInizio": "17:00", "OraFine": "19:00", "Aula": "2", "Anno": "3", "Semestre": "1"}, 
-    {"Nome": "nil", "GiornoSettimana": "nil", "OraInizio": "nil", "OraFine": "nil", "Aula": "nil", "Anno": "nil", "Semestre": "nil"}
-]
+{
+    "materie": [
+        {
+            "Semestre": "2", 
+            "Nome": "ARCHITETTURA DEGLI ELABORATORI A - L", 
+            "Aula": "Aula 3", 
+            "Anno": "1", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ARCHITETTURA DEGLI ELABORATORI A - L", 
+            "Aula": "Aula 3", 
+            "Anno": "1", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ARCHITETTURA DEGLI ELABORATORI M - Z", 
+            "Aula": "Aula 4", 
+            "Anno": "1", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ARCHITETTURA DEGLI ELABORATORI M - Z", 
+            "Aula": "Aula 4", 
+            "Anno": "1", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ELEMENTI DI ANALISI MATEMATICA 1  A - L", 
+            "Aula": "Aula 3", 
+            "Anno": "1", 
+            "OraInizio": "08:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "10:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ELEMENTI DI ANALISI MATEMATICA 1  A - L", 
+            "Aula": "Aula 3", 
+            "Anno": "1", 
+            "OraInizio": "08:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "10:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ELEMENTI DI ANALISI MATEMATICA 1  M - Z", 
+            "Aula": "Aula 4", 
+            "Anno": "1", 
+            "OraInizio": "08:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "10:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ELEMENTI DI ANALISI MATEMATICA 1  M - Z", 
+            "Aula": "Aula 4", 
+            "Anno": "1", 
+            "OraInizio": "08:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "10:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "MATEMATICA  DISCRETA A - L", 
+            "Aula": "Aula 3", 
+            "Anno": "1", 
+            "OraInizio": "08:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "10:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "MATEMATICA  DISCRETA A - L", 
+            "Aula": "Aula 3", 
+            "Anno": "1", 
+            "OraInizio": "08:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "10:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "MATEMATICA  DISCRETA M - Z", 
+            "Aula": "Aula 4", 
+            "Anno": "1", 
+            "OraInizio": "08:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "10:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "MATEMATICA  DISCRETA M - Z", 
+            "Aula": "Aula 22", 
+            "Anno": "1", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "17:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "PROGRAMMAZIONE II A - L", 
+            "Aula": "Aula 3", 
+            "Anno": "1", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "PROGRAMMAZIONE II A - L", 
+            "Aula": "Aula 3", 
+            "Anno": "1", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "PROGRAMMAZIONE II M - Z", 
+            "Aula": "Aula 4", 
+            "Anno": "1", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "PROGRAMMAZIONE II M - Z", 
+            "Aula": "Aula 4", 
+            "Anno": "1", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "INGEGNERIA DEL SOFTWARE", 
+            "Aula": "Aula 2", 
+            "Anno": "2", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "INGEGNERIA DEL SOFTWARE", 
+            "Aula": "Aula 2", 
+            "Anno": "2", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "RETI DI CALCOLATORI", 
+            "Aula": "Aula 2", 
+            "Anno": "2", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "18:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "RETI DI CALCOLATORI", 
+            "Aula": "Aula 2", 
+            "Anno": "2", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "18:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "SISTEMI OPERATIVI", 
+            "Aula": "Aula 2", 
+            "Anno": "2", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "SISTEMI OPERATIVI", 
+            "Aula": "Aula 2", 
+            "Anno": "2", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "CALCOLO NUMERICO", 
+            "Aula": "Aula 126", 
+            "Anno": "3", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "CALCOLO NUMERICO", 
+            "Aula": "Aula 126", 
+            "Anno": "3", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "COMPUTER FORENSICS", 
+            "Aula": "Aula 22", 
+            "Anno": "3", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "17:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "COMPUTER FORENSICS", 
+            "Aula": "Aula 22", 
+            "Anno": "3", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "17:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "COMPUTER GRAFICA", 
+            "Aula": "Aula 4", 
+            "Anno": "3", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "18:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "COMPUTER GRAFICA", 
+            "Aula": "Aula 4", 
+            "Anno": "3", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "18:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "INTERNET SECURITY", 
+            "Aula": "Aula 22", 
+            "Anno": "3", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "INTERNET SECURITY", 
+            "Aula": "Aula 22", 
+            "Anno": "3", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "LABORATORIO AVANZATO DI PROGRAMMAZIONE II", 
+            "Aula": "Laboratorio 125", 
+            "Anno": "3", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "LABORATORIO AVANZATO DI PROGRAMMAZIONE II", 
+            "Aula": "Laboratorio 125", 
+            "Anno": "3", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "SISTEMI CENTRALI", 
+            "Aula": "Aula 22", 
+            "Anno": "3", 
+            "OraInizio": "17:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "19:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "SISTEMI CENTRALI", 
+            "Aula": "Aula 22", 
+            "Anno": "3", 
+            "OraInizio": "17:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "19:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "SISTEMI CENTRALI", 
+            "Aula": "Aula 22", 
+            "Anno": "3", 
+            "OraInizio": "17:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "19:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "SVILUPPO DI GIOCHI DIGITALI", 
+            "Aula": "Aula 22", 
+            "Anno": "3", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "SVILUPPO DI GIOCHI DIGITALI", 
+            "Aula": "Aula 2", 
+            "Anno": "3", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ALGEBRA", 
+            "Aula": "Aula 1", 
+            "Anno": "1", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ALGEBRA", 
+            "Aula": "Aula 1", 
+            "Anno": "1", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ANALISI MATEMATICA IMODULO 2", 
+            "Aula": "Aula 1", 
+            "Anno": "1", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ANALISI MATEMATICA IMODULO 2", 
+            "Aula": "Aula 1", 
+            "Anno": "1", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ANALISI MATEMATICA IMODULO 2", 
+            "Aula": "Aula 1", 
+            "Anno": "1", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "GEOMETRIA I", 
+            "Aula": "Aula 1", 
+            "Anno": "1", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "GEOMETRIA I", 
+            "Aula": "Aula 1", 
+            "Anno": "1", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "INFORMATICA I", 
+            "Aula": "Aula 1", 
+            "Anno": "1", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "INFORMATICA I", 
+            "Aula": "Aula 1", 
+            "Anno": "1", 
+            "OraInizio": "08:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "10:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ULTERIORI ATTIVITA' FORMATIVE", 
+            "Aula": "Laboratorio 125", 
+            "Anno": "1", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "14:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ANALISI MATEMATICA II", 
+            "Aula": "Aula MI6", 
+            "Anno": "2", 
+            "OraInizio": "10:30", 
+            "GiornoSettimana": "1", 
+            "OraFine": "12:30"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ANALISI MATEMATICA II", 
+            "Aula": "Aula 126", 
+            "Anno": "2", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ANALISI MATEMATICA II", 
+            "Aula": "Aula 126", 
+            "Anno": "2", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "CALCOLO NUMERICO", 
+            "Aula": "Aula 126", 
+            "Anno": "2", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "CALCOLO NUMERICO", 
+            "Aula": "Aula 126", 
+            "Anno": "2", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "FISICA MATEMATICA", 
+            "Aula": "Aula 126", 
+            "Anno": "2", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "FISICA MATEMATICA", 
+            "Aula": "Aula 126", 
+            "Anno": "2", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "GEOMETRIA II", 
+            "Aula": "Aula 126", 
+            "Anno": "2", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "GEOMETRIA II", 
+            "Aula": "Aula 126", 
+            "Anno": "2", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ALGEBRA LINEARE NUMERICA", 
+            "Aula": "Aula 126", 
+            "Anno": "3", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ALGEBRA LINEARE NUMERICA", 
+            "Aula": "Aula 22", 
+            "Anno": "3", 
+            "OraInizio": "08:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "10:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "FISICA GENERALE IIMODULO 2", 
+            "Aula": "Aula G", 
+            "Anno": "3", 
+            "OraInizio": "08:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "10:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "FISICA GENERALE IIMODULO 2", 
+            "Aula": "Aula G", 
+            "Anno": "3", 
+            "OraInizio": "08:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "10:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "FONDAMENTI DI MATEMATICA", 
+            "Aula": "Aula MI6", 
+            "Anno": "3", 
+            "OraInizio": "08:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "FONDAMENTI DI MATEMATICA", 
+            "Aula": "Aula 22", 
+            "Anno": "3", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "SISTEMI DINAMICI", 
+            "Aula": "Aula 126", 
+            "Anno": "3", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "SISTEMI DINAMICI", 
+            "Aula": "Aula MI6", 
+            "Anno": "3", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "TEORIA DEI GRAFI", 
+            "Aula": "Aula G", 
+            "Anno": "3", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "12:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "TEORIA DEI GRAFI", 
+            "Aula": "Aula G", 
+            "Anno": "3", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "12:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ALGORITMI RANDOMIZZATI ED APPROSSIMATI", 
+            "Aula": "Aula 2", 
+            "Anno": "1", 
+            "OraInizio": "17:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "19:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ALGORITMI RANDOMIZZATI ED APPROSSIMATI", 
+            "Aula": "Aula 2", 
+            "Anno": "1", 
+            "OraInizio": "17:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "19:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ANALISI NUMERICA", 
+            "Aula": "Aula 23", 
+            "Anno": "1", 
+            "OraInizio": "08:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "10:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ANALISI NUMERICA", 
+            "Aula": "Aula 23", 
+            "Anno": "1", 
+            "OraInizio": "08:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "10:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "BIG DATA", 
+            "Aula": "Aula 23", 
+            "Anno": "1", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "12:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "BIG DATA", 
+            "Aula": "Aula 23", 
+            "Anno": "1", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "12:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "COMPUTAZIONE NATURALE E BIOISPIRATA", 
+            "Aula": "Aula 24", 
+            "Anno": "1", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "COMPUTAZIONE NATURALE E BIOISPIRATA", 
+            "Aula": "Aula 24", 
+            "Anno": "1", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "COMPUTER SECURITY E LABORATORIOModulo COMPUTER SECURITY", 
+            "Aula": "Aula 23", 
+            "Anno": "1", 
+            "OraInizio": "14:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "17:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "COMPUTER SECURITY E LABORATORIOModulo COMPUTER SECURITY", 
+            "Aula": "Aula 23", 
+            "Anno": "1", 
+            "OraInizio": "14:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "17:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "COMPUTER VISION", 
+            "Aula": "Aula 23", 
+            "Anno": "1", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "COMPUTER VISION", 
+            "Aula": "Aula 23", 
+            "Anno": "1", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "FONDAMENTI E LINGUAGGI PER LA PROGRAMMAZIONE DISTRIBUITA", 
+            "Aula": "Aula 23", 
+            "Anno": "1", 
+            "OraInizio": "17:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "19:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "FONDAMENTI E LINGUAGGI PER LA PROGRAMMAZIONE DISTRIBUITA", 
+            "Aula": "Aula 23", 
+            "Anno": "1", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "17:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "INTELLIGENZA ARTIFICIALE E LABORATORIOModulo INTELLIGENZA ARTIFICIALE", 
+            "Aula": "Aula 23", 
+            "Anno": "1", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "INTELLIGENZA ARTIFICIALE E LABORATORIOModulo INTELLIGENZA ARTIFICIALE", 
+            "Aula": "Aula 23", 
+            "Anno": "1", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "INTELLIGENZA ARTIFICIALE E LABORATORIOModulo INTELLIGENZA ARTIFICIALE", 
+            "Aula": "Aula 23", 
+            "Anno": "1", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "INTELLIGENZA ARTIFICIALE E LABORATORIOModulo LABORATORIO", 
+            "Aula": "Aula 23", 
+            "Anno": "1", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "INTELLIGENZA ARTIFICIALE E LABORATORIOModulo LABORATORIO", 
+            "Aula": "Aula 23", 
+            "Anno": "1", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "INTELLIGENZA ARTIFICIALE E LABORATORIOModulo LABORATORIO", 
+            "Aula": "Aula 23", 
+            "Anno": "1", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "MACHINE LEARNING", 
+            "Aula": "Laboratorio 145", 
+            "Anno": "1", 
+            "OraInizio": "17:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "19:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "MACHINE LEARNING", 
+            "Aula": "Laboratorio 145", 
+            "Anno": "1", 
+            "OraInizio": "17:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "19:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "PROGRAMMAZIONE DI SISTEMI ROBOTICI AUTONOMI E LABORATORIOModulo PROGRAMMAZIONE DI SISTEMI ROBOTICI AUTONOMI", 
+            "Aula": "Aula 2", 
+            "Anno": "1", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "17:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "PROGRAMMAZIONE DI SISTEMI ROBOTICI AUTONOMI E LABORATORIOModulo PROGRAMMAZIONE DI SISTEMI ROBOTICI AUTONOMI", 
+            "Aula": "Aula 2", 
+            "Anno": "1", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "17:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "PROGRAMMAZIONE DI SISTEMI ROBOTICI AUTONOMI E LABORATORIOModulo PROGRAMMAZIONE DI SISTEMI ROBOTICI AUTONOMI", 
+            "Aula": "Aula 2", 
+            "Anno": "1", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "17:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "SISTEMI CENTRALI", 
+            "Aula": "Aula 22", 
+            "Anno": "1", 
+            "OraInizio": "17:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "19:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "SISTEMI CENTRALI", 
+            "Aula": "Aula 22", 
+            "Anno": "1", 
+            "OraInizio": "17:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "19:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "SISTEMI CENTRALI", 
+            "Aula": "Aula 22", 
+            "Anno": "1", 
+            "OraInizio": "17:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "19:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "SISTEMI DISTRIBUITI 1 E LABORATORIOModulo SISTEMI DISTRIBUITI 1", 
+            "Aula": "Aula 23", 
+            "Anno": "1", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "18:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "SISTEMI DISTRIBUITI 1 E LABORATORIOModulo SISTEMI DISTRIBUITI 1", 
+            "Aula": "Aula 23", 
+            "Anno": "1", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "18:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "TECHNOLOGIES FOR ADVANCED PROGRAMMING", 
+            "Aula": "Laboratorio 125", 
+            "Anno": "1", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "17:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "TECHNOLOGIES FOR ADVANCED PROGRAMMING", 
+            "Aula": "Laboratorio 125", 
+            "Anno": "1", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "17:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "COMPUTABILITA'", 
+            "Aula": "Aula F", 
+            "Anno": "2", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "COMPUTABILITA'", 
+            "Aula": "Aula F", 
+            "Anno": "2", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "SISTEMI DISTRIBUITI 2 E LABORATORIOModulo LABORATORIO", 
+            "Aula": "Laboratorio 125", 
+            "Anno": "2", 
+            "OraInizio": "10:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "SISTEMI DISTRIBUITI 2 E LABORATORIOModulo LABORATORIO", 
+            "Aula": "Laboratorio 125", 
+            "Anno": "2", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "WEB REASONING E LABORATORIOModulo LABORATORIO", 
+            "Aula": "Aula 22", 
+            "Anno": "2", 
+            "OraInizio": "08:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "WEB REASONING E LABORATORIOModulo LABORATORIO", 
+            "Aula": "Aula 22", 
+            "Anno": "2", 
+            "OraInizio": "08:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ANALISI NUMERICAMODULO 2", 
+            "Aula": "Aula F", 
+            "Anno": "1", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ANALISI NUMERICAMODULO 2", 
+            "Aula": "Aula F", 
+            "Anno": "1", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "COMPUTABILITA'", 
+            "Aula": "Aula F", 
+            "Anno": "1", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "COMPUTABILITA'", 
+            "Aula": "Aula F", 
+            "Anno": "1", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "FONDAMENTI DI FISICA MODERNA", 
+            "Aula": "Aula F", 
+            "Anno": "1", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "FONDAMENTI DI FISICA MODERNA", 
+            "Aula": "Aula F", 
+            "Anno": "1", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ISTITUZIONI DI ALGEBRA SUPERIOREMODULO 2", 
+            "Aula": "Aula F", 
+            "Anno": "1", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ISTITUZIONI DI ALGEBRA SUPERIOREMODULO 2", 
+            "Aula": "Aula F", 
+            "Anno": "1", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "17:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ISTITUZIONI DI ANALISI SUPERIOREMODULO 2", 
+            "Aula": "Aula G", 
+            "Anno": "1", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ISTITUZIONI DI ANALISI SUPERIOREMODULO 2", 
+            "Aula": "Aula G", 
+            "Anno": "1", 
+            "OraInizio": "14:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "16:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ISTITUZIONI DI FISICA MATEMATICAMODULO 2", 
+            "Aula": "Aula F", 
+            "Anno": "1", 
+            "OraInizio": "14:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "16:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ISTITUZIONI DI FISICA MATEMATICAMODULO 2", 
+            "Aula": "Aula F", 
+            "Anno": "1", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ISTITUZIONI GEOMETRIA SUPERIOREMODULO 2", 
+            "Aula": "Aula F", 
+            "Anno": "1", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "17:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ISTITUZIONI GEOMETRIA SUPERIOREMODULO 2", 
+            "Aula": "Aula F", 
+            "Anno": "1", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "MODELLI STATISTICI", 
+            "Aula": "Aula 124 A.M. Anile", 
+            "Anno": "1", 
+            "OraInizio": "17:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "19:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "MODELLI STATISTICI", 
+            "Aula": "Aula 124 A.M. Anile", 
+            "Anno": "1", 
+            "OraInizio": "16:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "19:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ANALISI SUPERIORE", 
+            "Aula": "Aula 36", 
+            "Anno": "2", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ANALISI SUPERIORE", 
+            "Aula": "Aula 36", 
+            "Anno": "2", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ANALISI SUPERIORE", 
+            "Aula": "Aula 36", 
+            "Anno": "2", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "DIDATTICA DELLA MATEMATICA", 
+            "Aula": "Aula G", 
+            "Anno": "2", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "18:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "DIDATTICA DELLA MATEMATICA", 
+            "Aula": "Aula G", 
+            "Anno": "2", 
+            "OraInizio": "16:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "19:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "EQUAZIONI A DERIVATE PARZIALI", 
+            "Aula": "Aula 36", 
+            "Anno": "2", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "18:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "EQUAZIONI A DERIVATE PARZIALI", 
+            "Aula": "Aula 36", 
+            "Anno": "2", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "18:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "EQUAZIONI A DERIVATE PARZIALI", 
+            "Aula": "Aula 36", 
+            "Anno": "2", 
+            "OraInizio": "15:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "18:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "MATEMATICHE COMPLEMENTARI", 
+            "Aula": "Laboratorio 125", 
+            "Anno": "2", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "14:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "MATEMATICHE COMPLEMENTARI", 
+            "Aula": "Laboratorio 125", 
+            "Anno": "2", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "METODI MATEMATICI PER L'OTTIMIZZAZIONE", 
+            "Aula": "Aula G", 
+            "Anno": "2", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "1", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "METODI MATEMATICI PER L'OTTIMIZZAZIONE", 
+            "Aula": "Aula MI6", 
+            "Anno": "2", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "METODI MATEMATICI PER L'OTTIMIZZAZIONE", 
+            "Aula": "Aula G", 
+            "Anno": "2", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "NETWORK E SUPERNETWORK", 
+            "Aula": "Aula MI6", 
+            "Anno": "2", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "NETWORK E SUPERNETWORK", 
+            "Aula": "Aula MI6", 
+            "Anno": "2", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "4", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "NETWORK E SUPERNETWORK", 
+            "Aula": "Aula G", 
+            "Anno": "2", 
+            "OraInizio": "09:00", 
+            "GiornoSettimana": "5", 
+            "OraFine": "11:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ULTERIORI ATTIVITA' FORMATIVE", 
+            "Aula": "Aula MI6", 
+            "Anno": "2", 
+            "OraInizio": "11:00", 
+            "GiornoSettimana": "2", 
+            "OraFine": "13:00"
+        }, 
+        {
+            "Semestre": "2", 
+            "Nome": "ULTERIORI ATTIVITA' FORMATIVE", 
+            "Aula": "Aula G", 
+            "Anno": "2", 
+            "OraInizio": "14:00", 
+            "GiornoSettimana": "3", 
+            "OraFine": "16:00"
+        }
+    ]
+}
