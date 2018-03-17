@@ -59,5 +59,5 @@ def scrape_orario():
 
 
     finaljson = {"materie" : materie}
-    with open('../data/json/lezioni.json', 'w') as outfile:
+    with open('./data/json/lezioni.json', 'w') as outfile:
         json.dump(finaljson, outfile, sort_keys=False, indent=4)
