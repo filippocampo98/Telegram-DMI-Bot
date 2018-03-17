@@ -46,7 +46,7 @@ def main():
 	dp.add_handler(CommandHandler('biblioteca', lambda bot, update: informative_callback(bot, update, 'biblioteca')))
 	dp.add_handler(CommandHandler('cus', lambda bot, update: informative_callback(bot, update, 'cus')))
 
-	dp.add_handler(CommandHandler('lezioni', lambda bot, update, args: lezioni(bot, update, args), pass_args=True))
+#	dp.add_handler(CommandHandler('lezioni', lambda bot, update, args: lezioni(bot, update, args), pass_args=True))
 	dp.add_handler(CommandHandler('esami', lambda bot, update, args: esami(bot, update, args), pass_args=True))
 
 	dp.add_handler(CommandHandler('mlezioni', lambda bot, update, args: lezioni(bot, update, args, True), pass_args=True))

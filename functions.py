@@ -52,10 +52,7 @@ news = ""
 
 def lezioni(bot, update, args, *m):
     checkLog(bot, update, "lezioni")
-    if(m):
-        messageText = lezioni_cmd(args, config_map['api_uri']+'/PHP-DMI-API/result/lezioni_dmi_mag.json')
-    else:
-        messageText = lezioni_cmd(args, config_map['api_uri']+'/PHP-DMI-API/result/lezioni_dmi.json')
+    messageText = lezioni_cmd(bot, update, args,"data/json/lezioni.json")
     bot.sendMessage(chat_id=update.message.chat_id, text=messageText, parse_mode='Markdown')
 
 def esami(bot, update, args):
@@ -736,6 +733,7 @@ def avviso(bot, job):
 def update_esami(bot, job):
 	scrape_esami()
 	scrape_orario()
+
 def start(bot, update):
 	bot.sendMessage(chat_id=update.message.chat_id, text="Benvenuto! Questo bot è stato realizzato dagli studenti del Corso di Laurea in Informatica al fine di suppotare gli studenti del DMI! Per scoprire cosa puoi fare usa /help")
 

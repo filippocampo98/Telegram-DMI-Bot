@@ -15,6 +15,7 @@ def getGiorno(giorno):
         return 5
     else:
         return 0
+
 def scrape_orario():
     ids = ["l-31","l-35","lm-18","lm-40"]
     materie = []
@@ -22,8 +23,6 @@ def scrape_orario():
         url = "http://web.dmi.unict.it/corsi/"+str(id_)+"/orario-lezioni"
         sorgente = requests.get(url).text
         soup = bs4.BeautifulSoup(sorgente, "html.parser")
-
-
 
         if soup.find('b',id='attivo').text[0] == 'S':
             semestre = 2;

@@ -14,14 +14,14 @@ locale.setlocale(locale.LC_ALL, 'it_IT.utf8')
 def lezioni_output(item):
     daylist = list(calendar.day_name)
 
-    output = "*Insegnamento:* " + item["insegnamento"]
-    output += "\n*Aula:* " + item["aula"]
+    output = "*Nome:* " + item["Nome"]
+    output += "\n*Aula:* " + item["Aula"]
 
     for day in daylist:
         if(day.replace('ì','i') in item and item[day.replace('ì','i')] != ""):
             output += "\n*" + day.title() + ":* " + item[day.replace('ì','i')]
 
-    output += "\n*Anno:* " + item["anno"] + "\n"
+    output += "\n*Anno:* " + item["Anno"] + "\n"
 
     return output
 
@@ -41,25 +41,27 @@ def lezioni_condition_mult(items, days, years):
     output = Set()
     for item in items:
         for day in days:
-            if( [year for year in years if year in item["anno"].lower()] ):
+            if( [year for year in years if year in item["Anno"].lower()] ):
                 if(day.replace('ì','i') in item and item[day.replace('ì','i')] != ""):
                     output.add(lezioni_output(item))
     return output
 
-def lezioni_cmd(args, link):
+def lezioni_cmd(bot, update, args, path):
 
     output_str = "Poffarbacco, qualcosa non va. Segnalalo ai dev /contributors \n"
 
     if(args):
         output = Set()
-        r = requests.get(link)
-        if(r.status_code == requests.codes.ok):
+        r = json.load(open(path))
 
-            items = r.json()["items"]
-            daylist = list(calendar.day_name)
-            daylist = [x.lower().encode('utf-8').replace('ì', 'i') for x in daylist]
-            #Clear arguments - Trasform all to lower case utf-8 (ì) - Remove word 'anno' and len<2
-            args = [x.lower().encode('utf-8') for x in args if len(x) > 2]
+        items = r["materie"]
+        daylist = list(calendar.day_name)
+        daylist = [x.lower().encode('utf-8').replace('ì', 'i') for x in daylist]
+        #Clear arguments - Trasform all to lower case utf-8 (ì) - Remove word 'anno' and len<2
+        args = [x.lower().encode('utf-8') for x in args if len(x) > 2]
+
+        try:
+
             if 'anno' in args: args.remove('anno')
 
             #Study case
@@ -79,14 +81,10 @@ def lezioni_cmd(args, link):
                 elif(args[0] in ("primo", "secondo", "terzo")):
                     output = lezioni_condition(items, "anno", args[0])
 
-                elif([item["insegnamento"].lower().find(args[0]) for item in items]):
-                    output = lezioni_condition(items, "insegnamento", args[0])
+                elif([item["Nome"].lower().find(args[0]) for item in items]):
+                    output = lezioni_condition(items, "Nome", args[0])
 
-                if(len(output)):
-                    output_str = '\n'.join(list(output))
-                    output_str += "\n_Risultati trovati: " + str(len(output)) + "/" + str(r.json()["status"]["length"]) + "_"
-                    output_str += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
-                else:
+                if not len(output):
                     output_str = "Nessun risultato trovato :(\n"
             elif(len(args) > 1):
 
@@ -109,16 +107,16 @@ def lezioni_cmd(args, link):
 
                 else:
                     for arg in args:
-                        output = output.union(lezioni_condition(items, "insegnamento", arg))
+                        output = output.union(lezioni_condition(items, "Nome", arg))
 
-                if(len(output)):
-                    output_str = '\n'.join(list(output))
-                    output_str += "\n_Risultati trovati: " + str(len(output)) + "/" + str(r.json()["status"]["length"]) + "_"
-                    output_str += "\n_Ultimo aggiornamento: " + r.json()["status"]["lastupdate"] + "_\n"
-                else:
+                if not len(output):
                     output_str = "Nessun risultato trovato :(\n"
+
+        except Exception as e:
+            #debugging
+            bot.sendMessage(chat_id=update.message.chat_id, text=str(e))
+
     else:
         output_str = "Inserisci almeno uno dei seguenti parametri: giorno, materia, anno."
 
     return output_str
-    
