@@ -72,15 +72,18 @@ def mensa(bot,update):
 	timemensa = "🕑 Orario Mensa \nPranzo dalle ore 12,15 alle ore 14,30 \nCena dalle ore 19,00 alle ore 21,30 \n "
 	#Primi
 	for count in rprimi:
-		messagep += sh.cell(count,cprimi).value
+		if count < sh.nrows:
+			messagep += sh.cell(count,cprimi).value
 		messagep += "\n"
 	#Secondi
 	for count in rsecont:
-		messages += sh.cell(count,csecondi).value
+		if count < sh.nrows:
+			messages += sh.cell(count,csecondi).value
 		messages += "\n"
 	#Contorni
 	for count in rsecont:
-		messagec += sh.cell(count,ccontorni).value
+		if count < sh.nrows:
+			messagec += sh.cell(count,ccontorni).value
 		messagec += "\n"
 
 	bot.sendMessage(chat_id=update.message.chat_id, text = timemensa + "\n🍽" + ind + messagep+ "\n" + messages + "\n" + messagec)
@@ -189,15 +192,18 @@ def mensa_notify_lunch(bot, update):
 
     #Primi
     for count in rprimi:
-        messagep += sh.cell(count,cprimi).value
+        if count < sh.nrows:
+            messagep += sh.cell(count,cprimi).value
         messagep += "\n"
 	#Secondi
     for count in rsecont:
-        messages += sh.cell(count,csecondi).value
+        if count < sh.nrows:
+            messages += sh.cell(count,csecondi).value
         messages += "\n"
 	#Contorni
     for count in rsecont:
-        messagec += sh.cell(count,ccontorni).value
+        if count < sh.nrows:
+            messagec += sh.cell(count,ccontorni).value
         messagec += "\n"
 
     conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
@@ -228,15 +234,18 @@ def mensa_notify_dinner(bot, update):
     messagec = ""
     #Primi
     for count in rprimi:
-        messagep += sh.cell(count,cprimi).value
+        if count < sh.nrows:
+            messagep += sh.cell(count,cprimi).value
         messagep += "\n"
     #Secondi
     for count in rsecont:
-        messages += sh.cell(count,csecondi).value
+        if count < sh.nrows:
+            messages += sh.cell(count,csecondi).value
         messages += "\n"
     #Contorni
     for count in rsecont:
-        messagec += sh.cell(count,ccontorni).value
+        if count < sh.nrows:
+            messagec += sh.cell(count,ccontorni).value
         messagec += "\n"
 
     x = 2
