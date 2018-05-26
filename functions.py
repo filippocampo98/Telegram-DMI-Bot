@@ -30,6 +30,7 @@ from module.esami import esami_cmd
 from module.professori import prof_cmd
 from module.scraperesami import scrape_esami
 from module.scraperorario import scrape_orario
+from module.scraperprofessori import scrape_prof
 import yaml
 
 from module.mensa import*
@@ -102,7 +103,7 @@ def help_cmd():
     output = "@DMI_Bot risponde ai seguenti comandi: \n\n"
     output += "📖 /esami - /mesami - 	linka il calendario degli esami\n"
     output += "🗓 /aulario - linka l\'aulario\n"
-    output += "👔 /prof <nome> - es. /prof Milici\n"
+    output += "👔 /prof <nome> - es. /prof Barbanera\n"
     output += "🍽 /mensa - orario mensa\n"
     output += "👥 /rappresentanti - elenco dei rappresentanti del DMI\n"
     output += "📚 /biblioteca - orario biblioteca DMI\n"
@@ -730,9 +731,10 @@ def avviso(bot, job):
 					open("logs/errors.txt","a+").write(str(error)+" "+str(chat_id)+"\n")
 		os.remove("data/avviso.dat")
 
-def update_esami(bot, job):
+def updater_poe(bot, job):
 	scrape_esami()
 	scrape_orario()
+	scrape_prof()
 
 def start(bot, update):
 	bot.sendMessage(chat_id=update.message.chat_id, text="Benvenuto! Questo bot è stato realizzato dagli studenti del Corso di Laurea in Informatica al fine di suppotare gli studenti del DMI! Per scoprire cosa puoi fare usa /help")

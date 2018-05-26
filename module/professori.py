@@ -7,14 +7,18 @@ def prof_output(prof):
     output = "*Ruolo:* " + prof["Ruolo"] + "\n"
     output += "*Cognome:* " + prof["Cognome"] + "\n"
     output += "*Nome:* " + prof["Nome"] + "\n"
-    output += "*Indirizzo email:* " + prof["Email"] + "\n"
-    output += "*Sito web:* " + prof["Sito"] + "\n"
-    if prof["ID"]=="81":
-	output += ""
-    elif prof["ID"]=="28":
-	output += "*Scheda DMI:* " + "http://web.dmi.unict.it/docenti/"+prof["Cognome"].lower().replace(' ','')+"."+prof["Nome"].lower().replace(' ','.')+"\n"
-    else:
-	output += "*Scheda DMI:* " + "http://web.dmi.unict.it/docenti/"+prof["Nome"].lower().replace(' ','.')+"."+prof["Cognome"].lower().replace(' ','')+"\n"
+    if prof['Email'] != "":
+        output += "*Indirizzo email:* " + prof["Email"] + "\n"
+    if prof['Scheda DMI'] != "":
+        output += "*Scheda DMI:* " + prof["Scheda DMI"] + "\n"
+    if prof['Sito'] != "":
+        output += "*Sito web:* " + prof["Sito"] + "\n"
+    if prof['Ufficio'] != "":
+        output += "*Ufficio:* " + prof["Ufficio"] + "\n"
+    if prof['Telefono'] != "":
+        output += "*Telefono:* " + prof["Telefono"] + "\n"
+    if prof['Fax'] != "":
+        output += "*Fax:* " + prof["Fax"] + "\n"
     return output
 
 def prof_cmd(profs):
