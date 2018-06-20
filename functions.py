@@ -689,7 +689,7 @@ def lei_che_ne_pensa_signorina(bot, update):
 def prof(bot, update, args):
     checkLog(bot, update, "prof")
     messageText = prof_cmd(args)
-    print len(messageText)
+#    print len(messageText)
     if len(messageText) > 4096:
         mandaMessaggio(bot, update, messageText)
     else:
