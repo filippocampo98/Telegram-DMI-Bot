@@ -25,7 +25,7 @@ import os
 import sys
 import os.path
 import requests
-import urllib2
+from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import sqlite3
 import logging
@@ -59,56 +59,50 @@ TOKEN = tokenconf
 news = ""
 
 
-def mandaMessaggio(bot, update, messaggio):
+def send_message(bot, update, messaggio):
     msg = ""
     righe = messaggio.split('\n')
     for riga in righe:
         if riga.strip() == "" and len(msg) > 3000:
-            bot.sendMessage(chat_id=update.message.chat_id,
-                            text=msg, parse_mode='Markdown')
+            bot.sendMessage(chat_id=update.message.chat_id, text=msg, parse_mode='Markdown')
             msg = ""
         else:
             msg += riga + "\n"
-    bot.sendMessage(chat_id=update.message.chat_id,
-                    text=msg, parse_mode='Markdown')
+    bot.sendMessage(chat_id=update.message.chat_id, text=msg, parse_mode='Markdown')
 
 
 def lezioni(bot, update, args, *m):
-    checkLog(bot, update, "lezioni")
-    messageText = lezioni_cmd(bot, update, args, "data/json/lezioni.json")
-    bot.sendMessage(chat_id=update.message.chat_id,
-                    text=messageText, parse_mode='Markdown')
+    check_log(bot, update, "lezioni")
+    message_text = lezioni_cmd(bot, update, args, "data/json/lezioni.json")
+    bot.sendMessage(chat_id=update.message.chat_id, text=message_text, parse_mode='Markdown')
 
 
 def esami(bot, update, args):
-    checkLog(bot, update, "esami")
-    messageText = esami_cmd(args, "data/json/esami.json")
-    if len(messageText) > 4096:
-        mandaMessaggio(bot, update, messageText)
+    check_log(bot, update, "esami")
+    message_text = esami_cmd(args, "data/json/esami.json")
+    if len(message_text) > 4096:
+        send_message(bot, update, message_text)
     else:
-        bot.sendMessage(chat_id=update.message.chat_id,
-                        text=messageText, parse_mode='Markdown')
+        bot.sendMessage(chat_id=update.message.chat_id, text=message_text, parse_mode='Markdown')
 
 
 def forum(sezione):
-    response = urllib2.urlopen("http://forum.informatica.unict.it/")
+    response = urlopen("http://forum.informatica.unict.it/")
     html_doc = response.read()
     s = BeautifulSoup(html_doc, 'html.parser')
     s.prettify()
     dictionary = {}
-    for rangeLimit, mainTable in enumerate(s.findAll("div", class_="tborder")):
-        if(rangeLimit >= 3):  # If che limita le sezioni a quelle interessate, evitando di stampare sottosezioni come "News" della categoria "Software"
+    for range_limit, main_table in enumerate(s.findAll("div", class_="tborder")):
+        if(range_limit >= 3):  # If che limita le sezioni a quelle interessate, evitando di stampare sottosezioni come "News" della categoria "Software"
             break
-        for tdOfTable in mainTable.findAll("td", class_="windowbg3"):
-            for spanUnder in tdOfTable.findAll("span", class_="smalltext"):
-                for anchorTags in spanUnder.find_all('a'):
-                    anchorTagsSplitted = anchorTags.string.split(",")
-                    anchorTagsWithoutCFU = StringParser.removeCFU(
-                        anchorTagsSplitted[0])
+        for td_of_table in main_table.findAll("td", class_="windowbg3"):
+            for span_under in td_of_table.findAll("span", class_="smalltext"):
+                for anchor_tags in span_under.find_all('a'):
+                    anchor_tags_splitted = anchor_tags.string.split(",")
+                    anchor_tags_without_cfu = StringParser.remove_cfu(anchor_tags_splitted[0])
 
-                    if(sezione == anchorTagsWithoutCFU.lower()):
-                        dictionary[anchorTagsWithoutCFU.lower()
-                                   ] = anchorTags['href']
+                    if(sezione == anchor_tags_without_cfu.lower()):
+                        dictionary[anchor_tags_without_cfu.lower()] = anchor_tags['href']
                         return dictionary
 
     return False  # Redefine with @Veeenz API
@@ -157,10 +151,9 @@ def read_md(namefile):
 
 
 def informative_callback(bot, update, cmd):
-    checkLog(bot, update, cmd)
-    messageText = read_md(cmd)
-    bot.sendMessage(chat_id=update.message.chat_id,
-                    text=messageText, parse_mode='Markdown')
+    check_log(bot, update, cmd)
+    message_text = read_md(cmd)
+    bot.sendMessage(chat_id=update.message.chat_id, text=message_text, parse_mode='Markdown')
 
 
 def exit_cmd():
@@ -198,11 +191,10 @@ def prof_sticker_id(data):
 
 def forum_cmd(text):
     text = text.replace("/forum ", "")
-    dictUrlSezioni = forum(text)
-    if not (dictUrlSezioni == False):
-        for titoli in dictUrlSezioni:
-            output = StringParser.startsWithUpper(
-                titoli)+": "+str(dictUrlSezioni[titoli])
+    dict_url_sezioni = forum(text)
+    if not (dict_url_sezioni == False):
+        for titoli in dict_url_sezioni:
+            output = StringParser.starts_with_upper(titoli) + ": " + str(dict_url_sezioni[titoli])
     else:
         output = "La sezione non e' stata trovata."
     return output
@@ -211,56 +203,41 @@ def forum_cmd(text):
 def callback(bot, update):
     keyboard2 = [[]]
     icona = ""
-    NumberRow = 0
-    NumberArray = 0
-    update_id = update.update_id
+    number_row = 0
+    number_array = 0
 
-    update.callback_query.data = update.callback_query.data.replace(
-        "Drive_", "")
+    update.callback_query.data = update.callback_query.data.replace("Drive_", "")
     #print('Callback query data: ' + str(update.callback_query.data))
     if len(update.callback_query.data) < 13:
         #conn.execute("DELETE FROM 'Chat_id_List'")
-        ArrayValue = update['callback_query']['message']['text'].split(" ")
-        print(ArrayValue)
+        array_value = update['callback_query']['message']['text'].split(" ")
+        print(array_value)
         try:
-            if len(ArrayValue) == 4:
-                ArrayValue.insert(0, "None")
-            if len(ArrayValue) == 5:
-                conn.execute("INSERT INTO 'Chat_id_List' VALUES ("+update.callback_query.data+",'" +
-                             ArrayValue[4]+"','"+ArrayValue[1]+"','"+ArrayValue[2]+"','"+ArrayValue[3]+"') ")
-                bot.sendMessage(chat_id=update.callback_query.data,
-                                text="🔓 La tua richiesta è stata accettata. Leggi il file README")
-                bot.sendDocument(chat_id=update.callback_query.data,
-                                 document=open('data/README.pdf', 'rb'))
+            if len(array_value) == 4:
+                array_value.insert(0, "None")
+            if len(array_value) == 5:
+                conn.execute("INSERT INTO 'Chat_id_List' VALUES ("+update.callback_query.data+",'" + array_value[4] + "','" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "') ")
+                bot.sendMessage(chat_id=update.callback_query.data, text="🔓 La tua richiesta è stata accettata. Leggi il file README")
+                bot.sendDocument(chat_id=update.callback_query.data, document=open('data/README.pdf', 'rb'))
 
-                request_elimination_text = "Richiesta di " + \
-                    str(ArrayValue[1]) + " " + str(ArrayValue[2]) + " estinta"
-                bot.editMessageText(text=request_elimination_text, chat_id=-
-                                    1001095167198, message_id=update.callback_query.message.message_id)
+                request_elimination_text = "Richiesta di " + str(array_value[1]) + " " + str(array_value[2]) + " estinta"
+                bot.editMessageText(text=request_elimination_text, chat_id=-1001095167198, message_id=update.callback_query.message.message_id)
 
-                bot.sendMessage(chat_id=-1001095167198, text=str(ArrayValue[1])+" "+str(
-                    ArrayValue[2]+str(" è stato inserito nel database")))
+                bot.sendMessage(chat_id=-1001095167198, text=str(array_value[1]) + " " + str(array_value[2] + str(" è stato inserito nel database")))
 
-            elif len(ArrayValue) == 4:
-                conn.execute("INSERT INTO 'Chat_id_List'('Chat_id','Nome','Cognome','Email') VALUES (" +
-                             update.callback_query.data+",'"+ArrayValue[1]+"','"+ArrayValue[2]+"','"+ArrayValue[3]+"')")
-                bot.sendMessage(chat_id=update.callback_query.data,
-                                text="🔓 La tua richiesta è stata accettata. Leggi il file README")
-                bot.sendDocument(chat_id=update.callback_query.data,
-                                 document=open('data/README.pdf', 'rb'))
+            elif len(array_value) == 4:
+                conn.execute("INSERT INTO 'Chat_id_List'('Chat_id','Nome','Cognome','Email') VALUES (" + update.callback_query.data + ",'" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "')")
+                bot.sendMessage(chat_id=update.callback_query.data, text="🔓 La tua richiesta è stata accettata. Leggi il file README")
+                bot.sendDocument(chat_id=update.callback_query.data, document=open('data/README.pdf', 'rb'))
 
             else:
-                bot.sendMessage(chat_id=-1001095167198, text=str("ERRORE INSERIMENTO: ")+str(
-                    update['callback_query']['message']['text'])+" "+str(update['callback_query']['data']))
+                bot.sendMessage(chat_id=-1001095167198, text=str("ERRORE INSERIMENTO: ") + str(update['callback_query']['message']['text']) + " " + str(update['callback_query']['data']))
             conn.commit()
         except Exception as error:
             print(error)
-            bot.sendMessage(chat_id=-1001095167198, text=str("ERRORE INSERIMENTO: ")+str(
-                update['callback_query']['message']['text'])+" "+str(update['callback_query']['data']))
+            bot.sendMessage(chat_id=-1001095167198, text=str("ERRORE INSERIMENTO: ") + str(update['callback_query']['message']['text']) + " " + str(update['callback_query']['data']))
 
-        LAST_UPDATE_ID = update_id + 1
         text = ""
-        messageText = ""
 
     else:
         pid = os.fork()
@@ -277,44 +254,33 @@ def callback(bot, update):
                 file_list2 = None
 
                 try:
-                    istanceFile = drive2.ListFile(
-                        {'q': "'"+file1['id']+"' in parents and trashed=false", 'orderBy': 'folder,title'})
-                    file_list2 = istanceFile.GetList()
+                    istance_file = drive2.ListFile({'q': "'"+file1['id']+"' in parents and trashed=false", 'orderBy': 'folder,title'})
+                    file_list2 = istance_file.GetList()
                     with open("./logs/debugDrive.txt", "a") as debugfile:
-                        debugfile.write(
-                            "- Log time:\n {}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
-                        debugfile.write(
-                            "- File:\n {}".format(str(json.dumps(file1))))
-                        debugfile.write(
-                            "- IstanceFile:\n {}".format(str(json.dumps(istanceFile))))
-                        debugfile.write(
-                            "- FileList:\n {}".format(str(json.dumps(file_list2))))
+                        debugfile.write("- Log time:\n {}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+                        debugfile.write("- File:\n {}".format(str(json.dumps(file1))))
+                        debugfile.write("- IstanceFile:\n {}".format(str(json.dumps(istance_file))))
+                        debugfile.write("- FileList:\n {}".format(str(json.dumps(file_list2))))
                         debugfile.write("\n------------\n")
                 except Exception as e:
                     with open("./logs/debugDrive.txt", "a") as debugfile:
-                        debugfile.write(
-                            "- Log time:\n {}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+                        debugfile.write("- Log time:\n {}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
                         debugfile.write("- Error:\n {}".format(e))
                         debugfile.write("\n------------\n")
                     print("- Drive error: {}".format(e))
-                    bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'],
-                                     text="Si è verificato un errore, ci scusiamo per il disagio. Contatta i devs. /help")
+                    bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text="Si è verificato un errore, ci scusiamo per il disagio. Contatta i devs. /help")
                     sys.exit(0)
 
                 for file2 in file_list2:
 
-                    fileN = ""
-
                     if file2['mimeType'] == "application/vnd.google-apps.folder":
-                        if NumberRow >= 1:
-                            keyboard2.append([InlineKeyboardButton(
-                                "🗂 "+file2['title'], callback_data="Drive_" + file2['id'])])
-                            NumberRow = 0
-                            NumberArray += 1
+                        if number_row >= 1:
+                            keyboard2.append([InlineKeyboardButton("🗂 "+file2['title'], callback_data="Drive_" + file2['id'])])
+                            number_row = 0
+                            number_array += 1
                         else:
-                            keyboard2[NumberArray].append(InlineKeyboardButton(
-                                "🗂 "+file2['title'], callback_data="Drive_" + file2['id']))
-                            NumberRow += 1
+                            keyboard2[number_array].append(InlineKeyboardButton("🗂 "+file2['title'], callback_data="Drive_" + file2['id']))
+                            number_row += 1
                     else:
                         if ".pdf" in file2['title']:
                             icona = "📕 "
@@ -330,54 +296,42 @@ def callback(bot, update):
                             icona = "💻 "
                         else:
                             icona = "📄 "
-                        if NumberRow >= 1:
-                            keyboard2.append([InlineKeyboardButton(
-                                icona+file2['title'], callback_data="Drive_" + file2['id'])])
-                            NumberRow = 0
-                            NumberArray += 1
+                        if number_row >= 1:
+                            keyboard2.append([InlineKeyboardButton(icona+file2['title'], callback_data="Drive_" + file2['id'])])
+                            number_row = 0
+                            number_array += 1
                         else:
-                            keyboard2[NumberArray].append(InlineKeyboardButton(
-                                icona+file2['title'], callback_data="Drive_" + file2['id']))
-                            NumberRow += 1
+                            keyboard2[number_array].append(InlineKeyboardButton(icona+file2['title'], callback_data="Drive_" + file2['id']))
+                            number_row += 1
 
                 if len(file1['parents']) > 0 and file1['parents'][0]['id'] != '0ADXK_Yx5406vUk9PVA':
-                    keyboard2.append([InlineKeyboardButton(
-                        "🔙", callback_data="Drive_" + file1['parents'][0]['id'])])
+                    keyboard2.append([InlineKeyboardButton("🔙", callback_data="Drive_" + file1['parents'][0]['id'])])
 
                 reply_markup3 = InlineKeyboardMarkup(keyboard2)
-                bot2.sendMessage(chat_id=update['callback_query']['from_user']
-                                 ['id'], text=file1['title']+":", reply_markup=reply_markup3)
+                bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text=file1['title']+":", reply_markup=reply_markup3)
 
             elif file1['mimeType'] == "application/vnd.google-apps.document":
-                bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'],
-                                 text="Impossibile scaricare questo file poichè esso è un google document, Andare sul seguente link")
-                bot2.sendMessage(chat_id=update['callback_query']['from_user']
-                                 ['id'], text=file1['exportLinks']['application/pdf'])
+                bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text="Impossibile scaricare questo file poichè esso è un google document, Andare sul seguente link")
+                bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text=file1['exportLinks']['application/pdf'])
 
             else:
                 try:
-                    fileD = drive2.CreateFile({'id': file1['id']})
-                    if int(fileD['fileSize']) < 5e+7:
-                        fileD.GetContentFile('file/'+file1['title'])
-                        fileS = file1['title']
-                        filex = open(str("file/"+fileS), "rb")
-                        bot2.sendChatAction(
-                            chat_id=update['callback_query']['from_user']['id'], action="UPLOAD_DOCUMENT")
-                        bot2.sendDocument(
-                            chat_id=update['callback_query']['from_user']['id'], document=filex)
-                        os.remove(str("file/"+fileS))
+                    file_d = drive2.CreateFile({'id': file1['id']})
+                    if int(file_d['fileSize']) < 5e+7:
+                        file_d.GetContentFile('file/'+file1['title'])
+                        file_s = file1['title']
+                        filex = open(str("file/" + file_s), "rb")
+                        bot2.sendChatAction(chat_id=update['callback_query']['from_user']['id'], action="UPLOAD_DOCUMENT")
+                        bot2.sendDocument(chat_id=update['callback_query']['from_user']['id'], document=filex)
+                        os.remove(str("file/" + file_s))
                     else:
-                        bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'],
-                                         text="File troppo grande per il download diretto, scarica dal seguente link")
-                        # fileD['downloadUrl']
-                        bot2.sendMessage(
-                            chat_id=update['callback_query']['from_user']['id'], text=fileD['alternateLink'])
+                        bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text="File troppo grande per il download diretto, scarica dal seguente link")
+                        # file_d['downloadUrl']
+                        bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text=fileD['alternateLink'])
                 except Exception as e:
                     print("- Drive error: {}".format(e))
-                    bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'],
-                                     text="Impossibile scaricare questo file, contattare gli sviluppatori del bot")
-                    open("logs/errors.txt", "a+").write(str(e) +
-                                                        str(fileD['title'])+"\n")
+                    bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text="Impossibile scaricare questo file, contattare gli sviluppatori del bot")
+                    open("logs/errors.txt", "a+").write(str(e) + str(fileD['title'])+"\n")
 
             sys.exit(0)
 
@@ -393,115 +347,103 @@ def request(bot, update):
                 flag = 1
 
         if flag == 0:
-            messageText = "✉️ Richiesta inviata"
+            message_text = "✉️ Richiesta inviata"
             keyboard = [[]]
             if (update['message']['from_user']['username']):
                 username = update['message']['from_user']['username']
             else:
                 username = ""
             if(len(update.message.text.split(" ")) == 4) and ("@" in update.message.text.split(" ")[3]) and ("." in update.message.text.split()[3]):
-                textSend = str(update.message.text)+" "+username
+                text_send = str(update.message.text) + " " + username
                 keyboard.append([InlineKeyboardButton(
                     "Accetta", callback_data="Drive_"+str(chat_id))])
                 reply_markup2 = InlineKeyboardMarkup(keyboard)
-                bot.sendMessage(chat_id=-1001095167198,
-                                text=textSend, reply_markup=reply_markup2)
-                bot.sendMessage(chat_id=chat_id, text=messageText)
+                bot.sendMessage(chat_id=-1001095167198, text=text_send, reply_markup=reply_markup2)
+                bot.sendMessage(chat_id=chat_id, text=message_text)
 
             else:
-                messageText = "Errore compilazione /request:\n Forma esatta: /request <nome> <cognome> <e-mail> (il nome e il cognome devono essere scritti uniti Es: Di mauro -> Dimauro)"
-                bot.sendMessage(chat_id=update.message.chat_id,
-                                text=messageText)
+                message_text = "Errore compilazione /request:\n Forma esatta: /request <nome> <cognome> <e-mail> (il nome e il cognome devono essere scritti uniti Es: Di mauro -> Dimauro)"
+                bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
 
         else:
-            messageText = "Hai già effettuato la richiesta di accesso"
-            bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+            message_text = "Hai già effettuato la richiesta di accesso"
+            bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
 
     else:
-        messageText = "Non è possibile utilizzare /request in un gruppo"
-        bot.sendMessage(chat_id=chat_id, text=messageText)
+        message_text = "Non è possibile utilizzare /request in un gruppo"
+        bot.sendMessage(chat_id=chat_id, text=message_text)
 
 
 def adddb(bot, update):
     chat_id = update.message.chat_id
     if (chat_id == 26349488 or chat_id == -1001095167198 or chat_id == 46806104):
         # /add nome cognome e-mail username chatid
-        ArrayValue = update.message.text.split(" ")
-        if len(ArrayValue) == 6:
-            conn.execute("INSERT INTO 'Chat_id_List' VALUES (" +
-                         ArrayValue[5]+",'"+ArrayValue[4]+"','"+ArrayValue[1]+"','"+ArrayValue[2]+"','"+ArrayValue[3]+"') ")
-            bot.sendMessage(
-                chat_id=ArrayValue[5], text="🔓 La tua richiesta è stata accettata. Leggi il file README")
-            bot.sendDocument(chat_id=ArrayValue[5], document=open(
-                'data/README.pdf', 'rb'))
+        array_value = update.message.text.split(" ")
+        if len(array_value) == 6:
+            conn.execute("INSERT INTO 'Chat_id_List' VALUES (" + array_value[5] + ",'" + array_value[4] + "','" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "') ")
+            bot.sendMessage(chat_id=array_value[5], text="🔓 La tua richiesta è stata accettata. Leggi il file README")
+            bot.sendDocument(chat_id=array_value[5], document=open('data/README.pdf', 'rb'))
             conn.commit()
-        elif len(ArrayValue) == 5:
-            conn.execute("INSERT INTO 'Chat_id_List'('Chat_id','Nome','Cognome','Email') VALUES (" +
-                         ArrayValue[4]+",'"+ArrayValue[1]+"','"+ArrayValue[2]+"','"+ArrayValue[3]+"')")
-            bot.sendMessage(chat_id=int(
-                ArrayValue[4]), text="🔓 La tua richiesta è stata accettata. Leggi il file README")
-            bot.sendDocument(chat_id=int(
-                ArrayValue[4]), document=open('data/README.pdf', 'rb'))
+        elif len(array_value) == 5:
+            conn.execute("INSERT INTO 'Chat_id_List'('Chat_id','Nome','Cognome','Email') VALUES (" + array_value[4] + ",'" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "')")
+            bot.sendMessage(chat_id=int(array_value[4]), text="🔓 La tua richiesta è stata accettata. Leggi il file README")
+            bot.sendDocument(chat_id=int(array_value[4]), document=open('data/README.pdf', 'rb'))
             conn.commit()
         else:
-            bot.sendMessage(
-                chat_id=chat_id, text="/adddb <nome> <cognome> <e-mail> <username> <chat_id>")
+            bot.sendMessage(chat_id=chat_id, text="/adddb <nome> <cognome> <e-mail> <username> <chat_id>")
 
 
 def drive(bot, update):
-    checkLog(bot, update, "drive")
+    check_log(bot, update, "drive")
     settings_file = "config/settings.yaml"
     gauth = GoogleAuth(settings_file=settings_file)
     gauth.CommandLineAuth()
     # gauth.LocalWebserverAuth()
     drive = GoogleDrive(gauth)
     chat_id = update.message.chat_id
-    TestDB = 0
-    IDDrive = '0B7-Gi4nb88hremEzWnh3QmN3ZlU'
+    test_db = 0
+    id_drive = '0B7-Gi4nb88hremEzWnh3QmN3ZlU'
     if chat_id < 0:
-        bot.sendMessage(chat_id=chat_id,
-                        text="La funzione /drive non è ammessa nei gruppi")
+        bot.sendMessage(chat_id=chat_id, text="La funzione /drive non è ammessa nei gruppi")
     else:
         for row in conn.execute("SELECT Chat_id FROM 'Chat_id_List' "):
             if row[0] == chat_id:
-                TestDB = 1
+                test_db = 1
 
-        if TestDB == 1:
+        if test_db == 1:
             keyboard2 = [[]]
             try:
                 file_list = drive.ListFile(
-                    {'q': "'"+IDDrive+"' in parents and trashed=false", 'orderBy': 'folder,title'}).GetList()
+                    {'q': "'" + id_drive + "' in parents and trashed=false", 'orderBy': 'folder,title'}).GetList()
             except Exception as error:
-                print str(error)
-            NumberRow = 0
-            NumberArray = 0
+                print (str(error))
+            number_row = 0
+            number_array = 0
 
             for file1 in file_list:
-                fileN = ""
                 if file1['mimeType'] == "application/vnd.google-apps.folder":
-                    if NumberRow >= 3:
+                    if number_row >= 3:
                         keyboard2.append([InlineKeyboardButton(
                             "🗂 "+file1['title'], callback_data="Drive_" + file1['id'])])
-                        NumberRow = 0
-                        NumberArray += 1
+                        number_row = 0
+                        number_array += 1
                     else:
-                        keyboard2[NumberArray].append(InlineKeyboardButton(
+                        keyboard2[number_array].append(InlineKeyboardButton(
                             "🗂 "+file1['title'], callback_data="Drive_" + file1['id']))
-                        NumberRow += 1
+                        number_row += 1
                 else:
-                    if NumberRow >= 3:
+                    if number_row >= 3:
                         keyboard2.append([InlineKeyboardButton(
                             "📃 "+file1['title'], callback_data="Drive_" + file1['id'])])
-                        NumberRow = 0
-                        NumberArray += 1
+                        number_row = 0
+                        number_array += 1
                     else:
-                        keyboard2[NumberArray].append(InlineKeyboardButton(
+                        keyboard2[number_array].append(InlineKeyboardButton(
                             "📃 "+file1['title'], callback_data="Drive_" + file1['id']))
-                        NumberRow += 1
+                        number_row += 1
 
             reply_markup3 = InlineKeyboardMarkup(keyboard2)
-            bot.sendMessage(
-                chat_id=chat_id, text="DMI UNICT - Appunti & Risorse:", reply_markup=reply_markup3)
+            bot.sendMessage(chat_id=chat_id, text="DMI UNICT - Appunti & Risorse:", reply_markup=reply_markup3)
         else:
             bot.sendMessage(chat_id=chat_id, text="🔒 Non hai i permessi per utilizzare la funzione /drive,\n Utilizzare il comando /request <nome> <cognome> <e-mail> (il nome e il cognome devono essere scritti uniti Es: Di mauro -> Dimauro) ")
 
@@ -515,13 +457,13 @@ def button_handler(bot, update):
 
     # Submenu
     if data.startswith("sm_"):
-        funcName = data[3:len(data)]
-        globals()[funcName](bot, chat_id, message_id)
+        func_name = data[3:len(data)]
+        globals()[func_name](bot, chat_id, message_id)
 
     elif data == "esami_button" or data == "lezioni_button" or data == "help_cmd" or data == "exit_cmd":
-        messageText = globals()[data]()
+        message_text = globals()[data]()
         bot.editMessageText(
-            text=messageText, chat_id=chat_id, message_id=message_id)
+            text=message_text, chat_id=chat_id, message_id=message_id)
 
     elif data.startswith("Drive_"):
         callback(bot, update)
@@ -540,17 +482,17 @@ def button_handler(bot, update):
 
     # Simple text
     elif data != "_div":
-        messageText = read_md(data)
-        checkLog(bot, update, data, 1)
+        message_text = read_md(data)
+        check_log(bot, update, data, 1)
         bot.editMessageText(
-            text=messageText, chat_id=chat_id, message_id=message_id)
+            text=message_text, chat_id=chat_id, message_id=message_id)
 
 
 def help(bot, update):
-    checkLog(bot, update, "help")
+    check_log(bot, update, "help")
     chat_id = update.message.chat_id
     keyboard = [[]]
-    messageText = "@DMI_Bot risponde ai seguenti comandi:"
+    message_text = "@DMI_Bot risponde ai seguenti comandi:"
 
     keyboard.append([InlineKeyboardButton(
         " ~ Dipartimento e CdL ~ ", callback_data="_div")])
@@ -629,78 +571,70 @@ def help(bot, update):
 
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    bot.sendMessage(chat_id=chat_id, text=messageText,
-                    reply_markup=reply_markup)
+    bot.sendMessage(chat_id=chat_id, text=message_text, reply_markup=reply_markup)
 
 
 def rapp_menu(bot, chat_id, message_id):
     keyboard = [[]]
-    messageText = "Quali rappresentanti vuoi contattare?"
+    message_text = "Quali rappresentanti vuoi contattare?"
 
     keyboard.append(
         [
-            InlineKeyboardButton(
-                "Rapp. DMI",         callback_data="rappresentanti_dmi"),
-            InlineKeyboardButton("Rapp. Informatica",
-                                 callback_data="rappresentanti_informatica"),
-            InlineKeyboardButton("Rapp. Matematica",
-                                 callback_data="rappresentanti_matematica"),
+            InlineKeyboardButton("Rapp. DMI",         callback_data="rappresentanti_dmi"),
+            InlineKeyboardButton("Rapp. Informatica", callback_data="rappresentanti_informatica"),
+            InlineKeyboardButton("Rapp. Matematica",  callback_data="rappresentanti_matematica"),
         ]
     )
 
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    bot.editMessageText(text=messageText, chat_id=chat_id,
-                        message_id=message_id, reply_markup=reply_markup)
+    bot.editMessageText(text=message_text, chat_id=chat_id, message_id=message_id, reply_markup=reply_markup)
 
 
 def smonta_portoni(bot, update):
-    checkLog(bot, update, "smonta_portoni")
-    messageText = EasterEgg.getSmontaPortoni()
-    bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+    check_log(bot, update, "smonta_portoni")
+    message_text = EasterEgg.get_smonta_portoni()
+    bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
 
 
 def santino(bot, update):
     chat_id = update.message.chat_id
     if (chat_id == -1001031103640 or chat_id == -1001095167198):
-        checkLog(bot, update, "santino")
-        messageText = EasterEgg.getSantino()
-        bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+        check_log(bot, update, "santino")
+        message_text = EasterEgg.get_santino()
+        bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
 
 
 def bladrim(bot, update):
-    checkLog(bot, update, "bladrim")
-    messageText = EasterEgg.getBladrim()
-    bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+    check_log(bot, update, "bladrim")
+    message_text = EasterEgg.get_bladrim()
+    bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
 
 
 def prof_sticker(bot, update):
-    checkLog(bot, update, "prof_sticker")
-    bot.sendSticker(chat_id=update.message.chat_id,
-                    sticker=prof_sticker_id('data/json/stickers.json'))
+    check_log(bot, update, "prof_sticker")
+    bot.sendSticker(chat_id=update.message.chat_id, sticker=prof_sticker_id('data/json/stickers.json'))
 
 
 def lei_che_ne_pensa_signorina(bot, update):
-    checkLog(bot, update, "leiCheNePensaSignorina")
-    messageText = EasterEgg.getLeiCheNePensaSignorina()
-    bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+    check_log(bot, update, "leiCheNePensaSignorina")
+    message_text = EasterEgg.get_lei_che_ne_pensa_signorina()
+    bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
 
 
 def prof(bot, update, args):
-    checkLog(bot, update, "prof")
-    messageText = prof_cmd(args)
-#    print len(messageText)
-    if len(messageText) > 4096:
-        mandaMessaggio(bot, update, messageText)
+    check_log(bot, update, "prof")
+    message_text = prof_cmd(args)
+    if len(message_text) > 4096:
+        send_message(bot, update, message_text)
     else:
-        bot.sendMessage(chat_id=update.message.chat_id,
-                        text=messageText, parse_mode='Markdown')
+        bot.sendMessage(chat_id=update.message.chat_id, text=message_text, parse_mode='Markdown')
 
 
 def forum_bot(bot, update):
-    checkLog(bot, update, "forum_bot")
-    messageText = forum_cmd(update.message.text)
-    bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+    check_log(bot, update, "forum_bot")
+    message_text = forum_cmd(update.message.text)
+    bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
 
 
 def get_short_link(url):
@@ -713,18 +647,18 @@ def get_short_link(url):
 
 
 def shortit(message):
-    urlRegex = re.compile(
+    url_regex = re.compile(
         'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
     urls = re.findall(
         'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message)
-    news = urlRegex.sub('{URL}', message)
+    news = url_regex.sub('{URL}', message)
     urls.reverse()
-    updatedMessage = ''
+    updated_message = ''
     for word in news.split(" "):
         if word == '{URL}':
             word = get_short_link(urls.pop())
-        updatedMessage += word+' '
-    return updatedMessage
+        updated_message += word+' '
+    return updated_message
 
 
 def news_(bot, update):
@@ -733,13 +667,11 @@ def news_(bot, update):
         news = update.message.text.replace("/news ", "")
         news = update.message.text.replace("/news", "")
 #		news = shortit(news)
-        messageText = "News Aggiornata!"
-        bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
-
+        bot.sendMessage(chat_id=update.message.chat_id, text="News Aggiornata!")
 
 def spamnews(bot, update):
-    #admins = [58880997, 26349488, 37967664]
-    if(update.message.chat_id == 26349488 or update.message.chat_id == 37967664 or update.message.chat_id == 58880997):
+    admins = [58880997, 26349488, 37967664]
+    if update.message.chat_id in admins:
         chat_ids = open('logs/chatid.txt', 'r').read()
         chat_ids = chat_ids.split("\n")
         for chat_id in chat_ids:
@@ -757,41 +689,39 @@ def spamnews(bot, update):
                     for id in chat_ids:
                         target.write(id+'\n')
             except Exception as error:
-                open("logs/errors.txt", "a+").write(str(error) +
-                                                    " "+str(chat_id)+"\n")
-        messageText = "News spammata!"
-        bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+                open("logs/errors.txt", "a+").write(str(error) + " " + str(chat_id)+"\n")
+        bot.sendMessage(chat_id=update.message.chat_id, text="News spammata!")
 
 
 def disablenews(bot, update):
-    checkLog(bot, update, "disablenews")
+    check_log(bot, update, "disablenews")
     chat_ids = open('logs/chatid.txt', 'r').read()
     chat_id = update.message.chat_id
     if not ("+"+str(chat_id)) in chat_ids:
         chat_ids = chat_ids.replace(str(chat_id), "+"+str(chat_id))
-        messageText = "News disabilitate!"
+        message_test = "News disabilitate!"
         open('logs/chatid.txt', 'w').write(chat_ids)
     else:
-        messageText = "News già disabilitate!"
-    bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+        message_test = "News già disabilitate!"
+    bot.sendMessage(chat_id=update.message.chat_id, text=message_test)
 
 
 def enablenews(bot, update):
-    checkLog(bot, update, "enablenews")
+    check_log(bot, update, "enablenews")
     chat_ids = open('logs/chatid.txt', 'r').read()
     chat_id = update.message.chat_id
     if ("+"+str(chat_id)) in chat_ids:
         chat_ids = chat_ids.replace("+"+str(chat_id), str(chat_id))
-        messageText = "News abilitate!"
+        message_text = "News abilitate!"
         open('logs/chatid.txt', 'w').write(chat_ids)
     else:
-        messageText = "News già abilitate!"
-    bot.sendMessage(chat_id=update.message.chat_id, text=messageText)
+        message_text = "News già abilitate!"
+    bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
 
 # check if user (chatid) is registered on chatid.txt
 
 
-def statsGen(bot, update, days):
+def stats_gen(bot, update, days):
     query = ""
     chat_id = update.message.chat_id
     conn = sqlite3.connect('data/DMI_DB.db', check_same_thread=False)
@@ -805,7 +735,7 @@ def statsGen(bot, update, days):
             date.today()-timedelta(days=days))+"' GROUP BY Type ORDER BY Type;"
     for row in conn.execute(query):
         if str(row[0]) != "leiCheNePensaSignorina" and str(row[0]) != "smonta_portoni" and str(row[0]) != "santino" and str(row[0]) != "bladrim" and str(row[0]) != "prof_sticker":
-            text += str(row[1])+": "+str(row[0])+"\n"
+            text += str(row[1]) + ": " + str(row[0]) + "\n"
     bot.sendMessage(chat_id=chat_id, text=text)
 
 
@@ -816,14 +746,14 @@ def stats(bot, update):
             days = 30
     else:
         days = 30
-    statsGen(bot, update, days)
+    stats_gen(bot, update, days)
 
 
-def statsTot(bot, update):
-    statsGen(bot, update, 0)
+def stats_tot(bot, update):
+    stats_gen(bot, update, 0)
 
 
-def checkLog(bot, update, type, callback=0):
+def check_log(bot, update, type, callback=0):
 
     if callback:
         update = update.callback_query
@@ -842,26 +772,23 @@ def checkLog(bot, update, type, callback=0):
             log.write(str(chat_id)+"\n")
 
 
-def giveChatId(bot, update):
+def give_chat_id(bot, update):
     update.message.reply_text(str(update.message.chat_id))
 
 
-def sendLog(bot, update):
+def send_log(bot, update):
     if(update.message.chat_id == -1001095167198):
-        bot.sendDocument(chat_id=-1001095167198,
-                         document=open('logs/logs.txt', 'rb'))
+        bot.sendDocument(chat_id=-1001095167198, document=open('logs/logs.txt', 'rb'))
 
 
-def sendChatIds(bot, update):
+def send_chat_ids(bot, update):
     if(update.message.chat_id == -1001095167198):
-        bot.sendDocument(chat_id=-1001095167198,
-                         document=open('logs/chatid.txt', 'rb'))
+        bot.sendDocument(chat_id=-1001095167198, document=open('logs/chatid.txt', 'rb'))
 
 
-def sendErrors(bot, update):
+def send_errors(bot, update):
     if(update.message.chat_id == -1001095167198):
-        bot.sendDocument(chat_id=-1001095167198,
-                         document=open('logs/errors.txt', 'rb'))
+        bot.sendDocument(chat_id=-1001095167198, document=open('logs/errors.txt', 'rb'))
 
 
 def avviso(bot, job):
@@ -873,11 +800,9 @@ def avviso(bot, job):
             for chat_id in chat_ids:
                 try:
                     if not "+" in chat_id:
-                        bot.send_message(
-                            chat_id=chat_id, text=testo, parse_mode='HTML')
+                        bot.sendMessage(chat_id=chat_id, text=testo, parse_mode='HTML')
                 except Exception as error:
-                    open("logs/errors.txt", "a+").write(str(error) +
-                                                        " "+str(chat_id)+"\n")
+                    open("logs/errors.txt", "a+").write(str(error) + " " + str(chat_id)+"\n")
         os.remove("data/avviso.dat")
 
 
@@ -888,25 +813,23 @@ def updater_poe(bot, job):
 
 
 def start(bot, update):
-    bot.sendMessage(chat_id=update.message.chat_id,
-                    text="Benvenuto! Questo bot è stato realizzato dagli studenti del Corso di Laurea in Informatica al fine di suppotare gli studenti del DMI! Per scoprire cosa puoi fare usa /help")
+    bot.sendMessage(chat_id=update.message.chat_id, text="Benvenuto! Questo bot è stato realizzato dagli studenti del Corso di Laurea in Informatica al fine di suppotare gli studenti del DMI! Per scoprire cosa puoi fare usa /help")
 
 
 def mensa_cmd(bot, update):
-    checkLog(bot, update, "mensa")
+    check_log(bot, update, "mensa")
     mensa(bot, update)
 
 
 def mensa_plus_cmd(bot, update):
-    checkLog(bot, update, "mensa_plus")
+    check_log(bot, update, "mensa_plus")
     mensa_plus(bot, update)
 
 
 def newscommand(bot, update):
-    checkLog(bot, update, "avvisi")
+    check_log(bot, update, "avvisi")
     global news
     if news == "":
-        bot.sendMessage(chat_id=update.message.chat_id,
-                        text="Non ho nulla da mostrarti.")
+        bot.sendMessage(chat_id=update.message.chat_id, text="Non ho nulla da mostrarti.")
     else:
         bot.sendMessage(chat_id=update.message.chat_id, text=news)

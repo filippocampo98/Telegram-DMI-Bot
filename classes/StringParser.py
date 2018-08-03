@@ -2,10 +2,10 @@
 import re
 class StringParser(object):
 	@staticmethod
-	def removeCFU(stringToParse):
-		updatedString = re.sub('\s?[0-9] CFU.*', '', stringToParse)
-		return updatedString
+	def remove_cfu(string_to_parse):
+		updated_string = re.sub('\s?[0-9] CFU.*', '', string_to_parse)
+		return updated_string
 	@staticmethod
-	def startsWithUpper(stringToParse):
-		stringToParse = stringToParse[0].upper()+stringToParse[1:]
-		return stringToParse
+	def starts_with_upper(string_to_parse):
+		string_to_parse = string_to_parse[0].upper()+string_to_parse[1:]
+		return string_to_parse

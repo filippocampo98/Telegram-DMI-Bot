@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 
 import bs4
 import requests
@@ -17,7 +17,7 @@ def inserisci(riga, sessione, items, anno):
 		elif (riga[i]).text.strip() != "":
 			(item[sessione])[i-3] = ((riga[i]).text)
 	items.append(item)
-	
+
 
 def scrape_esami():
 	url_esami = ["http://web.dmi.unict.it/corsi/l-31/esami?sessione=1&aa=118", "http://web.dmi.unict.it/corsi/l-31/esami?sessione=2&aa=118", "http://web.dmi.unict.it/corsi/l-31/esami?sessione=3&aa=118"]

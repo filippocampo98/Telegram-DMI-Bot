@@ -1,20 +1,29 @@
 # -*- coding: utf-8 -*-
 from functions import *
-reload(sys)
-sys.setdefaultencoding('utf8')
 
 bot = telegram.Bot(TOKEN)
 
 with open('config/settings.yaml') as yaml_config:
 	config_map = yaml.load(yaml_config)
 
-def record_everything(bot, update):
+def logging_message(bot, update):
 	message_id = update.message.message_id #ID MESSAGGIO
 	user = update.message.from_user # Restituisce un oggetto Telegram.User
-	date = update.message.date #Restituisce la data dell'invio del messaggio
 	chat = update.message.chat # Restituisce un oggetto Telegram.Chat
 	text = update.message.text #Restituisce il testo del messaggio
-	message = "\n___ID MESSAGE: " + str(message_id) + "____\n" + "___INFO USER___\n" +"user_id:"+str(user.id)+"\n"+"user_name:"+str(user.username)+"\n"+"user_firstlastname:"+str(user.first_name) +" "+ str(user.last_name) +"\n"+"___INFO CHAT___\n" +"chat_id:"+str(chat.id)+"\n"+"chat_type:"+str(chat.type)+"\n"+"chat_title:"+str(chat.title)+"\n"+"___TESTO___\n"+"text:"+str(text)+"\n_____________\n"
+	date = update.message.date #Restituisce la data dell'invio del messaggio
+	message = "\n___ID MESSAGE: " 	+ str(message_id) + "____\n" + \
+			  "___INFO USER___\n" + \
+			  "user_id:" 			+ str(user.id) + "\n" + \
+			  "user_name:" 			+ str(user.username) + "\n" + \
+			  "user_firstlastname:" + str(user.first_name) + " " + str(user.last_name) + "\n" + \
+			  "___INFO CHAT___\n" + \
+			  "chat_id:" 			+ str(chat.id) + "\n" + \
+			  "chat_type:" 			+ str(chat.type)+"\n" + "chat_title:" + str(chat.title) + "\n" + \
+			  "___TESTO___\n" + \
+			  "text:" 				+ str(text) + \
+			  "date:" 				+ str(date) + \
+			  "\n_____________\n"
 
 	log_tmp = open("logs/logs.txt","a+")
 	log_tmp.write("\n"+message)
@@ -23,7 +32,7 @@ def record_everything(bot, update):
 def main():
 	updater = Updater(TOKEN)
 	dp = updater.dispatcher
-	dp.add_handler(MessageHandler(Filters.all, record_everything),1)
+	dp.add_handler(MessageHandler(Filters.all, logging_message),1)
 	dp.add_handler(CallbackQueryHandler(button_handler))
 
   	#Easter Egg
@@ -62,21 +71,21 @@ def main():
 	dp.add_handler(CommandHandler('rappresentanti_dmi', lambda bot, update: informative_callback(bot, update, 'rappresentanti_dmi')))
 	dp.add_handler(CommandHandler('rappresentanti_informatica', lambda bot, update: informative_callback(bot, update, 'rappresentanti_informatica')))
 	dp.add_handler(CommandHandler('rappresentanti_matematica', lambda bot, update: informative_callback(bot, update, 'rappresentanti_matematica')))
-	dp.add_handler(CommandHandler('chatid',giveChatId))
-	dp.add_handler(CommandHandler('sendlog', sendLog))
-	dp.add_handler(CommandHandler('sendChatids', sendChatIds))
-	dp.add_handler(CommandHandler('errors', sendErrors))
+	dp.add_handler(CommandHandler('chatid',give_chat_id))
+	dp.add_handler(CommandHandler('send_log', send_log))
+	dp.add_handler(CommandHandler('send_chat_ids', send_chat_ids))
+	dp.add_handler(CommandHandler('errors', send_errors))
 	dp.add_handler(CommandHandler('start', start))
 	dp.add_handler(CommandHandler('avviso', newscommand))
 
 	#JobQueue
 	j = updater.job_queue
 
-	job_dmi_news = j.run_repeating(avviso, interval=60)
-	job_updater_poe = j.run_repeating(updater_poe, interval=86400, first=0) #24h
-	job_mensa = j.run_repeating(scrap, interval=3600, first=0)
-	job_mensa_lunch = j.run_daily(mensa_notify_lunch, datetime.time(11, 45, 00), name='At 11:45')
-	job_mensa_dinner = j.run_daily(mensa_notify_dinner, datetime.time(18, 45, 00), name='At 18:45')
+	j.run_repeating(avviso, interval=60) 											# job_dmi_news
+	j.run_repeating(updater_poe, interval=86400, first=0) 							# job_updater_poe (24h)
+	j.run_repeating(scrap, interval=3600, first=0) 									# job_mensa
+	j.run_daily(mensa_notify_lunch, datetime.time(11, 45, 00), name='At 11:45') 	# job_mensa_lunch
+	j.run_daily(mensa_notify_dinner, datetime.time(18, 45, 00), name='At 18:45') 	# job_mensa_dinner
 
 	if (config_map['debug']['disable_drive'] == 0):
 	  dp.add_handler(CommandHandler('drive',drive))
@@ -85,7 +94,7 @@ def main():
 
 	if (config_map['debug']['disable_db'] == 0):
 	  dp.add_handler(CommandHandler('stats',stats))
-	  dp.add_handler(CommandHandler('stats_tot',statsTot))
+	  dp.add_handler(CommandHandler('stats_tot',stats_tot))
 
 	if (config_map['debug']['disable_chatid_logs'] == 0):
 	  dp.add_handler(RegexHandler('/news',news_))

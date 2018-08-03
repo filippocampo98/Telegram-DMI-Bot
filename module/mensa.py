@@ -1,4 +1,4 @@
-# encoding=utf8
+# -*- coding: utf-8 -*-
 import requests
 import bs4
 import xlrd
@@ -28,12 +28,15 @@ def scrap(bot,job):
 
     try:
         menu = soup.find(SECTION_, class_= CLASS_).find_all("p")[1].find("a") # Contiene nome Menu
-    except IndexError, ValueError:
-        print "Errore mensa"
+    except (IndexError, ValueError):
+        print ("Errore mensa")
     nome_menu = menu.text;
     link_menu = menu.get("href")
 
-    nome_file = nome_menu.lower().encode('utf-8').replace('ù', 'u').replace("menu",'').replace(' ','')+".xls"
+    nome_file = nome_menu.lower().encode('utf-8')
+    nome_file = nome_file.replace('ù', 'u')
+    nome_file = nome_file.replace("menu",'')
+    nome_file = nome_file.replace(' ','') + ".xls"
 
     if (not exists(join(PATH,nome_file))): # not =  !
         #Il file non esiste, crealo
@@ -91,7 +94,7 @@ def mensa(bot,update):
 def mensa_plus(bot, update):
 	chat_id = update.message.chat_id
 	keyboard=[[]]
-	messageText="Scegli un'opzione per ricevere giornalmente il menu della mensa:"
+	message_text="Scegli un'opzione per ricevere giornalmente il menu della mensa:"
 
 	keyboard.append(
 		[
@@ -106,7 +109,7 @@ def mensa_plus(bot, update):
 		]
 	)
 	reply_markup=InlineKeyboardMarkup(keyboard)
-	bot.sendMessage(chat_id=chat_id, text=messageText, reply_markup=reply_markup)
+	bot.sendMessage(chat_id=chat_id, text=message_text, reply_markup=reply_markup)
 
 def mensa_subscription(bot, update):
     query = update.callback_query

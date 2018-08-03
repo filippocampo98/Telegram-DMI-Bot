@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from sets import Set
 import json
 
 def prof_output(prof):
@@ -25,7 +24,7 @@ def prof_cmd(profs):
 
     if(profs):
 
-        output = Set()
+        output = set()
         profs = [x.lower().encode('utf-8') for x in profs if len(x) > 3]
 
         with open("data/json/professori.json") as data_file:

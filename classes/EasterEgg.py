@@ -3,7 +3,7 @@
 import random
 class EasterEgg(object):
     @staticmethod
-    def getSantino():
+    def get_santino():
         r = random.randint(0, 20)
         if (r >= 0 and r <= 3):
             output = "@Santinol"
@@ -16,7 +16,7 @@ class EasterEgg(object):
         return output
 
     @staticmethod
-    def getSmontaPortoni():
+    def get_smonta_portoni():
         r = random.randint(0, 13)
         if (r >= 0 and r <= 3):
             output = "$ sudo umount portoni"
@@ -29,12 +29,12 @@ class EasterEgg(object):
         return output
 
     @staticmethod
-    def getBladrim():
+    def get_bladrim():
         output = "Per maggiori informazioni contatta @bladrim"
         return output
 
     @staticmethod
-    def getLeiCheNePensaSignorina():
+    def get_lei_che_ne_pensa_signorina():
         r = random.randint(0, 20)
         if(r < 3):
             output = "🎤 Pronto? Si sente?"
@@ -49,4 +49,3 @@ class EasterEgg(object):
         else:
             output = "Vieni tu a spiegare, così io mi riposo!"
         return output
-

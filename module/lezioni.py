@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from sets import Set
-
 import json, datetime
 import requests
 
@@ -26,7 +24,7 @@ def lezioni_output(item):
     return output
 
 def lezioni_condition(items, condition, *arg):
-    output = Set()
+    output = set()
     for item in items:
         if(arg):
             if(arg[0] in item[condition].lower()):
@@ -38,12 +36,11 @@ def lezioni_condition(items, condition, *arg):
     return output
 
 def lezioni_condition_mult(items, days, years):
-    output = Set()
+    output = set()
     for item in items:
         for day in days:
-            if( [year for year in years if year in item["Anno"].lower()] ):
-                if(day.replace('ì','i') in item and item[day.replace('ì','i')] != ""):
-                    output.add(lezioni_output(item))
+            if ([year for year in years if year in item["Anno"].lower()]) and (day.replace('ì','i') in item and item[day.replace('ì','i')] != ""):
+                output.add(lezioni_output(item))
     return output
 
 def lezioni_cmd(bot, update, args, path):
@@ -51,7 +48,7 @@ def lezioni_cmd(bot, update, args, path):
     output_str = "Poffarbacco, qualcosa non va. Segnalalo ai dev /contributors \n"
 
     if(args):
-        output = Set()
+        output = set()
         r = json.load(open(path))
 
         items = r["materie"]
