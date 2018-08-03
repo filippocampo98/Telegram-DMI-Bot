@@ -52,7 +52,7 @@ conn = sqlite3.connect('data/DMI_DB.db', check_same_thread=False)
 # Token
 tokenconf = open('config/token.conf', 'r').read()
 tokenconf = tokenconf.replace("\n", "")
-with open('config/settings.yaml') as yaml_config:
+with open('config/settings.yaml', 'r') as yaml_config:
     config_map = yaml.load(yaml_config)
 # Token of your telegram bot that you created from @BotFather, write it on token.conf
 TOKEN = tokenconf
@@ -184,7 +184,7 @@ def aulario_url():
 
 
 def prof_sticker_id(data):
-    text = json.loads(open(data).read())
+    text = json.loads(open(data, 'r').read())
     i = random.randint(0, len(text)-1)
     return text[i]["id"]
 
@@ -731,8 +731,7 @@ def stats_gen(bot, update, days):
         query = "SELECT Type, count(chat_id) FROM stat_list GROUP BY Type ORDER BY Type;"
     else:
         text += "Record di "+str(days)+" giorni:\n"
-        query = "SELECT Type, count(chat_id) FROM stat_list WHERE DateCommand > '"+unicode(
-            date.today()-timedelta(days=days))+"' GROUP BY Type ORDER BY Type;"
+        query = "SELECT Type, count(chat_id) FROM stat_list WHERE DateCommand > '"+ str(date.today()-timedelta(days=days)) + "' GROUP BY Type ORDER BY Type;"
     for row in conn.execute(query):
         if str(row[0]) != "leiCheNePensaSignorina" and str(row[0]) != "smonta_portoni" and str(row[0]) != "santino" and str(row[0]) != "bladrim" and str(row[0]) != "prof_sticker":
             text += str(row[1]) + ": " + str(row[0]) + "\n"
@@ -761,15 +760,15 @@ def check_log(bot, update, type, callback=0):
     if (config_map['debug']['disable_db'] == 0):
         chat_id = update.message.chat_id
         conn = sqlite3.connect('data/DMI_DB.db', check_same_thread=False)
-        today = unicode(date.today())
-        conn.execute("INSERT INTO stat_list VALUES ('"+str(type) +
-                     "',"+str(chat_id)+",'"+str(today)+" ')")
+        today = str(date.today())
+        conn.execute("INSERT INTO stat_list VALUES ('"+ str(type) + "',"+str(chat_id)+",'"+str(today)+" ')")
         conn.commit()
 
     if (config_map['debug']['disable_chatid_logs'] == 0):
-        log = open("logs/chatid.txt", "a+")
-        if not str(chat_id) in log.read():
-            log.write(str(chat_id)+"\n")
+        a_log = open("logs/chatid.txt", "a+")
+        r_log = open("logs/chatid.txt", "r+")
+        if not str(chat_id) in r_log.read():
+            a_log.write(str(chat_id)+"\n")
 
 
 def give_chat_id(bot, update):

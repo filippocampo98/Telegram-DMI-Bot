@@ -33,7 +33,7 @@ def scrap(bot,job):
     nome_menu = menu.text;
     link_menu = menu.get("href")
 
-    nome_file = nome_menu.lower().encode('utf-8')
+    nome_file = nome_menu.lower()
     nome_file = nome_file.replace('ù', 'u')
     nome_file = nome_file.replace("menu",'')
     nome_file = nome_file.replace(' ','') + ".xls"

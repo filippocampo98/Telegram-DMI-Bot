@@ -25,16 +25,16 @@ def prof_cmd(profs):
     if(profs):
 
         output = set()
-        profs = [x.lower().encode('utf-8') for x in profs if len(x) > 3]
+        profs = [x.lower() for x in profs if len(x) > 3]
 
-        with open("data/json/professori.json") as data_file:
+        with open("data/json/professori.json", "r") as data_file:
             professori_data = json.load(data_file)
         for prof in profs:
             professori = [professore for professore in professori_data if (prof in professore["Nome"].lower() or prof in professore["Cognome"].lower())]
             for professore in professori:
                 output.add(prof_output(professore))
 
-        if(len(output)):
+        if len(output):
             output_str = '\n'.join(list(output))
         else:
             output_str = "Nessun risultato trovato :(\n"

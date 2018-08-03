@@ -47,15 +47,15 @@ def lezioni_cmd(bot, update, args, path):
 
     output_str = "Poffarbacco, qualcosa non va. Segnalalo ai dev /contributors \n"
 
-    if(args):
+    if args:
         output = set()
-        r = json.load(open(path))
+        r = json.load(open(path, "r"))
 
         items = r["materie"]
         daylist = list(calendar.day_name)
-        daylist = [x.lower().encode('utf-8').replace('ì', 'i') for x in daylist]
+        daylist = [x.lower().replace('ì', 'i') for x in daylist]
         #Clear arguments - Trasform all to lower case utf-8 (ì) - Remove word 'anno' and len<2
-        args = [x.lower().encode('utf-8') for x in args if len(x) > 2]
+        args = [x.lower() for x in args if len(x) > 2]
 
         try:
 

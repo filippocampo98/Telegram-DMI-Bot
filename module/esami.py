@@ -44,7 +44,7 @@ def esami_cmd(args, link):
 			items = esami_json["items"]
 
 			#Clear arguments - Trasform all to lower case - Remove word 'anno', 'sessione'
-			args = [x.lower().encode('utf-8') for x in args if len(x) > 2]
+			args = [x.lower() for x in args if len(x) > 2]
 			if 'anno' in args: args.remove('anno')
 			if 'sessione' in args: args.remove('sessione')
 
