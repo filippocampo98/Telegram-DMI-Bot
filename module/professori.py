@@ -20,6 +20,21 @@ def prof_output(prof):
         output += "*Fax:* " + prof["Fax"] + "\n"
     return output
 
+def test_prof_output():
+    sample = {
+        "Cognome": "BARBANERA",
+        "Email": "barba@dmi.unict.it",
+        "Fax": "",
+        "ID": 1,
+        "Nome": "Franco ",
+        "Ruolo": "Associato",
+        "Scheda DMI": "http://web.dmi.unict.it/docenti/franco.barbanera",
+        "Sito": "www.dmi.unict.it/~barba/",
+        "Telefono": " 0957383005",
+        "Ufficio": " V.le A. Doria, 6 Ufficio MII-42 Dipartimento di Matematica e Informatica"
+    }
+    assert type(prof_output(sample)) == type("string")
+
 def prof_cmd(profs):
 
     if(profs):

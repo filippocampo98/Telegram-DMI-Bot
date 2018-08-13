@@ -8,7 +8,7 @@ Send **'/start'** to start it, **'/help'** to see a list of commands.
 
 Please note that the commands and their answers are in Italian.
 
---- 
+---
 
 ### Setting up a local istance
 If you want to test the bot by creating your personal istance, follow this steps:
@@ -21,7 +21,7 @@ If you want to test the bot by creating your personal istance, follow this steps
 
 ### System requirements
 
-- Python 2
+- Python 3
 - python-pip
 - python-bs4
 - language-pack-it

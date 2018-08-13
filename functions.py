@@ -4,8 +4,7 @@
 import telegram
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, Filters, MessageHandler, CommandHandler, CallbackQueryHandler, RegexHandler
-from telegram.error import (TelegramError, Unauthorized, BadRequest,
-                            TimedOut, ChatMigrated, NetworkError)
+from telegram.error import (TelegramError, Unauthorized, BadRequest, TimedOut, ChatMigrated, NetworkError)
 
 # Drive
 from pydrive.drive import GoogleDrive
@@ -25,26 +24,21 @@ import os
 import sys
 import os.path
 import requests
+import sqlite3
+import yaml
+import logging
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-import sqlite3
-import logging
-
 
 from module.lezioni import lezioni_cmd
 from module.esami import esami_cmd
 from module.professori import prof_cmd
-from module.scraperesami import scrape_esami
+from module.scrape_exams import scrape_exams
 from module.scraperorario import scrape_orario
 from module.scraperprofessori import scrape_prof
-import yaml
+from module.mensa import *
 
-from module.mensa import*
-
-
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
-
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 conn = sqlite3.connect('data/DMI_DB.db', check_same_thread=False)
@@ -54,10 +48,10 @@ tokenconf = open('config/token.conf', 'r').read()
 tokenconf = tokenconf.replace("\n", "")
 with open('config/settings.yaml', 'r') as yaml_config:
     config_map = yaml.load(yaml_config)
+
 # Token of your telegram bot that you created from @BotFather, write it on token.conf
 TOKEN = tokenconf
 news = ""
-
 
 def send_message(bot, update, messaggio):
     msg = ""
@@ -806,7 +800,7 @@ def avviso(bot, job):
 
 
 def updater_poe(bot, job):
-    scrape_esami()
+    scrape_exams()
     scrape_orario()
     scrape_prof()
 
