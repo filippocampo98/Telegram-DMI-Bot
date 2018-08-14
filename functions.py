@@ -22,7 +22,6 @@ import re
 import random
 import os
 import sys
-import os.path
 import requests
 import sqlite3
 import yaml
@@ -203,7 +202,6 @@ def callback(bot, update):
     if len(update.callback_query.data) < 13:
         #conn.execute("DELETE FROM 'Chat_id_List'")
         array_value = update['callback_query']['message']['text'].split(" ")
-        print(array_value)
         try:
             if len(array_value) == 4:
                 array_value.insert(0, "None")
@@ -264,6 +262,16 @@ def callback(bot, update):
                     bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text="Si è verificato un errore, ci scusiamo per il disagio. Contatta i devs. /help")
                     sys.exit(0)
 
+                formats = {
+                	** { "pdf" : "📕 " },
+                	** dict.fromkeys([' a', 'b', 'c'], 10),
+                	** dict.fromkeys(["doc", "docx", "txt"], "📘 "),
+                	** dict.fromkeys(["jpg", "png", "gif"], "📷 "),
+                	** dict.fromkeys(["rar", "zip"], "🗄 "),
+                	** dict.fromkeys(["out", "exe"], "⚙ "),
+                	** dict.fromkeys(["c", "cpp", "h", "py", "java", "js", "html", "php"], "💻 ")
+                }
+
                 for file2 in file_list2:
 
                     if file2['mimeType'] == "application/vnd.google-apps.folder":
@@ -275,20 +283,15 @@ def callback(bot, update):
                             keyboard2[number_array].append(InlineKeyboardButton("🗂 "+file2['title'], callback_data="Drive_" + file2['id']))
                             number_row += 1
                     else:
-                        if ".pdf" in file2['title']:
-                            icona = "📕 "
-                        elif ".doc" in file2['title'] or ".docx" in file2['title'] or ".txt" in file2['title']:
-                            icona = "📘 "
-                        elif ".jpg" in file2['title'] or ".png" in file2['title'] or ".gif" in file2['title']:
-                            icona = "📷 "
-                        elif ".rar" in file2['title'] or ".zip" in file2['title']:
-                            icona = "🗄 "
-                        elif ".out" in file2['title'] or ".exe" in file2['title']:
-                            icona = "⚙ "
-                        elif ".c" in file2['title'] or ".cpp" in file2['title'] or ".py" in file2['title'] or ".java" in file2['title'] or ".js" in file2['title'] or ".html" in file2['title'] or ".php" in file2['title']:
-                            icona = "💻 "
-                        else:
-                            icona = "📄 "
+                        file_format = file2['title'][-5:] # get last 5 characters of strings
+                        file_format = file_format.split(".") # split file_format per "."
+                        file_format = file_format[len(file_format)-1] # get last element of file_format
+
+                        icona = "📄 "
+
+                        if file_format in formats.keys():
+                            icona = formats[file_format]
+
                         if number_row >= 1:
                             keyboard2.append([InlineKeyboardButton(icona+file2['title'], callback_data="Drive_" + file2['id'])])
                             number_row = 0
@@ -333,36 +336,29 @@ def callback(bot, update):
 
 def request(bot, update):
     chat_id = update.message.chat_id
-    flag = 0
     if chat_id > 0:
-        for row in conn.execute("SELECT Chat_id FROM Chat_id_List"):
-            if row[0] == chat_id:
-                flag = 1
-
-        if flag == 0:
+        # if we do not find any chat_id in the db
+        if not conn.execute("SELECT Chat_id FROM Chat_id_List WHERE Chat_id = " + str(chat_id)).fetchone():
             message_text = "✉️ Richiesta inviata"
             keyboard = [[]]
 
+            username = ""
             if update['message']['from_user']['username']:
                 username = update['message']['from_user']['username']
-            else:
-                username = ""
 
             if len(update.message.text.split(" ")) == 4 and "@" in update.message.text.split(" ")[3] and "." in update.message.text.split()[3]:
                 text_send = str(update.message.text) + " " + username
                 keyboard.append([InlineKeyboardButton("Accetta", callback_data="Drive_"+str(chat_id))])
                 reply_markup2 = InlineKeyboardMarkup(keyboard)
                 bot.sendMessage(chat_id=-1001095167198, text=text_send, reply_markup=reply_markup2)
-                bot.sendMessage(chat_id=chat_id, text=message_text)
             else:
                 message_text = "Errore compilazione /request:\n Forma esatta: /request <nome> <cognome> <e-mail> (il nome e il cognome devono essere scritti uniti Es: Di mauro -> Dimauro)"
-                bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
         else:
             message_text = "Hai già effettuato la richiesta di accesso"
-            bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
     else:
         message_text = "Non è possibile utilizzare /request in un gruppo"
-        bot.sendMessage(chat_id=chat_id, text=message_text)
+
+    bot.sendMessage(chat_id=chat_id, text=message_text)
 
 
 def adddb(bot, update):
@@ -392,16 +388,11 @@ def drive(bot, update):
     # gauth.LocalWebserverAuth()
     drive = GoogleDrive(gauth)
     chat_id = update.message.chat_id
-    test_db = 0
     id_drive = '0B7-Gi4nb88hremEzWnh3QmN3ZlU'
     if chat_id < 0:
         bot.sendMessage(chat_id=chat_id, text="La funzione /drive non è ammessa nei gruppi")
     else:
-        for row in conn.execute("SELECT Chat_id FROM 'Chat_id_List' "):
-            if row[0] == chat_id:
-                test_db = 1
-
-        if test_db == 1:
+        if conn.execute("SELECT Chat_id FROM 'Chat_id_List' WHERE Chat_id = " + str(chat_id)).fetchone():
             keyboard2 = [[]]
 
             try:
@@ -706,6 +697,7 @@ def stats_gen(bot, update, days):
     else:
         text += "Record di "+str(days)+" giorni:\n"
         query = "SELECT Type, count(chat_id) FROM stat_list WHERE DateCommand > '"+ str(date.today()-timedelta(days=days)) + "' GROUP BY Type ORDER BY Type;"
+
     for row in conn.execute(query):
         if str(row[0]) != "leiCheNePensaSignorina" and str(row[0]) != "smonta_portoni" and str(row[0]) != "santino" and str(row[0]) != "bladrim" and str(row[0]) != "prof_sticker":
             text += str(row[1]) + ": " + str(row[0]) + "\n"

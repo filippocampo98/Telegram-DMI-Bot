@@ -132,15 +132,10 @@ def mensa_subscription(bot, update):
 
     conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
 
-    flag = 0
-    for row in conn.execute("SELECT chatid FROM subscriptions"):
-        if row[0] == chat_id:
-            flag = 1
-
-    if flag == 0:
-        conn.execute("INSERT INTO 'subscriptions' (`chatid`, `mensa`) VALUES ({}, {});".format(chat_id, flag_mensa))
-    else:
+    if conn.execute("SELECT chatid FROM subscriptions WHERE chatid = " + str(chat_id)).fetchone():
         conn.execute("UPDATE 'subscriptions' SET `mensa`={} WHERE `chatid`={};".format(flag_mensa, chat_id))
+    else:
+        conn.execute("INSERT INTO 'subscriptions' (`chatid`, `mensa`) VALUES ({}, {});".format(chat_id, flag_mensa))
     conn.commit()
 
     if flag_mensa != 0:
@@ -166,8 +161,7 @@ def mensa_weekend(bot, update):
 
     conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
 
-    for row in conn.execute("SELECT mensa FROM subscriptions WHERE chatid=%s"% chat_id):
-    	mensa = row[0]
+    mensa = conn.execute("SELECT mensa FROM subscriptions WHERE chatid=%s"% chat_id).fetchone()[0]
 
     if data == "mensa_weekend_no":
         if mensa > 3:
