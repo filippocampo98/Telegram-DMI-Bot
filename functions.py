@@ -175,8 +175,6 @@ def aulario_url():
     return url
 
 # Easter egg
-
-
 def prof_sticker_id(data):
     text = json.loads(open(data, 'r').read())
     i = random.randint(0, len(text)-1)
@@ -201,7 +199,7 @@ def callback(bot, update):
     number_array = 0
 
     update.callback_query.data = update.callback_query.data.replace("Drive_", "")
-    #print('Callback query data: ' + str(update.callback_query.data))
+    # print('Callback query data: ' + str(update.callback_query.data))
     if len(update.callback_query.data) < 13:
         #conn.execute("DELETE FROM 'Chat_id_List'")
         array_value = update['callback_query']['message']['text'].split(" ")
@@ -209,6 +207,7 @@ def callback(bot, update):
         try:
             if len(array_value) == 4:
                 array_value.insert(0, "None")
+
             if len(array_value) == 5:
                 conn.execute("INSERT INTO 'Chat_id_List' VALUES ("+update.callback_query.data+",'" + array_value[4] + "','" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "') ")
                 bot.sendMessage(chat_id=update.callback_query.data, text="🔓 La tua richiesta è stata accettata. Leggi il file README")
@@ -335,7 +334,7 @@ def callback(bot, update):
 def request(bot, update):
     chat_id = update.message.chat_id
     flag = 0
-    if (chat_id > 0):
+    if chat_id > 0:
         for row in conn.execute("SELECT Chat_id FROM Chat_id_List"):
             if row[0] == chat_id:
                 flag = 1
@@ -343,26 +342,24 @@ def request(bot, update):
         if flag == 0:
             message_text = "✉️ Richiesta inviata"
             keyboard = [[]]
-            if (update['message']['from_user']['username']):
+
+            if update['message']['from_user']['username']:
                 username = update['message']['from_user']['username']
             else:
                 username = ""
-            if(len(update.message.text.split(" ")) == 4) and ("@" in update.message.text.split(" ")[3]) and ("." in update.message.text.split()[3]):
+
+            if len(update.message.text.split(" ")) == 4 and "@" in update.message.text.split(" ")[3] and "." in update.message.text.split()[3]:
                 text_send = str(update.message.text) + " " + username
-                keyboard.append([InlineKeyboardButton(
-                    "Accetta", callback_data="Drive_"+str(chat_id))])
+                keyboard.append([InlineKeyboardButton("Accetta", callback_data="Drive_"+str(chat_id))])
                 reply_markup2 = InlineKeyboardMarkup(keyboard)
                 bot.sendMessage(chat_id=-1001095167198, text=text_send, reply_markup=reply_markup2)
                 bot.sendMessage(chat_id=chat_id, text=message_text)
-
             else:
                 message_text = "Errore compilazione /request:\n Forma esatta: /request <nome> <cognome> <e-mail> (il nome e il cognome devono essere scritti uniti Es: Di mauro -> Dimauro)"
                 bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
-
         else:
             message_text = "Hai già effettuato la richiesta di accesso"
             bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
-
     else:
         message_text = "Non è possibile utilizzare /request in un gruppo"
         bot.sendMessage(chat_id=chat_id, text=message_text)
@@ -406,34 +403,31 @@ def drive(bot, update):
 
         if test_db == 1:
             keyboard2 = [[]]
+
             try:
-                file_list = drive.ListFile(
-                    {'q': "'" + id_drive + "' in parents and trashed=false", 'orderBy': 'folder,title'}).GetList()
+                file_list = drive.ListFile({'q': "'" + id_drive + "' in parents and trashed=false", 'orderBy': 'folder,title'}).GetList()
             except Exception as error:
                 print (str(error))
+
             number_row = 0
             number_array = 0
 
             for file1 in file_list:
                 if file1['mimeType'] == "application/vnd.google-apps.folder":
                     if number_row >= 3:
-                        keyboard2.append([InlineKeyboardButton(
-                            "🗂 "+file1['title'], callback_data="Drive_" + file1['id'])])
+                        keyboard2.append([InlineKeyboardButton("🗂 "+file1['title'], callback_data="Drive_" + file1['id'])])
                         number_row = 0
                         number_array += 1
                     else:
-                        keyboard2[number_array].append(InlineKeyboardButton(
-                            "🗂 "+file1['title'], callback_data="Drive_" + file1['id']))
+                        keyboard2[number_array].append(InlineKeyboardButton("🗂 "+file1['title'], callback_data="Drive_" + file1['id']))
                         number_row += 1
                 else:
                     if number_row >= 3:
-                        keyboard2.append([InlineKeyboardButton(
-                            "📃 "+file1['title'], callback_data="Drive_" + file1['id'])])
+                        keyboard2.append([InlineKeyboardButton("📃 "+file1['title'], callback_data="Drive_" + file1['id'])])
                         number_row = 0
                         number_array += 1
                     else:
-                        keyboard2[number_array].append(InlineKeyboardButton(
-                            "📃 "+file1['title'], callback_data="Drive_" + file1['id']))
+                        keyboard2[number_array].append(InlineKeyboardButton("📃 "+file1['title'], callback_data="Drive_" + file1['id']))
                         number_row += 1
 
             reply_markup3 = InlineKeyboardMarkup(keyboard2)
@@ -488,46 +482,36 @@ def help(bot, update):
     keyboard = [[]]
     message_text = "@DMI_Bot risponde ai seguenti comandi:"
 
-    keyboard.append([InlineKeyboardButton(
-        " ~ Dipartimento e CdL ~ ", callback_data="_div")])
+    keyboard.append([InlineKeyboardButton(" ~ Dipartimento e CdL ~ ", callback_data="_div")])
 
     keyboard.append(
         [
-            InlineKeyboardButton("📖 Esami (Triennale)",
-                                 callback_data="esami_button"),
-            InlineKeyboardButton("📖 Esami (Magistrale)",  url=mesami_url()),
-            InlineKeyboardButton("🗓 Aulario",             url=aulario_url()),
-            InlineKeyboardButton(
-                "Lezioni",               callback_data="lezioni_button")
+            InlineKeyboardButton("📖 Esami (Triennale)",    callback_data="esami_button"),
+            InlineKeyboardButton("📖 Esami (Magistrale)",   url=mesami_url()),
+            InlineKeyboardButton("🗓 Aulario",              url=aulario_url()),
+            InlineKeyboardButton("Lezioni",                 callback_data="lezioni_button")
         ]
     )
     keyboard.append(
         [
-            InlineKeyboardButton("🍽 Mensa",
-                                 callback_data="mensa_help"),
-            InlineKeyboardButton("👥 Rappresentanti",
-                                 callback_data="sm_rapp_menu"),
-            InlineKeyboardButton("📚 Biblioteca",
-                                 callback_data="biblioteca"),
-            InlineKeyboardButton(
-                CUSicon[random.randint(0, 5)] + " CUS", callback_data="cus")
+            InlineKeyboardButton("🍽 Mensa",                                callback_data="mensa_help"),
+            InlineKeyboardButton("👥 Rappresentanti",                       callback_data="sm_rapp_menu"),
+            InlineKeyboardButton("📚 Biblioteca",                           callback_data="biblioteca"),
+            InlineKeyboardButton(CUSicon[random.randint(0, 5)] + " CUS",    callback_data="cus")
         ]
     )
 
-    keyboard.append([InlineKeyboardButton(
-        " ~ Segreteria orari e contatti ~ ", callback_data="_div")])
+    keyboard.append([InlineKeyboardButton(" ~ Segreteria orari e contatti ~ ", callback_data="_div")])
 
     keyboard.append(
         [
-            InlineKeyboardButton(
-                "Seg. Didattica",  callback_data="sdidattica"),
+            InlineKeyboardButton("Seg. Didattica",  callback_data="sdidattica"),
             InlineKeyboardButton("Seg. Studenti",   callback_data="sstudenti"),
             InlineKeyboardButton("CEA",             callback_data="cea")
         ]
     )
 
-    keyboard.append([InlineKeyboardButton(
-        " ~ ERSU orari e contatti ~ ", callback_data="_div")])
+    keyboard.append([InlineKeyboardButton(" ~ ERSU orari e contatti ~ ", callback_data="_div")])
 
     keyboard.append(
         [
@@ -537,22 +521,18 @@ def help(bot, update):
         ]
     )
 
-    keyboard.append([InlineKeyboardButton(
-        " ~ Bot e varie ~ ", callback_data="_div")])
+    keyboard.append([InlineKeyboardButton(" ~ Bot e varie ~ ", callback_data="_div")])
 
     keyboard.append(
         [
-            InlineKeyboardButton("Iscriviti alle news",
-                                 callback_data="enablenews"),
-            InlineKeyboardButton("Disiscriviti dalle news",
-                                 callback_data="disablenews")
+            InlineKeyboardButton("Iscriviti alle news",     callback_data="enablenews"),
+            InlineKeyboardButton("Disiscriviti dalle news", callback_data="disablenews")
         ]
     )
     keyboard.append(
         [
-            InlineKeyboardButton("📂 Drive",          callback_data="drive"),
-            InlineKeyboardButton(
-                "Contributors",     callback_data="contributors"),
+            InlineKeyboardButton("📂 Drive",     callback_data="drive"),
+            InlineKeyboardButton("Contributors", callback_data="contributors"),
         ]
     )
 
@@ -632,8 +612,7 @@ def forum_bot(bot, update):
 
 
 def get_short_link(url):
-    post_url = 'https://www.googleapis.com/urlshortener/v1/url?key={}'.format(
-        config_map['shortener_key'])
+    post_url = 'https://www.googleapis.com/urlshortener/v1/url?key={}'.format(config_map['shortener_key'])
     payload = {'longUrl': url}
     headers = {'content-type': 'application/json'}
     r = requests.post(post_url, data=json.dumps(payload), headers=headers)
@@ -641,10 +620,8 @@ def get_short_link(url):
 
 
 def shortit(message):
-    url_regex = re.compile(
-        'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
-    urls = re.findall(
-        'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message)
+    url_regex = re.compile('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
+    urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message)
     news = url_regex.sub('{URL}', message)
     urls.reverse()
     updated_message = ''
@@ -668,51 +645,54 @@ def spamnews(bot, update):
     if update.message.chat_id in admins:
         chat_ids = open('logs/chatid.txt', 'r').read()
         chat_ids = chat_ids.split("\n")
+
         for chat_id in chat_ids:
             try:
                 if not "+" in chat_id:
                     bot.sendMessage(chat_id=chat_id, text=news)
             except Unauthorized:
-                logger.error(
-                    'Unauthorized id. Trying to remove from the chat_id list...')
+                logger.error('Unauthorized id. Trying to remove from the chat_id list...')
                 chat_ids.remove(chat_id)
-                if chat_id not in chat_ids:
-                    logger.info(
-                        'Succesfully removed {} from the list!!'.format(chat_id))
-                with open('logs/chatid.txt', 'w') as target:
-                    for id in chat_ids:
-                        target.write(id+'\n')
+
+                chat_ids = '\n'.join(chat_ids)
+                open('logs/chatid.txt', 'w').write(chat_ids)
+
             except Exception as error:
                 open("logs/errors.txt", "a+").write(str(error) + " " + str(chat_id)+"\n")
+
         bot.sendMessage(chat_id=update.message.chat_id, text="News spammata!")
 
 
 def disablenews(bot, update):
     check_log(bot, update, "disablenews")
+
     chat_ids = open('logs/chatid.txt', 'r').read()
     chat_id = update.message.chat_id
+
     if not ("+"+str(chat_id)) in chat_ids:
         chat_ids = chat_ids.replace(str(chat_id), "+"+str(chat_id))
         message_test = "News disabilitate!"
         open('logs/chatid.txt', 'w').write(chat_ids)
     else:
         message_test = "News già disabilitate!"
+
     bot.sendMessage(chat_id=update.message.chat_id, text=message_test)
 
 
 def enablenews(bot, update):
     check_log(bot, update, "enablenews")
+
     chat_ids = open('logs/chatid.txt', 'r').read()
     chat_id = update.message.chat_id
+
     if ("+"+str(chat_id)) in chat_ids:
         chat_ids = chat_ids.replace("+"+str(chat_id), str(chat_id))
         message_text = "News abilitate!"
         open('logs/chatid.txt', 'w').write(chat_ids)
     else:
         message_text = "News già abilitate!"
-    bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
 
-# check if user (chatid) is registered on chatid.txt
+    bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
 
 
 def stats_gen(bot, update, days):
