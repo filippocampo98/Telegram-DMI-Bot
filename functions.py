@@ -636,17 +636,18 @@ def spamnews(bot, update):
     if update.message.chat_id in admins:
         chat_ids = open('logs/chatid.txt', 'r').read()
         chat_ids = chat_ids.split("\n")
+        list_chat_ids = chat_ids
 
         for chat_id in chat_ids:
             try:
                 if not "+" in chat_id:
                     bot.sendMessage(chat_id=chat_id, text=news)
             except Unauthorized:
-                logger.error('Unauthorized id. Trying to remove from the chat_id list...')
-                chat_ids.remove(chat_id)
+                logger.error('Unauthorized id. Trying to remove from the chat_id list...' + str(chat_id))
+                list_chat_ids.remove(chat_id)
 
-                chat_ids = '\n'.join(chat_ids)
-                open('logs/chatid.txt', 'w').write(chat_ids)
+                _chat_ids = '\n'.join(list_chat_ids)
+                open('logs/chatid.txt', 'w').write(_chat_ids)
 
             except Exception as error:
                 open("logs/errors.txt", "a+").write(str(error) + " " + str(chat_id)+"\n")
