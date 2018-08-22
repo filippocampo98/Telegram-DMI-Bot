@@ -323,11 +323,11 @@ def callback(bot, update):
                     else:
                         bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text="File troppo grande per il download diretto, scarica dal seguente link")
                         # file_d['downloadUrl']
-                        bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text=fileD['alternateLink'])
+                        bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text=file_d['alternateLink'])
                 except Exception as e:
                     print("- Drive error: {}".format(e))
                     bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text="Impossibile scaricare questo file, contattare gli sviluppatori del bot")
-                    open("logs/errors.txt", "a+").write(str(e) + str(fileD['title'])+"\n")
+                    open("logs/errors.txt", "a+").write(str(e) + str(file_d['title'])+"\n")
 
             sys.exit(0)
 
