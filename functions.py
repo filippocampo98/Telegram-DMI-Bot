@@ -113,7 +113,7 @@ CUSicon = {0: "🏋",
 
 def help_cmd():
     output = "@DMI_Bot risponde ai seguenti comandi: \n\n"
-    output += "📖 /esami - /mesami - 	linka il calendario degli esami\n"
+    output += "📖 /esami - linka il calendario degli esami\n"
     output += "🗓 /aulario - linka l\'aulario\n"
     output += "👔 /prof <nome> - es. /prof Barbanera\n"
     output += "🍽 /mensa - orario mensa\n"

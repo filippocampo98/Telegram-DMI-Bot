@@ -60,7 +60,6 @@ def main():
 	dp.add_handler(CommandHandler('esami', lambda bot, update, args: esami(bot, update, args), pass_args=True))
 
 	# dp.add_handler(CommandHandler('mlezioni', lambda bot, update, args: lezioni(bot, update, args, True), pass_args=True))
-	# dp.add_handler(CommandHandler('mesami', lambda bot, update, args: esami(bot, update, args, True), pass_args=True))
 
 	dp.add_handler(CommandHandler('prof', prof, pass_args=True))
 

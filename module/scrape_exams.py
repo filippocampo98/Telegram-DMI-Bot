@@ -29,37 +29,58 @@ def handle_exams(row, session, items, year):
 		insert(row, session, items, year)
 
 def scrape_exams():
-	url_exams = [
-		"http://web.dmi.unict.it/corsi/l-31/esami?sessione=1&aa=118",
-		"http://web.dmi.unict.it/corsi/l-31/esami?sessione=2&aa=118",
-		"http://web.dmi.unict.it/corsi/l-31/esami?sessione=3&aa=118"
-	]
+	year_exams = "118" # 2017/2018
+	url_exams = {
+		"l-31":	[ # Informatica Triennale
+			"http://web.dmi.unict.it/corsi/l-31/esami?sessione=1&aa="+year_exams,
+			"http://web.dmi.unict.it/corsi/l-31/esami?sessione=2&aa="+year_exams,
+			"http://web.dmi.unict.it/corsi/l-31/esami?sessione=3&aa="+year_exams
+		],
+		"lm-18": [ # Informatica Magistrale
+			"http://web.dmi.unict.it/corsi/lm-18/esami?sessione=1&aa="+year_exams,
+			"http://web.dmi.unict.it/corsi/lm-18/esami?sessione=2&aa="+year_exams,
+			"http://web.dmi.unict.it/corsi/lm-18/esami?sessione=3&aa="+year_exams
+		],
+		"l-35": [ # Matematica Triennale
+			"http://web.dmi.unict.it/corsi/l-35/esami?sessione=1&aa="+year_exams,
+			"http://web.dmi.unict.it/corsi/l-35/esami?sessione=2&aa="+year_exams,
+			"http://web.dmi.unict.it/corsi/l-35/esami?sessione=3&aa="+year_exams
+		],
+		"lm-40": [ # Matematica Magistrale
+			"http://web.dmi.unict.it/corsi/lm-40/esami?sessione=1&aa="+year_exams,
+			"http://web.dmi.unict.it/corsi/lm-40/esami?sessione=2&aa="+year_exams,
+			"http://web.dmi.unict.it/corsi/lm-40/esami?sessione=3&aa="+year_exams
+		]
+	}
+
 	status = {
 		"length": "" ,
 		"lastupdate": strftime("%Y-%d-%m %H:%M:%S",localtime())
 	}
 
+	courses = ["l-31", "lm-18", "l-35", "lm-40"]
 	arr = ["prima", "seconda", "terza"]
 	items = []
 	year = ""
 
-	for count, url in enumerate(url_exams):
-		source = requests.get(url).text
-		soup = bs4.BeautifulSoup(source, "html.parser")
-		table = soup.find(id="tbl_small_font")
-		all_tr = table.find_all("tr")
+	for course in courses:
+		for count, url in enumerate(url_exams[course]):
+			source = requests.get(url).text
+			soup = bs4.BeautifulSoup(source, "html.parser")
+			table = soup.find(id="tbl_small_font")
+			all_tr = table.find_all("tr")
 
-		for tr in all_tr:
-			firstd = tr.find("td")
-			if not tr.has_attr("class") and not firstd.has_attr("class"):
-				all_td = tr.find_all("td")
+			for tr in all_tr:
+				firstd = tr.find("td")
+				if not tr.has_attr("class") and not firstd.has_attr("class"):
+					all_td = tr.find_all("td")
 
-				if count == 0:
-					insert(all_td, arr[count], items, year)
-				else:
-					handle_exams(all_td, arr[count], items, year)
-			elif not tr.has_attr("class") and firstd.has_attr("class"):
-				year = firstd.b.text
+					if count == 0:
+						insert(all_td, arr[count], items, year)
+					else:
+						handle_exams(all_td, arr[count], items, year)
+				elif not tr.has_attr("class") and firstd.has_attr("class"):
+					year = firstd.b.text
 
 	status["length"] = len(items)
 	finaljson = {

@@ -38,7 +38,7 @@ def esami_condition(items, field, value, *session):
 
 	return output
 
-def check_output(output):
+def check_output(output, esami_json):
 	if len(output):
 		output_str = '\n'.join(list(output))
 		output_str += "\n_Risultati trovati: " + str(len(output)) + "/" + str(esami_json["status"]["length"]) + "_"
@@ -49,7 +49,6 @@ def check_output(output):
 	return output_str
 
 def esami_cmd(args, link):
-
 	output_str = "Inserisci un parametro valido\n"
 
 	if args:
@@ -78,7 +77,7 @@ def esami_cmd(args, link):
 				elif [item["insegnamento"].lower().find(args[0]) for item in items]:
 					output = esami_condition(items, "insegnamento", args[0])
 
-				output_str = check_output(output)
+				output_str = check_output(output, esami_json)
 
 			elif len(args) > 1:
 
@@ -118,7 +117,7 @@ def esami_cmd(args, link):
 					for arg in args:
 						output = output.union(esami_condition(items, "insegnamento", arg))
 
-				output_str = check_output(output)
+				output_str = check_output(output, esami_json)
 	else:
 		output_str = "Inserisci almeno uno dei seguenti parametri: giorno, materia, sessione (prima, seconda, terza, straordinaria)."
 
