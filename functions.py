@@ -645,12 +645,19 @@ def spamnews(bot, update):
             except Unauthorized:
                 logger.error('Unauthorized id. Trying to remove from the chat_id list...' + str(chat_id))
                 list_chat_ids.remove(chat_id)
-
-                _chat_ids = '\n'.join(list_chat_ids)
-                open('logs/chatid.txt', 'w').write(_chat_ids)
-
             except Exception as error:
-                open("logs/errors.txt", "a+").write(str(error) + " " + str(chat_id)+"\n")
+                if "Group migrated to supergroup" in str(error):
+                    logger.error(str(error) + " (" + str(chat_id) + ")")
+                    new_chat_id = str(error).replace("Group migrated to supergroup. New chat id: ", "")
+                    new_chat_id = new_chat_id.replace("\n", "")
+                    list_chat_ids.remove(chat_id)
+                    list_chat_ids.append(new_chat_id)
+                else:
+                    open("logs/errors.txt", "a+").write(str(error) + " " + str(chat_id)+"\n")
+
+        list_chat_ids = '\n'.join(list_chat_ids)
+        list_chat_ids = list_chat_ids.replace("\n\n", "\n")
+        open('logs/chatid.txt', 'w').write(list_chat_ids)
 
         bot.sendMessage(chat_id=update.message.chat_id, text="News spammata!")
 
