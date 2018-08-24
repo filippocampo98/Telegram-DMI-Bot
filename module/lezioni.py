@@ -83,6 +83,9 @@ def lezioni_cmd(bot, update, args, path):
 
                 if not len(output):
                     output_str = "Nessun risultato trovato :(\n"
+                else:
+                    output_str = "\n".join(str(e) for e in output)
+
             elif(len(args) > 1):
 
                 #Create an array of days and years if in arguments
@@ -108,6 +111,8 @@ def lezioni_cmd(bot, update, args, path):
 
                 if not len(output):
                     output_str = "Nessun risultato trovato :(\n"
+                else:
+                    output_str = "\n\n".join(str(e) for e in output)
 
         except Exception as e:
             #debugging
