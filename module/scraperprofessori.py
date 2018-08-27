@@ -3,66 +3,105 @@
 import bs4
 import requests
 import json
+import sqlite3
+import logging
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
-def getanagrafica(linkscheda):
-    diz = {"ufficio": "", "email": "", "sito": "", "telefono": "", "fax": ""}
-    sorgente = requests.get("http://web.dmi.unict.it"+str(linkscheda)).text
-    soup = bs4.BeautifulSoup(sorgente, "html.parser")
+def get_anagraphic(link):
+    dic = {"ufficio": "", "email": "", "sito": "", "telefono": "", "fax": ""}
+    source = requests.get("http://web.dmi.unict.it"+str(link)).text
+    soup = bs4.BeautifulSoup(source, "html.parser")
     div = soup.find(id="anagrafica")
     for bi in div.find_all("b"):
         if bi.text == "Ufficio:":
-            diz['ufficio'] = bi.next_sibling
+            dic['ufficio'] = bi.next_sibling
         elif bi.text == "Email:":
-            diz['email'] = bi.next_sibling.next_sibling.text
+            dic['email'] = bi.next_sibling.next_sibling.text
         elif bi.text == "Sito web:":
-            diz['sito'] = bi.next_sibling.next_sibling.text
+            dic['sito'] = bi.next_sibling.next_sibling.text
         elif bi.text == "Telefono:":
-            diz['telefono'] = bi.next_sibling
+            dic['telefono'] = bi.next_sibling
         elif bi.text == "Fax:":
-            diz['fax'] = bi.next_sibling
-    return diz
+            dic['fax'] = bi.next_sibling
+    return dic
 
 
 def scrape_prof():
     url_prof = "http://web.dmi.unict.it/docenti"
+
     items = []
     count = 0
-    contratto = False
-    madrelingua = False
+
+    contract = False
+    mother_tongue = False
+
     href = ""
-    cognome = ""
-    nome = ""
-    ruolo = ""
-    sorgente = requests.get(url_prof).text
-    soup = bs4.BeautifulSoup(sorgente, "html.parser")
+    surname = ""
+    name = ""
+    role = ""
+
+    source = requests.get(url_prof).text
+    soup = bs4.BeautifulSoup(source, "html.parser")
     table = soup.find(id="persone")
+
     for link in table.find_all("a"):
         if not link.has_attr("name"):
             href = link['href']
-            cognome = link.text.split(" ")[0]
-            nome = ""
+            surname = link.text.split(" ")[0]
+            name = ""
+
             for i in range(len(link.text.split(" "))-1):
-                nome += link.text.split(" ")[i+1] + " "
-            if contratto:
-                ruolo = "Contratto"
-            elif madrelingua:
-                ruolo = "Lettore madrelingua"
+                name += link.text.split(" ")[i+1] + " "
+
+            if contract:
+                role = "Contratto"
+            elif mother_tongue:
+                role = "Lettore madrelingua"
             else:
-                ruolo = link.parent.next_sibling.text.split(" ")[1] if len(
-                    link.parent.next_sibling.text.split(" ")) > 1 else link.parent.next_sibling.text
+                role = link.parent.next_sibling.text.split(" ")[1] if len(link.parent.next_sibling.text.split(" ")) > 1 else link.parent.next_sibling.text
             if link.parent.parent.next_sibling.next_sibling != None and link.parent.parent.next_sibling.next_sibling.find("td").find("b") != None:
-                if not contratto:
-                    contratto = True
-                else:
-                    contratto = False
-                    madrelingua = True
+                contract = False
+                mother_tongue = True
+
+                if not contract:
+                    contract = True
+                    mother_tongue = False
+
             count += 1
-            anagrafica = getanagrafica(href)
-            items.append({"ID": count, "Ruolo": ruolo.title(), "Nome": nome,
-                          "Cognome": cognome, "Scheda DMI": "http://web.dmi.unict.it" + href,
-                          "Fax": anagrafica['fax'], "Telefono": anagrafica['telefono'],
-                          "Email": anagrafica['email'], "Ufficio" : anagrafica['ufficio'],
-                          "Sito" : anagrafica['sito']})
+
+            anagraphic = get_anagraphic(href)
+            items.append({
+                "ID": count,
+                "Ruolo": role.title(),
+                "Nome": name,
+                "Cognome": surname,
+                "Scheda DMI": "http://web.dmi.unict.it" + href,
+                "Fax": anagraphic['fax'],
+                "Telefono": anagraphic['telefono'],
+                "Email": anagraphic['email'],
+                "Ufficio" : anagraphic['ufficio'],
+                "Sito" : anagraphic['sito']
+            })
+
+    # to delete
     with open('data/json/professori.json', 'w') as outfile:
         json.dump(items, outfile, sort_keys=True, indent=4)
+
+    columns = "`" + "`, `".join(items[0].keys()) + "`"
+
+    values = ""
+    for i in items:
+    	values += '("'+'", "'.join(str(v) for v in i.values())+'"),'
+    values = values[:-1]
+
+    query = "INSERT INTO professors ({}) VALUES {}".format(columns, values)
+
+    conn = sqlite3.connect('data/DMI_DB.db', check_same_thread=False)
+    conn.execute('DELETE FROM `professors`;') # TRUNCATE professors
+    conn.execute(query)
+    conn.commit()
+
+    logger.info("Professors loaded.")

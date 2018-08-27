@@ -3,7 +3,11 @@
 import bs4
 import requests
 import json
+import logging
 from time import localtime, strftime
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def insert(row, session, items, year):
 	item = {"insegnamento" : "", "docenti" : "", "prima" : ["", "", ""], "seconda" : ["", ""], "terza" : ["", ""], "straordinaria" : ["", ""], "anno" : year}
@@ -90,3 +94,5 @@ def scrape_exams():
 
 	with open('data/json/esami.json', 'w') as outfile:
 		json.dump(finaljson, outfile, sort_keys=True, indent=4)
+
+	logger.info("Exams loaded.")

@@ -1,6 +1,10 @@
 import bs4
 import requests
 import json
+import logging
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def get_giorno(giorno):
     if giorno == "LUN":
@@ -64,3 +68,5 @@ def scrape_orario():
     finaljson = {"materie" : materie}
     with open('./data/json/lezioni.json', 'w') as outfile:
         json.dump(finaljson, outfile, sort_keys=False, indent=4)
+
+    logger.info("Lessons loaded.")

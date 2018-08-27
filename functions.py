@@ -780,8 +780,8 @@ def avviso(bot, job):
 
 
 def updater_poe(bot, job):
-    scrape_exams()
     scrape_orario()
+    scrape_exams()
     scrape_prof()
 
 

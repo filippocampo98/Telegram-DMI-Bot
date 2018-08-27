@@ -27,3 +27,17 @@ CREATE TABLE IF NOT EXISTS `subscriptions` (
   `mensa` INT(11),
   `news` INT(11)
 );
+
+-- professors
+CREATE TABLE IF NOT EXISTS `professors` (
+  "ID" INT(11) NOT NULL PRIMARY KEY,
+  "Ruolo" VARCHAR(255),
+  "Nome" VARCHAR(255),
+  "Cognome" VARCHAR(255),
+  "Scheda DMI" VARCHAR(255),
+  "Fax" VARCHAR(255),
+  "Telefono" VARCHAR(255),
+  "Email" VARCHAR(255),
+  "Ufficio" VARCHAR(255),
+  "Sito" VARCHAR(255)
+);
