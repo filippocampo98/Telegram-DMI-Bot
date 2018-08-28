@@ -12,7 +12,6 @@ module/*.pyc
 data/archivioAvvisi.dat
 data/avviso.dat
 data/json/esami.json
-data/json/professori.json
 pydrive
 pydrive/*
 data/*.xls

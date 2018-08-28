@@ -86,10 +86,6 @@ def scrape_prof():
                 "Sito" : anagraphic['sito']
             })
 
-    # to delete
-    with open('data/json/professori.json', 'w') as outfile:
-        json.dump(items, outfile, sort_keys=True, indent=4)
-
     columns = "`" + "`, `".join(items[0].keys()) + "`"
 
     values = ""

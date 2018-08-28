@@ -1,59 +1,46 @@
 # -*- coding: utf-8 -*-
 
 import json
+import sqlite3
 
 def prof_output(prof):
-    output = "*Ruolo:* " + prof["Ruolo"] + "\n"
-    output += "*Cognome:* " + prof["Cognome"] + "\n"
-    output += "*Nome:* " + prof["Nome"] + "\n"
-    if prof['Email'] != "":
-        output += "*Indirizzo email:* " + prof["Email"] + "\n"
-    if prof['Scheda DMI'] != "":
-        output += "*Scheda DMI:* " + prof["Scheda DMI"] + "\n"
-    if prof['Sito'] != "":
-        output += "*Sito web:* " + prof["Sito"] + "\n"
-    if prof['Ufficio'] != "":
-        output += "*Ufficio:* " + prof["Ufficio"] + "\n"
-    if prof['Telefono'] != "":
-        output += "*Telefono:* " + prof["Telefono"] + "\n"
-    if prof['Fax'] != "":
-        output += "*Fax:* " + prof["Fax"] + "\n"
-    return output
+    output = "*Ruolo:* " + prof[1] + "\n"
+    output += "*Cognome:* " + prof[3] + "\n"
+    output += "*Nome:* " + prof[2] + "\n"
 
-def test_prof_output():
-    sample = {
-        "Cognome": "BARBANERA",
-        "Email": "barba@dmi.unict.it",
-        "Fax": "",
-        "ID": 1,
-        "Nome": "Franco ",
-        "Ruolo": "Associato",
-        "Scheda DMI": "http://web.dmi.unict.it/docenti/franco.barbanera",
-        "Sito": "www.dmi.unict.it/~barba/",
-        "Telefono": " 0957383005",
-        "Ufficio": " V.le A. Doria, 6 Ufficio MII-42 Dipartimento di Matematica e Informatica"
-    }
-    assert type(prof_output(sample)) == type("string")
+    if prof[7] != "":
+        output += "*Indirizzo email:* " + prof[7] + "\n"
+    if prof[4] != "":
+        output += "*Scheda DMI:* " + prof[4] + "\n"
+    if prof[9] != "":
+        output += "*Sito web:* " + prof[9] + "\n"
+    if prof[8] != "":
+        output += "*Ufficio:* " + prof[8] + "\n"
+    if prof[6] != "":
+        output += "*Telefono:* " + prof[6] + "\n"
+    if prof[5] != "":
+        output += "*Fax:* " + prof[5] + "\n"
+    return output
 
 def prof_cmd(profs):
 
-    if(profs):
-
+    if profs:
         output = set()
         profs = [x.lower() for x in profs if len(x) > 3]
+        conn = sqlite3.connect('data/DMI_DB.db')
 
-        with open("data/json/professori.json", "r") as data_file:
-            professori_data = json.load(data_file)
-        for prof in profs:
-            professori = [professore for professore in professori_data if (prof in professore["Nome"].lower() or prof in professore["Cognome"].lower())]
-            for professore in professori:
-                output.add(prof_output(professore))
+        professors = []
+        for i in profs:
+            rows = conn.execute("SELECT * FROM professors WHERE Nome LIKE '%" + i + "%' OR Cognome LIKE '%" + i + "%' ").fetchall()
+            professors += rows
+
+        for prof in professors:
+            output.add(prof_output(prof))
 
         if len(output):
             output_str = '\n'.join(list(output))
         else:
             output_str = "Nessun risultato trovato :(\n"
-
     else:
         output_str = "La sintassi del comando è: /prof <nomeprofessore>\n"
 
