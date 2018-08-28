@@ -40,7 +40,7 @@ from module.mensa import *
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-conn = sqlite3.connect('data/DMI_DB.db', check_same_thread=False)
+conn = sqlite3.connect('data/DMI_DB.db')
 
 # Token
 tokenconf = open('config/token.conf', 'r').read()
@@ -697,7 +697,7 @@ def enablenews(bot, update):
 def stats_gen(bot, update, days):
     query = ""
     chat_id = update.message.chat_id
-    conn = sqlite3.connect('data/DMI_DB.db', check_same_thread=False)
+    conn = sqlite3.connect('data/DMI_DB.db')
     text = ""
     if days == 0:
         text += "Record Globale:\n"
@@ -733,7 +733,7 @@ def check_log(bot, update, type, callback=0):
 
     if (config_map['debug']['disable_db'] == 0):
         chat_id = update.message.chat_id
-        conn = sqlite3.connect('data/DMI_DB.db', check_same_thread=False)
+        conn = sqlite3.connect('data/DMI_DB.db')
         today = str(date.today())
         conn.execute("INSERT INTO stat_list VALUES ('"+ str(type) + "',"+str(chat_id)+",'"+str(today)+" ')")
         conn.commit()

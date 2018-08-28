@@ -130,7 +130,7 @@ def mensa_subscription(bot, update):
         flag_mensa = 3
         message_text = "Notifiche abilitate! Da ora in avanti riceverai alle 18:45 il menu della cena."
 
-    conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
+    conn = sqlite3.connect('data/DMI_DB.db')
 
     if conn.execute("SELECT chatid FROM subscriptions WHERE chatid = " + str(chat_id)).fetchone():
         conn.execute("UPDATE 'subscriptions' SET `mensa`={} WHERE `chatid`={};".format(flag_mensa, chat_id))
@@ -159,7 +159,7 @@ def mensa_weekend(bot, update):
     message_id = query.message.message_id
     data = query.data
 
-    conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
+    conn = sqlite3.connect('data/DMI_DB.db')
 
     mensa = conn.execute("SELECT mensa FROM subscriptions WHERE chatid=%s"% chat_id).fetchone()[0]
 
@@ -203,7 +203,7 @@ def mensa_notify_lunch(bot, update):
             messagec += sh.cell(count,ccontorni).value
         messagec += "\n"
 
-    conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
+    conn = sqlite3.connect('data/DMI_DB.db')
 
     x = 1
     y = 2
@@ -251,7 +251,7 @@ def mensa_notify_dinner(bot, update):
         x += 3
         y += 3
 
-    conn = sqlite3.connect('data/DMI_DB.db',check_same_thread=False)
+    conn = sqlite3.connect('data/DMI_DB.db')
     for row in conn.execute("SELECT chatid FROM subscriptions WHERE mensa = {} OR mensa = {} OR mensa = {} OR mensa = {}".format(x, y, x+3, y+3)):
     	try:
             bot.sendMessage(chat_id=row[0], text="🍽" + ind + messagep+ "\n" + messages + "\n" + messagec)
