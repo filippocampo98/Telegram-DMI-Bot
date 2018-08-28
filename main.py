@@ -80,7 +80,7 @@ def main():
 	j = updater.job_queue
 
 	j.run_repeating(avviso, interval=60) 											# job_dmi_news
-	j.run_repeating(updater_poe, interval=86400, first=0) 							# job_updater_poe (24h)
+	j.run_repeating(updater_lep, interval=86400, first=0) 							# job_updater_lep (24h)
 	j.run_repeating(scrap, interval=3600, first=0) 									# job_mensa
 	j.run_daily(mensa_notify_lunch, datetime.time(11, 45, 00), name='At 11:45') 	# job_mensa_lunch
 	j.run_daily(mensa_notify_dinner, datetime.time(18, 45, 00), name='At 18:45') 	# job_mensa_dinner

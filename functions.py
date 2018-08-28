@@ -32,9 +32,9 @@ from bs4 import BeautifulSoup
 from module.lezioni import lezioni_cmd
 from module.esami import esami_cmd
 from module.professori import prof_cmd
-from module.scrape_exams import scrape_exams
-from module.scraperorario import scrape_orario
-from module.scraperprofessori import scrape_prof
+from module.scraper_exams import scrape_exams
+from module.scraper_lessons import scrape_lessons
+from module.scraper_professors import scrape_prof
 from module.mensa import *
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -66,7 +66,7 @@ def send_message(bot, update, messaggio):
 
 def lezioni(bot, update, args, *m):
     check_log(bot, update, "lezioni")
-    message_text = lezioni_cmd(bot, update, args, "data/json/lezioni.json")
+    message_text = lezioni_cmd(bot, update, args)
     bot.sendMessage(chat_id=update.message.chat_id, text=message_text, parse_mode='Markdown')
 
 
@@ -779,8 +779,8 @@ def avviso(bot, job):
         os.remove("data/avviso.dat")
 
 
-def updater_poe(bot, job):
-    scrape_orario()
+def updater_lep(bot, job):
+    scrape_lessons()
     scrape_exams()
     scrape_prof()
 

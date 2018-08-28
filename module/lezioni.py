@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import json, datetime
+import json
 import requests
-
+import sqlite3
 import calendar
+import datetime
 import locale
 import time
 
@@ -12,14 +13,14 @@ locale.setlocale(locale.LC_ALL, 'it_IT.utf8')
 def lezioni_output(item):
     daylist = list(calendar.day_name)
 
-    output = "*Nome:* " + item["Nome"]
-    output += "\n*Aula:* " + item["Aula"]
+    output = "*Nome:* " + item["nome"]
+    output += "\n*Aula:* " + str(item["aula"])
 
     for day in daylist:
         if(day.replace('ì','i') in item and item[day.replace('ì','i')] != ""):
             output += "\n*" + day.title() + ":* " + item[day.replace('ì','i')]
 
-    output += "\n*Anno:* " + item["Anno"] + "\n"
+    output += "\n*Anno:* " + str(item["anno"]) + "\n"
 
     return output
 
@@ -39,19 +40,36 @@ def lezioni_condition_mult(items, days, years):
     output = set()
     for item in items:
         for day in days:
-            if ([year for year in years if year in item["Anno"].lower()]) and (day.replace('ì','i') in item and item[day.replace('ì','i')] != ""):
+            if ([year for year in years if year in item["anno"].lower()]) and (day.replace('ì','i') in item and item[day.replace('ì','i')] != ""):
                 output.add(lezioni_output(item))
     return output
 
-def lezioni_cmd(bot, update, args, path):
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
+
+
+def lezioni_cmd(bot, update, args):
+
+    import logging
+
+    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+    logger = logging.getLogger(__name__)
+
 
     output_str = "Poffarbacco, qualcosa non va. Segnalalo ai dev /contributors \n"
 
     if args:
         output = set()
-        r = json.load(open(path, "r"))
 
-        items = r["materie"]
+        conn = sqlite3.connect('data/DMI_DB.db')
+        conn.row_factory = dict_factory
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM lessons")
+        items = cur.fetchall()
+
         daylist = list(calendar.day_name)
         daylist = [x.lower().replace('ì', 'i') for x in daylist]
         #Clear arguments - Trasform all to lower case utf-8 (ì) - Remove word 'anno' and len<2
@@ -78,8 +96,8 @@ def lezioni_cmd(bot, update, args, path):
                 elif(args[0] in ("primo", "secondo", "terzo")):
                     output = lezioni_condition(items, "anno", args[0])
 
-                elif([item["Nome"].lower().find(args[0]) for item in items]):
-                    output = lezioni_condition(items, "Nome", args[0])
+                elif([item["nome"].lower().find(args[0]) for item in items]):
+                    output = lezioni_condition(items, "nome", args[0])
 
                 if not len(output):
                     output_str = "Nessun risultato trovato :(\n"
@@ -107,7 +125,7 @@ def lezioni_cmd(bot, update, args, path):
 
                 else:
                     for arg in args:
-                        output = output.union(lezioni_condition(items, "Nome", arg))
+                        output = output.union(lezioni_condition(items, "nome", arg))
 
                 if not len(output):
                     output_str = "Nessun risultato trovato :(\n"

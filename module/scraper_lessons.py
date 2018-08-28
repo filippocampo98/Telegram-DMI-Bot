@@ -2,6 +2,7 @@ import bs4
 import requests
 import json
 import logging
+import sqlite3
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -20,11 +21,11 @@ def get_giorno(giorno):
     else:
         return 0
 
-def scrape_orario():
+def scrape_lessons():
     year_exams = "118" # 2017/2018
     ids = ["l-31","l-35","lm-18","lm-40"]
 
-    materie = []
+    items = []
     for id_ in ids:
         urls = [
             "http://web.dmi.unict.it/corsi/"+str(id_)+"/orario-lezioni?semestre=1&aa="+year_exams,
@@ -61,12 +62,28 @@ def scrape_orario():
                                 orario = orario.replace(ora_inizio + "-" + ora_fine,'')
                                 aula = orario[2:]
 
-                                materia = {"Nome": td_all[0].text, "GiornoSettimana": str(giorno), "OraInizio": ora_inizio, "OraFine": ora_fine, "Aula": str(aula), "Anno": str(anno), "Semestre": str(semestre)}
-                                materie.append(materia)
+                                items.append({
+                                 "nome": td_all[0].text,
+                                 "giorno_settimana": str(giorno),
+                                 "ora_inizio": ora_inizio,
+                                 "ora_fine": ora_fine,
+                                 "aula": str(aula),
+                                 "anno": str(anno),
+                                 "semestre": str(semestre)
+                                })
 
+    columns = "`" + "`, `".join(items[0].keys()) + "`"
 
-    finaljson = {"materie" : materie}
-    with open('./data/json/lezioni.json', 'w') as outfile:
-        json.dump(finaljson, outfile, sort_keys=False, indent=4)
+    values = ""
+    for i in items:
+    	values += '("'+'", "'.join(str(v) for v in i.values())+'"),'
+    values = values[:-1]
+
+    query = "INSERT INTO lessons ({}) VALUES {}".format(columns, values)
+
+    conn = sqlite3.connect('data/DMI_DB.db')
+    conn.execute('DELETE FROM `lessons`;') # TRUNCATE lessons
+    conn.execute(query)
+    conn.commit()
 
     logger.info("Lessons loaded.")
