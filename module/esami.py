@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+import sqlite3
 
 def esami_output(item, sessions):
 
@@ -8,9 +9,14 @@ def esami_output(item, sessions):
 	output += "\n*Docenti:* " + item["docenti"]
 
 	for session in sessions:
-		appeal = [appeal for appeal in item[session] if appeal]
-		if(appeal):
-			output += "\n*" + session.title() + ":* " + " | ".join(appeal)
+		appeal = item[session]
+		if appeal:
+			appeal = str(appeal)
+			appeal = appeal.replace("['", "")
+			appeal = appeal.replace("']", "")
+			appeal = appeal.split("', '")
+			if "".join(appeal) != "":
+				output += "\n*" + session.title() + ":* " + " | ".join(appeal)
 
 	output += "\n*Anno:* " + item["anno"] + "\n"
 
@@ -38,86 +44,89 @@ def esami_condition(items, field, value, *session):
 
 	return output
 
-def check_output(output, esami_json):
+def check_output(output):
 	if len(output):
 		output_str = '\n'.join(list(output))
-		output_str += "\n_Risultati trovati: " + str(len(output)) + "/" + str(esami_json["status"]["length"]) + "_"
-		output_str += "\n_Ultimo aggiornamento: " + esami_json["status"]["lastupdate"] + "_\n"
+		output_str += "\n Risultati trovati: " + str(len(output))
 	else:
 		output_str = "Nessun risultato trovato :(\n"
 
 	return output_str
 
-def esami_cmd(args, link):
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
+
+def esami_cmd(args):
 	output_str = "Inserisci un parametro valido\n"
 
 	if args:
 		output = set()
-		with open(link, "r") as esami_file:
-			esami_json = json.load(esami_file)
-			items = esami_json["items"]
 
-			# Clear arguments - Trasform all to lower case - Remove word 'anno', 'sessione'
-			args = [x.lower() for x in args if len(x) > 2]
-			if 'anno' in args:
-				args.remove('anno')
+		conn = sqlite3.connect('data/DMI_DB.db')
+		conn.row_factory = dict_factory
+		cur = conn.cursor()
+		cur.execute("SELECT * FROM exams")
+		items = cur.fetchall()
 
-			if 'sessione' in args:
-				args.remove('sessione')
+		# Clear arguments - Trasform all to lower case - Remove word 'anno', 'sessione'
+		args = [x.lower() for x in args if len(x) > 2]
+		if 'anno' in args:
+			args.remove('anno')
 
-			# Study case
-			if len(args) == 1:
+		if 'sessione' in args:
+			args.remove('sessione')
 
-				if args[0] in ("primo", "secondo", "terzo"):
-					output = esami_condition(items, "anno", args[0])
+		# Study case
+		if len(args) == 1:
 
-				elif args[0] in ("prima", "seconda", "terza", "straordinaria"):
-					output = esami_condition(items, "sessione", args[0], True)
+			if args[0] in ("primo", "secondo", "terzo"):
+				output = esami_condition(items, "anno", args[0])
 
-				elif [item["insegnamento"].lower().find(args[0]) for item in items]:
-					output = esami_condition(items, "insegnamento", args[0])
+			elif args[0] in ("prima", "seconda", "terza", "straordinaria"):
+				output = esami_condition(items, "sessione", args[0], True)
 
-				output_str = check_output(output, esami_json)
+			elif [item["insegnamento"].lower().find(args[0]) for item in items]:
+				output = esami_condition(items, "insegnamento", args[0])
 
-			elif len(args) > 1:
+			output_str = check_output(output)
 
-				# Create an array of session and years if in arguments
-				sessions = list(set(args).intersection(("prima", "seconda", "terza", "straordinaria")))
-				years = list(set(args).intersection(("primo", "secondo", "terzo")))
+		elif len(args) > 1:
 
-				_years = {
-					"primo": "1° anno",
-					"secondo": "2° anno",
-					"terzo": "3° anno"
-				}
-				for i in range(len(years)):
-					years[i] = _years[years[i]]
+			# Create an array of session and years if in arguments
+			sessions = list(set(args).intersection(("prima", "seconda", "terza", "straordinaria")))
+			years = list(set(args).intersection(("primo", "secondo", "terzo")))
 
-				if sessions and years:
+			_years = {
+				"primo": "1° anno",
+				"secondo": "2° anno",
+				"terzo": "3° anno"
+			}
+			for i in range(len(years)):
+				years[i] = _years[years[i]]
+
+			if sessions and years:
+				for item in items:
+					if (item["anno"] in years) and ([session for session in sessions if [appeal for appeal in item[session] if appeal]]):
+						output.add(esami_output(item, sessions))
+
+			elif sessions and not years:
+				# If years array is empty and session not, the other word are subjects
+				subjects = [arg for arg in args if arg not in(sessions)]
+
+				if subjects:
 					for item in items:
-						if (item["anno"] in years) and ([session for session in sessions if [appeal for appeal in item[session] if appeal]]):
-							output.add(esami_output(item, sessions))
+						for subject in subjects:
+							if [session for session in sessions if [appeal for appeal in item[session] if appeal]] and subject in item["insegnamento"].lower():
+								output.add(esami_output(item, sessions))
 
-				elif sessions and not years:
-					# If years array is empty and session not, the other word are subjects
-					subjects = [arg for arg in args if arg not in(sessions)]
+			elif not sessions and not years:
+				for arg in args:
+					output = output.union(esami_condition(items, "insegnamento", arg))
 
-					if subjects:
-						for item in items:
-							for subject in subjects:
-								if [session for session in sessions if [appeal for appeal in item[session] if appeal]] and subject in item["insegnamento"].lower():
-									output.add(esami_output(item, sessions))
-
-							#List of session of all years [useless]
-							# else:
-							# 	if( [session for session in sessions if [appeal for appeal in item[session] if appeal]] ):
-							# 		output.add(esami_output(item, sessions))
-
-				elif not sessions and not years:
-					for arg in args:
-						output = output.union(esami_condition(items, "insegnamento", arg))
-
-				output_str = check_output(output, esami_json)
+			output_str = check_output(output)
 	else:
 		output_str = "Inserisci almeno uno dei seguenti parametri: giorno, materia, sessione (prima, seconda, terza, straordinaria)."
 

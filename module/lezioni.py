@@ -50,14 +50,7 @@ def dict_factory(cursor, row):
         d[col[0]] = row[idx]
     return d
 
-
 def lezioni_cmd(bot, update, args):
-
-    import logging
-
-    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
-    logger = logging.getLogger(__name__)
-
 
     output_str = "Poffarbacco, qualcosa non va. Segnalalo ai dev /contributors \n"
 

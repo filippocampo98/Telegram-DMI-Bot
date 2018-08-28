@@ -31,13 +31,35 @@ CREATE TABLE IF NOT EXISTS `subscriptions` (
 -- professors
 CREATE TABLE IF NOT EXISTS `professors` (
   "ID" INT(11) NOT NULL PRIMARY KEY,
-  "Ruolo" VARCHAR(255),
-  "Nome" VARCHAR(255),
-  "Cognome" VARCHAR(255),
-  "Scheda DMI" VARCHAR(255),
-  "Fax" VARCHAR(255),
-  "Telefono" VARCHAR(255),
-  "Email" VARCHAR(255),
-  "Ufficio" VARCHAR(255),
-  "Sito" VARCHAR(255)
+  "ruolo" VARCHAR(255),
+  "nome" VARCHAR(255),
+  "cognome" VARCHAR(255),
+  "scheda DMI" VARCHAR(255),
+  "fax" VARCHAR(255),
+  "telefono" VARCHAR(255),
+  "email" VARCHAR(255),
+  "ufficio" VARCHAR(255),
+  "sito" VARCHAR(255)
+);
+
+-- lessons
+CREATE TABLE IF NOT EXISTS `lessons` (
+  `nome` VARCHAR(255),
+  `giorno_settimana` VARCHAR(255),
+  `ora_inizio` VARCHAR(255),
+  `ora_fine` VARCHAR(255),
+  `aula` INT(4),
+  `anno` INT(1),
+  `semestre` VARCHAR(255)
+);
+
+-- exams
+CREATE TABLE IF NOT EXISTS `exams` (
+  `anno` INT(2),
+  `docenti` VARCHAR(255),
+  `insegnamento` VARCHAR(255),
+  `prima` VARCHAR(255),
+  `seconda` VARCHAR(255),
+  `terza` VARCHAR(255),
+  `straordinaria` VARCHAR(255)
 );

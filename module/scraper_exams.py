@@ -4,6 +4,7 @@ import bs4
 import requests
 import json
 import logging
+import sqlite3
 from time import localtime, strftime
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -57,11 +58,6 @@ def scrape_exams():
 		]
 	}
 
-	status = {
-		"length": "" ,
-		"lastupdate": strftime("%Y-%d-%m %H:%M:%S",localtime())
-	}
-
 	courses = ["l-31", "lm-18", "l-35", "lm-40"]
 	arr = ["prima", "seconda", "terza"]
 	items = []
@@ -86,13 +82,18 @@ def scrape_exams():
 				elif not tr.has_attr("class") and firstd.has_attr("class"):
 					year = firstd.b.text
 
-	status["length"] = len(items)
-	finaljson = {
-		"status" : status,
-		"items" : items
-	}
+	columns = "`" + "`, `".join(items[0].keys()) + "`"
 
-	with open('data/json/esami.json', 'w') as outfile:
-		json.dump(finaljson, outfile, sort_keys=True, indent=4)
+	values = ""
+	for i in items:
+		values += '("'+'", "'.join(str(v) for v in i.values())+'"),'
+	values = values[:-1]
+
+	query = "INSERT INTO exams ({}) VALUES {}".format(columns, values)
+
+	conn = sqlite3.connect('data/DMI_DB.db')
+	conn.execute('DELETE FROM `exams`;') # TRUNCATE professors
+	conn.execute(query)
+	conn.commit()
 
 	logger.info("Exams loaded.")

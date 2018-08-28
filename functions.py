@@ -72,7 +72,7 @@ def lezioni(bot, update, args, *m):
 
 def esami(bot, update, args):
     check_log(bot, update, "esami")
-    message_text = esami_cmd(args, "data/json/esami.json")
+    message_text = esami_cmd(args)
     if len(message_text) > 4096:
         send_message(bot, update, message_text)
     else:
