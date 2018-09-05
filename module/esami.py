@@ -70,6 +70,7 @@ def esami_cmd(args):
 		cur = conn.cursor()
 		cur.execute("SELECT * FROM exams")
 		items = cur.fetchall()
+		conn.close()
 
 		# Clear arguments - Trasform all to lower case - Remove word 'anno', 'sessione'
 		args = [x.lower() for x in args if len(x) > 2]

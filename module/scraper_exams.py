@@ -95,5 +95,6 @@ def scrape_exams():
 	conn.execute('DELETE FROM `exams`;') # TRUNCATE professors
 	conn.execute(query)
 	conn.commit()
+	conn.close()
 
 	logger.info("Exams loaded.")

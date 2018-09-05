@@ -62,6 +62,7 @@ def lezioni_cmd(bot, update, args):
         cur = conn.cursor()
         cur.execute("SELECT * FROM lessons")
         items = cur.fetchall()
+        conn.close()
 
         daylist = list(calendar.day_name)
         daylist = [x.lower().replace('ì', 'i') for x in daylist]

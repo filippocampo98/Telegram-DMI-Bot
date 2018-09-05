@@ -41,6 +41,7 @@ def prof_cmd(profs):
             output_str = '\n'.join(list(output))
         else:
             output_str = "Nessun risultato trovato :(\n"
+        conn.close()
     else:
         output_str = "La sintassi del comando è: /prof <nomeprofessore>\n"
 

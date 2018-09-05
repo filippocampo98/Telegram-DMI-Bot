@@ -85,5 +85,6 @@ def scrape_lessons():
     conn.execute('DELETE FROM `lessons`;') # TRUNCATE lessons
     conn.execute(query)
     conn.commit()
+    conn.close()
 
     logger.info("Lessons loaded.")

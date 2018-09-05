@@ -137,6 +137,7 @@ def mensa_subscription(bot, update):
     else:
         conn.execute("INSERT INTO 'subscriptions' (`chatid`, `mensa`) VALUES ({}, {});".format(chat_id, flag_mensa))
     conn.commit()
+    conn.close()
 
     if flag_mensa != 0:
         keyboard = [[]]
@@ -174,6 +175,7 @@ def mensa_weekend(bot, update):
         message_text = "Notifiche abilitate nel weekend!"
         conn.execute("UPDATE 'subscriptions' SET `mensa`={} WHERE `chatid`={};".format(mensa, chat_id))
     conn.commit()
+    conn.close()
     bot.editMessageText(chat_id=chat_id, text=message_text, message_id=update.callback_query.message.message_id)
 
 def mensa_notify_lunch(bot, update):
@@ -218,6 +220,7 @@ def mensa_notify_lunch(bot, update):
     		logger.error('Unauthorized id. Trying to remove from the chat_id list from subscriptions')
     	except Exception as error:
     		open("logs/errors.txt", "a+").write(str(error)+" "+str(row[0])+"\n")
+    conn.close()
 
 def mensa_notify_dinner(bot, update):
     wb, sh, weekx, weeky, rprimi, rsecont = mensa_get_menu()
@@ -259,3 +262,4 @@ def mensa_notify_dinner(bot, update):
     		logger.error('Unauthorized id. Trying to remove from the chat_id list from subscriptions')
     	except Exception as error:
     		open("logs/errors.txt", "a+").write(str(error)+" "+str(row[0])+"\n")
+    conn.close()

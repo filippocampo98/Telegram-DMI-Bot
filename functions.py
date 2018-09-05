@@ -40,7 +40,6 @@ from module.mensa import *
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-conn = sqlite3.connect('data/DMI_DB.db')
 
 # Token
 tokenconf = open('config/token.conf', 'r').read()
@@ -192,6 +191,7 @@ def forum_cmd(text):
 
 
 def callback(bot, update):
+    conn = sqlite3.connect('data/DMI_DB.db')
     keyboard2 = [[]]
     icona = ""
     number_row = 0
@@ -332,10 +332,14 @@ def callback(bot, update):
             sys.exit(0)
 
         os.waitpid(pid, 0)
+    conn.close()
+
 
 
 def request(bot, update):
+    conn = sqlite3.connect('data/DMI_DB.db')
     chat_id = update.message.chat_id
+
     if chat_id > 0:
         # if we do not find any chat_id in the db
         if not conn.execute("SELECT Chat_id FROM Chat_id_List WHERE Chat_id = " + str(chat_id)).fetchone():
@@ -359,10 +363,13 @@ def request(bot, update):
         message_text = "Non è possibile utilizzare /request in un gruppo"
 
     bot.sendMessage(chat_id=chat_id, text=message_text)
+    conn.close()
 
 
 def adddb(bot, update):
+    conn = sqlite3.connect('data/DMI_DB.db')
     chat_id = update.message.chat_id
+
     if (chat_id == 26349488 or chat_id == -1001095167198 or chat_id == 46806104):
         # /add nome cognome e-mail username chatid
         array_value = update.message.text.split(" ")
@@ -378,10 +385,13 @@ def adddb(bot, update):
             conn.commit()
         else:
             bot.sendMessage(chat_id=chat_id, text="/adddb <nome> <cognome> <e-mail> <username> <chat_id>")
+    conn.close()
 
 
 def drive(bot, update):
     check_log(bot, update, "drive")
+    conn = sqlite3.connect('data/DMI_DB.db')
+
     settings_file = "config/settings.yaml"
     gauth = GoogleAuth(settings_file=settings_file)
     gauth.CommandLineAuth()
@@ -425,6 +435,7 @@ def drive(bot, update):
             bot.sendMessage(chat_id=chat_id, text="DMI UNICT - Appunti & Risorse:", reply_markup=reply_markup3)
         else:
             bot.sendMessage(chat_id=chat_id, text="🔒 Non hai i permessi per utilizzare la funzione /drive,\n Utilizzare il comando /request <nome> <cognome> <e-mail> (il nome e il cognome devono essere scritti uniti Es: Di mauro -> Dimauro) ")
+    conn.close()
 
 
 # CallbackQueryHandler
@@ -695,10 +706,11 @@ def enablenews(bot, update):
 
 
 def stats_gen(bot, update, days):
-    query = ""
-    chat_id = update.message.chat_id
     conn = sqlite3.connect('data/DMI_DB.db')
+    chat_id = update.message.chat_id
+    query = ""
     text = ""
+
     if days == 0:
         text += "Record Globale:\n"
         query = "SELECT Type, count(chat_id) FROM stat_list GROUP BY Type ORDER BY Type;"
@@ -710,7 +722,7 @@ def stats_gen(bot, update, days):
         if str(row[0]) != "leiCheNePensaSignorina" and str(row[0]) != "smonta_portoni" and str(row[0]) != "santino" and str(row[0]) != "bladrim" and str(row[0]) != "prof_sticker":
             text += str(row[1]) + ": " + str(row[0]) + "\n"
     bot.sendMessage(chat_id=chat_id, text=text)
-
+    conn.close()
 
 def stats(bot, update):
     if(len(update['message']['text'].split(' ')) == 2):
@@ -733,10 +745,11 @@ def check_log(bot, update, type, callback=0):
 
     if (config_map['debug']['disable_db'] == 0):
         chat_id = update.message.chat_id
-        conn = sqlite3.connect('data/DMI_DB.db')
         today = str(date.today())
+        conn = sqlite3.connect('data/DMI_DB.db')
         conn.execute("INSERT INTO stat_list VALUES ('"+ str(type) + "',"+str(chat_id)+",'"+str(today)+" ')")
         conn.commit()
+        conn.close()
 
     if (config_map['debug']['disable_chatid_logs'] == 0):
         a_log = open("logs/chatid.txt", "a+")

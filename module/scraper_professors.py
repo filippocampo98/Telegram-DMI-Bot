@@ -99,5 +99,6 @@ def scrape_prof():
     conn.execute('DELETE FROM `professors`;') # TRUNCATE professors
     conn.execute(query)
     conn.commit()
+    conn.close()
 
     logger.info("Professors loaded.")
