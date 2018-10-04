@@ -2,3 +2,4 @@ python-telegram-bot
 pydrive
 requests
 xlrd
+beautifulsoup4
