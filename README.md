@@ -23,7 +23,6 @@ If you want to test the bot by creating your personal istance, follow this steps
 
 - Python 3
 - python-pip
-- python-bs4
 - language-pack-it
 
 #### To install with *pip*
@@ -32,6 +31,7 @@ If you want to test the bot by creating your personal istance, follow this steps
 - pydrive
 - requests
 - xlrd
+- beautifulsoup4
 
 ### Special functions
 
