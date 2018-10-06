@@ -30,7 +30,7 @@ def logging_message(bot, update):
 
 
 def main():
-	updater = Updater(TOKEN)
+	updater = Updater(TOKEN, request_kwargs={'read_timeout': 20, 'connect_timeout': 20})
 	dp = updater.dispatcher
 	dp.add_handler(MessageHandler(Filters.all, logging_message),1)
 	dp.add_handler(CallbackQueryHandler(button_handler))
