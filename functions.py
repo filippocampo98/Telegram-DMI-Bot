@@ -744,12 +744,12 @@ def stats_tot(bot, update):
 
 
 def check_log(bot, update, type, callback=0):
+    chat_id = update.message.chat_id
 
     if callback:
         update = update.callback_query
 
     if (config_map['debug']['disable_db'] == 0):
-        chat_id = update.message.chat_id
         today = str(date.today())
         conn = sqlite3.connect('data/DMI_DB.db')
         conn.execute("INSERT INTO stat_list VALUES ('"+ str(type) + "',"+str(chat_id)+",'"+str(today)+" ')")
