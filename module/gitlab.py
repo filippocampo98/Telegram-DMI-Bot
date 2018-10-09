@@ -10,7 +10,6 @@ import sqlite3
 import logging
 import base64
 import gitlab
-import plyvel
 import json
 import yaml
 import os

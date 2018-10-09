@@ -3,3 +3,4 @@ pydrive
 requests
 xlrd
 beautifulsoup4
+python-gitlab
