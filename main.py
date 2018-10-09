@@ -90,6 +90,10 @@ def main():
 	  dp.add_handler(RegexHandler('/adddb',adddb))
 	  dp.add_handler(RegexHandler('/request',request))
 
+	if config_map['debug']['disable_gitlab'] == 0:
+		dp.add_handler(CommandHandler('git', git))
+		dp.add_handler(CommandHandler('gitlab', git))
+
 	if (config_map['debug']['disable_db'] == 0):
 	  dp.add_handler(CommandHandler('stats',stats))
 	  dp.add_handler(CommandHandler('stats_tot',stats_tot))
