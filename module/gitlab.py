@@ -1,9 +1,3 @@
-"""
-    TODO:
-        - Fix large file upload by link
-        - Arrange buttons in a single row when possible
-"""
-
 from urllib.parse import quote
 import requests
 import sqlite3
@@ -30,7 +24,6 @@ with open('config/settings.yaml', 'r') as yaml_config:
 session = None
 api = None
 db = None
-
 
 # Formats
 formats = {
@@ -91,7 +84,6 @@ def get_chat_id(update):
         chat_id = update.message.chat_id
 
     return chat_id
-
 
 def get_subgroups(group_id):
     """
@@ -164,9 +156,9 @@ def explore_repository_tree(origin_id, path='/', db=None):
             item_extension = os.path.splitext(item['name'])[1].replace('.', '')
             format_icon = formats.get(item_extension, "📄")
 
-            buttons.append([InlineKeyboardButton("%s %s" % (format_icon, item['name']), callback_data='git_b_%s_%s' % (origin_id, item['id']))])
+            buttons.append(InlineKeyboardButton("%s %s" % (format_icon, item['name']), callback_data='git_b_%s_%s' % (origin_id, item['id'])))
         elif item['type'] == 'tree':
-            buttons.append([InlineKeyboardButton("🗂 %s" % item['name'], callback_data='git_t_%s_%s' % (origin_id, item['id']))])
+            buttons.append(InlineKeyboardButton("🗂 %s" % item['name'], callback_data='git_t_%s_%s' % (origin_id, item['id'])))
 
     return buttons
 
@@ -213,15 +205,40 @@ def download_blob_file(blob=None):
 
         blob_size = get_blob_file(parent_id, blob_id)['size']
 
-        if int(blob_size) < 1: #5e+7:
-            file_handle = open('file/%s' % blob_name, 'wb')
+        if int(blob_size) < 5e+7:
+            with open('file/%s' % blob_name, 'wb') as file_handle:
+                with session.get(download_url, stream=True) as download:
+                    file_handle.write(download.content)
 
-            with session.get(download_url, stream=True) as download:
-                file_handle.write(download.content)
-
-            return file_handle
+            return open('file/%s' % blob_name, 'rb')
         return download_url
     return None
+
+def format_keyboard_buttons(buttons=[]):
+    """
+        Place the buttons on multiple lines if possible
+
+        Parameters:
+            buttons: Array containing the buttons to display (default: [])
+    """
+
+    keyboard = [[]]
+    number_row = 0
+    number_array = 0
+
+    for button in buttons:
+        if isinstance(button, InlineKeyboardButton):
+            if number_row >= 1:
+                keyboard.append([button])
+                number_array += 1
+                number_row = 0
+            else:
+                keyboard[number_array].append(button)
+                number_row += 1
+        else:
+            keyboard.append([button[0]])
+
+    return keyboard
 
 def send_message(bot, update, message, buttons=[[]], blob=None):
     """
@@ -238,17 +255,21 @@ def send_message(bot, update, message, buttons=[[]], blob=None):
     chat_id = get_chat_id(update)
 
     if chat_id:
-        reply_markup = InlineKeyboardMarkup(buttons)
-        
         if blob:
             download = download_blob_file(blob)
 
             if isinstance(download, io.IOBase):
                 bot.sendChatAction(chat_id=chat_id, action="UPLOAD_DOCUMENT")
-                bot.sendDocument(chat_id=chat_id, document=open('file/%s' % blob['name'], 'rb'))
+                bot.sendDocument(chat_id=chat_id, document=download)
+                
+                download.close()
+                os.remove('file/%s' % blob['name'])
             elif isinstance(download, str):
                 bot.sendMessage(chat_id=chat_id, text="⚠️ Il file è troppo grande per il download diretto!\nScaricalo al seguente link:\n%s" % download)
         else:
+            buttons = format_keyboard_buttons(buttons)
+            reply_markup = InlineKeyboardMarkup(buttons)
+
             bot.sendMessage(
                 chat_id=chat_id,
                 text=message,
@@ -275,14 +296,14 @@ def gitlab_handler(bot, update, data=None):
     origin_id = None
 
     parent = (GITLAB_ROOT_GROUP, "DMI UNICT - Appunti & Risorse:")
-    buttons = [[]]
+    buttons = []
 
     if not data:
         subgroups = get_subgroups(GITLAB_ROOT_GROUP)
         
         for subgroup in subgroups:
             db.execute("INSERT OR REPLACE INTO gitlab (id, parent_id, name, type) VALUES ('%s', '%s', '%s', 'subgroup')" % (subgroup.id, subgroup.parent_id, subgroup.name))
-            buttons.append([InlineKeyboardButton("🗂 %s" % subgroup.name, callback_data='git_s_%s' % subgroup.id)])
+            buttons.append(InlineKeyboardButton("🗂 %s" % subgroup.name, callback_data='git_s_%s' % subgroup.id))
     else:
         action, origin_id, blob_id = (data.split('_') + [None]*3)[:3]
 
@@ -308,13 +329,13 @@ def gitlab_handler(bot, update, data=None):
             if subgroups:
                 for subgroup in subgroups:
                     db.execute("INSERT OR REPLACE INTO gitlab (id, parent_id, name, type) VALUES ('%s', '%s', '%s', 'subgroup')" % (subgroup.id, subgroup.parent_id, subgroup.name))
-                    buttons.append([InlineKeyboardButton("🗂 %s" % subgroup.name, callback_data='git_s_%s' % subgroup.id)])
+                    buttons.append(InlineKeyboardButton("🗂 %s" % subgroup.name, callback_data='git_s_%s' % subgroup.id))
             else:
                 projects = get_projects(origin_id)
 
                 for project in projects:
                     db.execute("INSERT OR REPLACE INTO gitlab (id, parent_id, name, web_url, type) VALUES ('%s', '%s', '%s', '%s', 'project')" % (project.id, origin_id, project.name, project.web_url))
-                    buttons.append([InlineKeyboardButton("🗂 %s" % project.name, callback_data='git_p_%s' % project.id)])
+                    buttons.append(InlineKeyboardButton("🗂 %s" % project.name, callback_data='git_p_%s' % project.id))
         elif action == 'p':
             buttons.extend(explore_repository_tree(origin_id, '/', db))
         elif action == 't':

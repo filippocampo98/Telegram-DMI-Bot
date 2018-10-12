@@ -130,6 +130,7 @@ def help_cmd():
     output += "/urp - URP studenti\n\n"
     output += "~Bot~\n"
     output += "📂 /drive - accedi a drive\n"
+    output += "📂 /git - /gitlab - accedi a gitlab\n"
     output += "/disablenews \n"
     output += "/enablenews\n"
     output += "/contributors"
@@ -744,11 +745,10 @@ def stats_tot(bot, update):
 
 
 def check_log(bot, update, type, callback=0):
-    chat_id = update.message.chat_id
-
     if callback:
         update = update.callback_query
 
+    chat_id = update.message.chat_id
     if (config_map['debug']['disable_db'] == 0):
         today = str(date.today())
         conn = sqlite3.connect('data/DMI_DB.db')
