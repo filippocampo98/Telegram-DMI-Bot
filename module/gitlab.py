@@ -1,3 +1,4 @@
+from telegram.ext import run_async
 from urllib.parse import quote
 import requests
 import sqlite3
@@ -6,6 +7,7 @@ import base64
 import gitlab
 import json
 import yaml
+import time
 import os
 import io
 
@@ -150,7 +152,7 @@ def explore_repository_tree(origin_id, path='/', db=None):
             continue
 
         if db:
-            db.execute("INSERT OR REPLACE INTO gitlab (id, parent_id, name, pathname, type) VALUES ('%s', '%s', '%s', '%s', '%s')" % (item['id'], origin_id, item['name'], item['path'], item['type']))
+            db.execute("INSERT OR REPLACE INTO gitlab (id, parent_id, name, pathname, type) VALUES (?, ?, ?, ?, ?)", (item['id'], origin_id, item['name'], item['path'], item['type']))
 
         if item['type'] == 'blob':
             item_extension = os.path.splitext(item['name'])[1].replace('.', '')
@@ -178,11 +180,50 @@ def get_blob_file(project_id, blob_id):
     except gitlab.GitlabGetError:
         return None
 
-def download_blob_file(blob=None):
+@run_async
+def download_blob_file_async_internal(bot, update, blob_id, blob_name, db_result):
+    """
+        Download a file asynchronously and send it if the size is less than 50MB, otherwise send the download link
+
+        Parameters:
+            bot: "bot" object of Telegram API
+            update: "update" object of Telegram API
+            blob_id: The id of file to download
+            blob_name: The name of file to download
+            db_result: The result of query to achieve web_url, pathname and parent_id
+    """
+
+    global session
+
+    chat_id = get_chat_id(update)
+
+    if chat_id:
+        web_url, pathname, parent_id = db_result
+        blob_size = get_blob_file(parent_id, blob_id)['size']
+        download_url = "%s/raw/master/%s" % (web_url, quote(pathname))
+
+        if int(blob_size) < 6e+7:
+            file_name = "%s_%s" % (time.time(), blob_name)
+
+            with open('file/%s' % file_name, 'wb') as file_handle:
+                with session.get(download_url) as download:
+                    file_handle.write(download.content)
+
+            with open('file/%s' % file_name, 'rb') as downloaded_file:
+                bot.sendChatAction(chat_id=chat_id, action="UPLOAD_DOCUMENT")
+                bot.sendDocument(chat_id=chat_id, document=downloaded_file)
+            
+            os.remove('file/%s' % file_name)
+        else:
+            bot.sendMessage(chat_id=chat_id, text="⚠️ Il file è troppo grande per il download diretto!\nScaricalo al seguente link:\n%s" % download)
+
+def download_blob_file_async(bot, update, blob=None):
     """
         Return the handle to the file if below the maximum size otherwise the download link
 
         Parameters:
+            bot: "bot" object of Telegram API
+            update: "update" object of Telegram API
             blob: Object containing ID and name of a blob (default: None)
     """
 
@@ -200,19 +241,14 @@ def download_blob_file(blob=None):
             (SELECT pathname FROM gitlab WHERE id = '{0}'),\
             (SELECT parent_id FROM gitlab WHERE id = '{0}')"
 
-        web_url, pathname, parent_id = db.execute(query.format(blob_id)).fetchone()
-        download_url = "%s/raw/master/%s" % (web_url, quote(pathname))
-
-        blob_size = get_blob_file(parent_id, blob_id)['size']
-
-        if int(blob_size) < 5e+7:
-            with open('file/%s' % blob_name, 'wb') as file_handle:
-                with session.get(download_url, stream=True) as download:
-                    file_handle.write(download.content)
-
-            return open('file/%s' % blob_name, 'rb')
-        return download_url
-    return None
+        db_result = db.execute(query.format(blob_id)).fetchone()
+        download_blob_file_async_internal(
+            bot,
+            update,
+            blob_id,
+            blob_name,
+            db_result
+        )
 
 def format_keyboard_buttons(buttons=[]):
     """
@@ -249,23 +285,14 @@ def send_message(bot, update, message, buttons=[[]], blob=None):
             update: "update" object of Telegram API
             message: Message text
             buttons: Array of answer buttons (default: [[]])
-            blob: Object that specifies the blob file (default: None)
+            blob: Object that specifies the blob file to download (default: None)
     """
 
     chat_id = get_chat_id(update)
 
     if chat_id:
         if blob:
-            download = download_blob_file(blob)
-
-            if isinstance(download, io.IOBase):
-                bot.sendChatAction(chat_id=chat_id, action="UPLOAD_DOCUMENT")
-                bot.sendDocument(chat_id=chat_id, document=download)
-                
-                download.close()
-                os.remove('file/%s' % blob['name'])
-            elif isinstance(download, str):
-                bot.sendMessage(chat_id=chat_id, text="⚠️ Il file è troppo grande per il download diretto!\nScaricalo al seguente link:\n%s" % download)
+            download_blob_file_async(bot, update, blob)
         else:
             buttons = format_keyboard_buttons(buttons)
             reply_markup = InlineKeyboardMarkup(buttons)
@@ -302,7 +329,7 @@ def gitlab_handler(bot, update, data=None):
         subgroups = get_subgroups(GITLAB_ROOT_GROUP)
         
         for subgroup in subgroups:
-            db.execute("INSERT OR REPLACE INTO gitlab (id, parent_id, name, type) VALUES ('%s', '%s', '%s', 'subgroup')" % (subgroup.id, subgroup.parent_id, subgroup.name))
+            db.execute("INSERT OR REPLACE INTO gitlab (id, parent_id, name, type) VALUES (?, ?, ?, ?)", (subgroup.id, subgroup.parent_id, subgroup.name, 'subgroup'))
             buttons.append(InlineKeyboardButton("🗂 %s" % subgroup.name, callback_data='git_s_%s' % subgroup.id))
     else:
         action, origin_id, blob_id = (data.split('_') + [None]*3)[:3]
@@ -328,13 +355,13 @@ def gitlab_handler(bot, update, data=None):
 
             if subgroups:
                 for subgroup in subgroups:
-                    db.execute("INSERT OR REPLACE INTO gitlab (id, parent_id, name, type) VALUES ('%s', '%s', '%s', 'subgroup')" % (subgroup.id, subgroup.parent_id, subgroup.name))
+                    db.execute("INSERT OR REPLACE INTO gitlab (id, parent_id, name, type) VALUES (?, ?, ?, ?)", (subgroup.id, subgroup.parent_id, subgroup.name, 'subgroup'))
                     buttons.append(InlineKeyboardButton("🗂 %s" % subgroup.name, callback_data='git_s_%s' % subgroup.id))
             else:
                 projects = get_projects(origin_id)
 
                 for project in projects:
-                    db.execute("INSERT OR REPLACE INTO gitlab (id, parent_id, name, web_url, type) VALUES ('%s', '%s', '%s', '%s', 'project')" % (project.id, origin_id, project.name, project.web_url))
+                    db.execute("INSERT OR REPLACE INTO gitlab (id, parent_id, name, web_url, type) VALUES (?, ?, ?, ?, ?)", (project.id, origin_id, project.name, project.web_url, 'project'))
                     buttons.append(InlineKeyboardButton("🗂 %s" % project.name, callback_data='git_p_%s' % project.id))
         elif action == 'p':
             buttons.extend(explore_repository_tree(origin_id, '/', db))
