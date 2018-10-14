@@ -368,7 +368,7 @@ def request(bot, update):
     conn.close()
 
 
-def adddb(bot, update):
+def add_db(bot, update):
     conn = sqlite3.connect('data/DMI_DB.db')
     chat_id = update.message.chat_id
 
