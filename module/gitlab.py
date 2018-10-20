@@ -8,6 +8,7 @@ import gitlab
 import json
 import yaml
 import time
+import re
 import os
 import io
 
@@ -176,7 +177,17 @@ def get_blob_file(project_id, blob_id):
     global api
 
     try:
-        return api.projects.get(project_id).repository_blob(blob_id)
+        blob_file = api.projects.get(project_id).repository_blob(blob_id)
+        blob_content = base64.b64decode(blob_file['content']).decode()
+        blob_size = blob_file['size']
+
+        if blob_content.startswith('version https://git-lfs.github.com/spec/v1'):
+            blob_size = re.findall('size (\d+)?', blob_content)[0]
+        
+        return {
+            'size': blob_size,
+            'content': blob_content
+        }
     except gitlab.GitlabGetError:
         return None
 
@@ -199,14 +210,14 @@ def download_blob_file_async_internal(bot, update, blob_id, blob_name, db_result
 
     if chat_id:
         web_url, pathname, parent_id = db_result
-        blob_size = get_blob_file(parent_id, blob_id)['size']
+        blob_info = get_blob_file(parent_id, blob_id)
         download_url = "%s/raw/master/%s" % (web_url, quote(pathname))
 
-        if int(blob_size) < 6e+7:
+        if int(blob_info['size']) < 4.5e+7:
             file_name = "%s_%s" % (time.time(), blob_name)
 
             with open('file/%s' % file_name, 'wb') as file_handle:
-                with session.get(download_url) as download:
+                with session.get(download_url, stream=True) as download:
                     file_handle.write(download.content)
 
             with open('file/%s' % file_name, 'rb') as downloaded_file:
@@ -215,7 +226,7 @@ def download_blob_file_async_internal(bot, update, blob_id, blob_name, db_result
             
             os.remove('file/%s' % file_name)
         else:
-            bot.sendMessage(chat_id=chat_id, text="⚠️ Il file è troppo grande per il download diretto!\nScaricalo al seguente link:\n%s" % download)
+            bot.sendMessage(chat_id=chat_id, text="⚠️ Il file è troppo grande per il download diretto!\nScaricalo al seguente link:\n%s" % download_url)
 
 def download_blob_file_async(bot, update, blob=None):
     """
