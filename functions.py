@@ -35,6 +35,7 @@ from module.professori import prof_cmd
 from module.scraper_exams import scrape_exams
 from module.scraper_lessons import scrape_lessons
 from module.scraper_professors import scrape_prof
+from module.scraper_notices import scrape_notices
 from module.mensa import *
 from module.gitlab import gitlab_handler
 
@@ -783,6 +784,8 @@ def send_errors(bot, update):
 
 
 def avviso(bot, job):
+    scrape_notices()
+    
     if os.path.isfile("data/avviso.dat"):
         testo = open("data/avviso.dat").read()
         if testo != "":
