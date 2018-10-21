@@ -104,3 +104,5 @@ This project is made possible thanks to the contributions of:
 - [Pierpaolo Pecoraio](https://github.com/Pierpaolo791)
 - [Alessandro Catalano](https://github.com/Wornairz)
 - [Davide Carnemolla](https://github.com/daxcpp)
+- [Salvo Distefano](https://github.com/RayperZ)
+
