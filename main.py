@@ -35,7 +35,7 @@ def main():
 	dp.add_handler(MessageHandler(Filters.all, logging_message),1)
 	dp.add_handler(CallbackQueryHandler(button_handler))
 
-  	#Easter Egg
+	#Easter Egg
 	dp.add_handler(CommandHandler('smonta_portoni',smonta_portoni))
 	dp.add_handler(CommandHandler('santino',santino))
 	dp.add_handler(CommandHandler('prof_sticker' ,prof_sticker))
@@ -43,7 +43,7 @@ def main():
 	dp.add_handler(CommandHandler('leiCheNePensaSignorina',lei_che_ne_pensa_signorina))
 	# dp.add_handler(RegexHandler('/forum',forum_bot))
 
-  	#Informative command
+	#Informative command
 	dp.add_handler(CommandHandler('sdidattica', lambda bot, update: informative_callback(bot, update, 'sdidattica')))
 	dp.add_handler(CommandHandler('sstudenti', lambda bot, update: informative_callback(bot, update, 'sstudenti')))
 	dp.add_handler(CommandHandler('cea', lambda bot, update: informative_callback(bot, update, 'cea')))
@@ -86,19 +86,26 @@ def main():
 	j.run_daily(mensa_notify_dinner, datetime.time(18, 45, 00), name='At 18:45') 	# job_mensa_dinner
 
 	if (config_map['debug']['disable_drive'] == 0):
-	  dp.add_handler(CommandHandler('drive',drive))
-	  dp.add_handler(RegexHandler('/adddb',adddb))
-	  dp.add_handler(RegexHandler('/request',request))
+		dp.add_handler(CommandHandler('drive',drive))
+
+	if config_map['debug']['disable_gitlab'] == 0:
+		dp.add_handler(CommandHandler('git', git))
+		dp.add_handler(CommandHandler('gitlab', git))
+
+	if	config_map['debug']['disable_drive'] == 0 or \
+		config_map['debug']['disable_gitlab'] == 0:
+			dp.add_handler(RegexHandler('/request', request))
+			dp.add_handler(RegexHandler('/add_db', add_db))
 
 	if (config_map['debug']['disable_db'] == 0):
-	  dp.add_handler(CommandHandler('stats',stats))
-	  dp.add_handler(CommandHandler('stats_tot',stats_tot))
+		dp.add_handler(CommandHandler('stats',stats))
+		dp.add_handler(CommandHandler('stats_tot',stats_tot))
 
 	if (config_map['debug']['disable_chatid_logs'] == 0):
-	  dp.add_handler(RegexHandler('/news',news_))
-	  dp.add_handler(CommandHandler('spamnews',spamnews))
-	  dp.add_handler(CommandHandler('disablenews',disablenews))
-	  dp.add_handler(CommandHandler('enablenews',enablenews))
+		dp.add_handler(RegexHandler('/news',news_))
+		dp.add_handler(CommandHandler('spamnews',spamnews))
+		dp.add_handler(CommandHandler('disablenews',disablenews))
+		dp.add_handler(CommandHandler('enablenews',enablenews))
 
 	dp.add_handler(CallbackQueryHandler(callback))
 

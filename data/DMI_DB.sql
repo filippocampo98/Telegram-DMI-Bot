@@ -63,3 +63,14 @@ CREATE TABLE IF NOT EXISTS `exams` (
   `terza` VARCHAR(255),
   `straordinaria` VARCHAR(255)
 );
+
+-- gitlab
+CREATE TABLE "gitlab" (
+  `id` TEXT NOT NULL UNIQUE,
+  `parent_id` INTEGER,
+  `pathname` TEXT,
+  `web_url` TEXT,
+  `name` TEXT,
+  `type` TEXT NOT NULL,
+  PRIMARY KEY(`id`)
+)

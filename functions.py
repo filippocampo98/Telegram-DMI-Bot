@@ -36,6 +36,7 @@ from module.scraper_exams import scrape_exams
 from module.scraper_lessons import scrape_lessons
 from module.scraper_professors import scrape_prof
 from module.mensa import *
+from module.gitlab import gitlab_handler
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -129,6 +130,7 @@ def help_cmd():
     output += "/urp - URP studenti\n\n"
     output += "~Bot~\n"
     output += "📂 /drive - accedi a drive\n"
+    output += "📂 /git - /gitlab - accedi a gitlab\n"
     output += "/disablenews \n"
     output += "/enablenews\n"
     output += "/contributors"
@@ -366,7 +368,7 @@ def request(bot, update):
     conn.close()
 
 
-def adddb(bot, update):
+def add_db(bot, update):
     conn = sqlite3.connect('data/DMI_DB.db')
     chat_id = update.message.chat_id
 
@@ -458,6 +460,9 @@ def button_handler(bot, update):
     elif data.startswith("Drive_"):
         callback(bot, update)
 
+    elif data.startswith('git_'):
+        gitlab_handler(bot, update, data.replace('git_', ''))
+
     elif (data == "mensa_help"):
         mensa_cmd(bot, update.callback_query)
 
@@ -534,6 +539,7 @@ def help(bot, update):
     keyboard.append(
         [
             InlineKeyboardButton("📂 Drive",     callback_data="drive"),
+            InlineKeyboardButton("📂 GitLab",     callback_data="gitlab"),
             InlineKeyboardButton("Contributors", callback_data="contributors"),
         ]
     )
@@ -739,12 +745,11 @@ def stats_tot(bot, update):
 
 
 def check_log(bot, update, type, callback=0):
-
     if callback:
         update = update.callback_query
 
+    chat_id = update.message.chat_id
     if (config_map['debug']['disable_db'] == 0):
-        chat_id = update.message.chat_id
         today = str(date.today())
         conn = sqlite3.connect('data/DMI_DB.db')
         conn.execute("INSERT INTO stat_list VALUES ('"+ str(type) + "',"+str(chat_id)+",'"+str(today)+" ')")
@@ -819,3 +824,22 @@ def newscommand(bot, update):
         bot.sendMessage(chat_id=update.message.chat_id, text="Non ho nulla da mostrarti.")
     else:
         bot.sendMessage(chat_id=update.message.chat_id, text=news)
+
+
+def git(bot, update):
+    check_log(bot, update, "gitlab")
+
+    chat_id = update.message.chat_id
+    executed_command = update.message.text.split(' ')[0]
+
+    if chat_id < 0:
+        bot.sendMessage(chat_id=chat_id, text="❗️ La funzione %s non è ammessa nei gruppi" % executed_command)
+    else:
+        db = sqlite3.connect('data/DMI_DB.db')
+
+        if db.execute("SELECT Chat_id FROM 'Chat_id_List' WHERE Chat_id = %s" % chat_id).fetchone():
+            gitlab_handler(bot, update)
+        else:
+            bot.sendMessage(chat_id=chat_id, text="🔒 Non hai i permessi per utilizzare la funzione %s\nUtilizzare il comando /request <nome> <cognome> <e-mail> (il nome e il cognome devono essere scritti uniti Es: Di Mauro -> DiMauro)" % executed_command)
+        
+        db.close()
