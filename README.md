@@ -17,15 +17,15 @@ If you want to test the bot by creating your personal istance, follow this steps
 * **Send a message to your bot** on Telegram, even '/start' will do. If you don't, you could get an error
 * Copy the file data/DMI_DB.db.dist into data/DMI_DB.db to enable the database sqlite
 * Copy the file config/settings.yaml.dist into config/settings.yaml
-* Now you can launch "main.py" with your Python interpreter
+* Now you can launch "main.py" with your Python3 interpreter
 
 ### System requirements
 
 - Python 3
-- python-pip
+- python-pip3
 - language-pack-it
 
-#### To install with *pip*
+#### To install with *pip3*
 
 - python-telegram-bot
 - pydrive
