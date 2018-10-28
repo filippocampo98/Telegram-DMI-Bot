@@ -69,6 +69,7 @@ def main():
 	dp.add_handler(CommandHandler('rappresentanti_dmi', lambda bot, update: informative_callback(bot, update, 'rappresentanti_dmi')))
 	dp.add_handler(CommandHandler('rappresentanti_informatica', lambda bot, update: informative_callback(bot, update, 'rappresentanti_informatica')))
 	dp.add_handler(CommandHandler('rappresentanti_matematica', lambda bot, update: informative_callback(bot, update, 'rappresentanti_matematica')))
+	dp.add_handler(CommandHandler('report', report, pass_args=True))
 	dp.add_handler(CommandHandler('chatid',give_chat_id))
 	dp.add_handler(CommandHandler('send_log', send_log))
 	dp.add_handler(CommandHandler('send_chat_ids', send_chat_ids))

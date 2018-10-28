@@ -785,7 +785,7 @@ def send_errors(bot, update):
 
 def avviso(bot, job):
     scrape_notices()
-    
+
     if os.path.isfile("data/avviso.dat"):
         testo = open("data/avviso.dat").read()
         if testo != "":
@@ -844,5 +844,35 @@ def git(bot, update):
             gitlab_handler(bot, update)
         else:
             bot.sendMessage(chat_id=chat_id, text="🔒 Non hai i permessi per utilizzare la funzione %s\nUtilizzare il comando /request <nome> <cognome> <e-mail> (il nome e il cognome devono essere scritti uniti Es: Di Mauro -> DiMauro)" % executed_command)
-        
+
         db.close()
+
+def report(bot, update, args):
+    check_log(bot, update, "report")
+    chat_id = update.message.chat_id
+    chat_username = update.message.from_user.username
+    executed_command = update.message.text.split(' ')[0]
+
+
+    if chat_id < 0:
+        bot.sendMessage(chat_id=chat_id, text="! La funzione %s non è ammessa nei gruppi" % executed_command)
+    elif not chat_username:
+        bot.sendMessage(chat_id=chat_id, text="La funzione %s non è ammessa se non si dispone di un username." % executed_command)
+    else:
+        if  args:
+            db = sqlite3.connect('data/DMI_DB.db')
+            message = "⚠️Segnalazione⚠️\n"
+            if db.execute("SELECT Chat_id FROM 'Chat_id_List' WHERE Chat_id = %s" %chat_id).fetchone():
+                name = db.execute("SELECT Username,Nome,Cognome FROM 'Chat_id_List' WHERE Chat_id = %s" %chat_id)
+                row = name.fetchone()
+
+                message += "Username: @" + row[0] + "\n" + "Nome: " + row[1] + "\n" + "Cognome: " + row[2] + "\n" + " ".join(args)
+                bot.sendMessage(chat_id =-1001095167198, text = message)
+                bot.sendMessage(chat_id = chat_id, text = "Resoconto segnalazione: \n" + message + "\n Grazie per la segnalazione, un rappresentante ti contatterà nel minor tempo possibile.")
+
+                db.close()
+            else:
+                bot.sendMessage(chat_id=chat_id, text="🔒 Non hai i permessi per utilizzare la funzione %s\nUtilizzare il comando /request <nome> <cognome> <e-mail> (il nome e il cognome devono essere scritti uniti Es: Di Mauro -> DiMauro)" % executed_command)
+
+        else:
+            bot.sendMessage(chat_id = chat_id, text="Errore. Inserisci la tua segnalazione dopo /report (Ad esempio /report Invasione ingegneri in corso.)")
