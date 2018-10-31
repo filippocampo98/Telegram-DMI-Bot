@@ -658,6 +658,7 @@ def spamnews(bot, update):
 
         for chat_id in chat_ids:
             try:
+                # This command is rarely used. Only for IMPORTANT news. It is right to spam in groups
                 if not "+" in chat_id:
                     bot.sendMessage(chat_id=chat_id, text=news)
             except Unauthorized:
@@ -676,6 +677,8 @@ def spamnews(bot, update):
         list_chat_ids = '\n'.join(list_chat_ids)
         list_chat_ids = list_chat_ids.replace("\n\n", "\n")
         open('logs/chatid.txt', 'w').write(list_chat_ids)
+
+        spam_channel(bot, news)
 
         bot.sendMessage(chat_id=update.message.chat_id, text="News spammata!")
 
@@ -783,6 +786,13 @@ def send_errors(bot, update):
         bot.sendDocument(chat_id=-1001095167198, document=open('logs/errors.txt', 'rb'))
 
 
+def spam_channel(bot, message):
+    try:
+        bot.sendMessage(chat_id=config_map['news_channel'], text=message, parse_mode='HTML')
+    except Exception as error:
+        open("logs/errors.txt", "a+").write("{} {}\n".format(error, config_map['news_channel']))
+
+
 def avviso(bot, job):
     scrape_notices()
 
@@ -793,10 +803,14 @@ def avviso(bot, job):
             chat_ids = chat_ids.split("\n")
             for chat_id in chat_ids:
                 try:
-                    if not "+" in chat_id:
+                    # Ignore chat_id with disabled news. Ignore chat_id groups.
+                    if not chat_id.startswith(("+", "-")):
                         bot.sendMessage(chat_id=chat_id, text=testo, parse_mode='HTML')
                 except Exception as error:
                     open("logs/errors.txt", "a+").write(str(error) + " " + str(chat_id)+"\n")
+            
+            spam_channel(bot, testo)
+            
         os.remove("data/avviso.dat")
 
 

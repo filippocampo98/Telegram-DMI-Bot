@@ -125,6 +125,7 @@ config/settings.yaml
 data/DMI_DB.db
 module/*.pyc
 data/archivioAvvisi.dat
+data/avvisiInSospeso.dat
 data/avviso.dat
 pydrive
 pydrive/*
