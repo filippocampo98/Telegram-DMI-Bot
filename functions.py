@@ -353,6 +353,8 @@ def request(bot, update):
             if update['message']['from_user']['username']:
                 username = update['message']['from_user']['username']
 
+            update.message.text = re.sub('<|>', '', update.message.text)
+
             if len(update.message.text.split(" ")) == 4 and "@" in update.message.text.split(" ")[3] and "." in update.message.text.split()[3]:
                 text_send = str(update.message.text) + " " + username
                 keyboard.append([InlineKeyboardButton("Accetta", callback_data="Drive_"+str(chat_id))])
