@@ -5,12 +5,17 @@ import xlrd
 import datetime
 import sqlite3
 import logging
+import yaml
 from os.path import exists, join
 from collections import OrderedDict
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.error import Unauthorized
 
 logger = logging.getLogger(__name__)
+
+with open('config/settings.yaml', 'r') as yaml_config:
+    config_map = yaml.load(yaml_config)
+
 
 def scrap(bot,job):
 
@@ -222,6 +227,12 @@ def mensa_notify_lunch(bot, update):
     		open("logs/errors.txt", "a+").write(str(error)+" "+str(row[0])+"\n")
     conn.close()
 
+    if config_map['mensa_channel'] != "@channelusername":
+        try:
+            bot.sendMessage(chat_id=config_map['mensa_channel'], text="🍽 " + ind + messagep+ "\n" + messages + "\n" + messagec + "\n Powered by @DMI_Bot", parse_mode='HTML')
+        except Exception as error:
+            open("logs/errors.txt", "a+").write("{} {}\n".format(error, config_map['mensa_channel']))
+
 def mensa_notify_dinner(bot, update):
     wb, sh, weekx, weeky, rprimi, rsecont = mensa_get_menu()
 
@@ -263,3 +274,9 @@ def mensa_notify_dinner(bot, update):
     	except Exception as error:
     		open("logs/errors.txt", "a+").write(str(error)+" "+str(row[0])+"\n")
     conn.close()
+
+    if config_map['mensa_channel'] != "@channelusername":
+        try:
+            bot.sendMessage(chat_id=config_map['mensa_channel'], text="🍽" + ind + messagep+ "\n" + messages + "\n" + messagec + "\n Powered by @DMI_Bot", parse_mode='HTML')
+        except Exception as error:
+            open("logs/errors.txt", "a+").write("{} {}\n".format(error, config_map['mensa_channel']))

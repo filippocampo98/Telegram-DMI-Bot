@@ -808,9 +808,9 @@ def avviso(bot, job):
                         bot.sendMessage(chat_id=chat_id, text=testo, parse_mode='HTML')
                 except Exception as error:
                     open("logs/errors.txt", "a+").write(str(error) + " " + str(chat_id)+"\n")
-            
+
             spam_channel(bot, testo)
-            
+
         os.remove("data/avviso.dat")
 
 
