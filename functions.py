@@ -215,9 +215,9 @@ def callback(bot, update):
                 bot.sendDocument(chat_id=update.callback_query.data, document=open('data/README.pdf', 'rb'))
 
                 request_elimination_text = "Richiesta di " + str(array_value[1]) + " " + str(array_value[2]) + " estinta"
-                bot.editMessageText(text=request_elimination_text, chat_id=-1001095167198, message_id=update.callback_query.message.message_id)
+                bot.editMessageText(text=request_elimination_text, chat_id=config_map['dev_group_chatid'], message_id=update.callback_query.message.message_id)
 
-                bot.sendMessage(chat_id=-1001095167198, text=str(array_value[1]) + " " + str(array_value[2] + str(" è stato inserito nel database")))
+                bot.sendMessage(chat_id=config_map['dev_group_chatid'], text=str(array_value[1]) + " " + str(array_value[2] + str(" è stato inserito nel database")))
 
             elif len(array_value) == 4:
                 conn.execute("INSERT INTO 'Chat_id_List'('Chat_id','Nome','Cognome','Email') VALUES (" + update.callback_query.data + ",'" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "')")
@@ -225,11 +225,11 @@ def callback(bot, update):
                 bot.sendDocument(chat_id=update.callback_query.data, document=open('data/README.pdf', 'rb'))
 
             else:
-                bot.sendMessage(chat_id=-1001095167198, text=str("ERRORE INSERIMENTO: ") + str(update['callback_query']['message']['text']) + " " + str(update['callback_query']['data']))
+                bot.sendMessage(chat_id=config_map['dev_group_chatid'], text=str("ERRORE INSERIMENTO: ") + str(update['callback_query']['message']['text']) + " " + str(update['callback_query']['data']))
             conn.commit()
         except Exception as error:
             print(error)
-            bot.sendMessage(chat_id=-1001095167198, text=str("ERRORE INSERIMENTO: ") + str(update['callback_query']['message']['text']) + " " + str(update['callback_query']['data']))
+            bot.sendMessage(chat_id=config_map['dev_group_chatid'], text=str("ERRORE INSERIMENTO: ") + str(update['callback_query']['message']['text']) + " " + str(update['callback_query']['data']))
 
         text = ""
 
@@ -359,7 +359,7 @@ def request(bot, update):
                 text_send = str(update.message.text) + " " + username
                 keyboard.append([InlineKeyboardButton("Accetta", callback_data="Drive_"+str(chat_id))])
                 reply_markup2 = InlineKeyboardMarkup(keyboard)
-                bot.sendMessage(chat_id=-1001095167198, text=text_send, reply_markup=reply_markup2)
+                bot.sendMessage(chat_id=config_map['dev_group_chatid'], text=text_send, reply_markup=reply_markup2)
             else:
                 message_text = "Errore compilazione /request:\n Forma esatta: /request <nome> <cognome> <e-mail> (il nome e il cognome devono essere scritti uniti Es: Di mauro -> Dimauro)"
         else:
@@ -375,7 +375,7 @@ def add_db(bot, update):
     conn = sqlite3.connect('data/DMI_DB.db')
     chat_id = update.message.chat_id
 
-    if (chat_id == 26349488 or chat_id == -1001095167198 or chat_id == 46806104):
+    if (config_map['dev_group_chatid'] != 0 and chat_id == config_map['dev_group_chatid']):
         # /add nome cognome e-mail username chatid
         array_value = update.message.text.split(" ")
         if len(array_value) == 6:
@@ -584,7 +584,7 @@ def smonta_portoni(bot, update):
 
 def santino(bot, update):
     chat_id = update.message.chat_id
-    if (chat_id == -1001031103640 or chat_id == -1001095167198):
+    if (chat_id == -1001031103640 or chat_id == config_map['dev_group_chatid']):
         check_log(bot, update, "santino")
         message_text = EasterEgg.get_santino()
         bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
@@ -644,7 +644,7 @@ def shortit(message):
 
 
 def news_(bot, update):
-    if (update.message.chat_id == 26349488 or update.message.chat_id == 37967664 or update.message.chat_id == 58880997):
+    if (config_map['spamnews_news_chatid'] != 0 and update.message.chat_id == config_map['spamnews_news_chatid']):
         global news
         news = update.message.text.replace("/news ", "")
         news = update.message.text.replace("/news", "")
@@ -652,8 +652,7 @@ def news_(bot, update):
         bot.sendMessage(chat_id=update.message.chat_id, text="News Aggiornata!")
 
 def spamnews(bot, update):
-    admins = [58880997, 26349488, 37967664]
-    if update.message.chat_id in admins:
+    if (config_map['spamnews_news_chatid'] != 0 and update.message.chat_id == config_map['spamnews_news_chatid']):
         chat_ids = open('logs/chatid.txt', 'r').read()
         chat_ids = chat_ids.split("\n")
         list_chat_ids = chat_ids
@@ -774,18 +773,18 @@ def give_chat_id(bot, update):
 
 
 def send_log(bot, update):
-    if(update.message.chat_id == -1001095167198):
-        bot.sendDocument(chat_id=-1001095167198, document=open('logs/logs.txt', 'rb'))
+    if(config_map['dev_group_chatid'] != 0 and update.message.chat_id == config_map['dev_group_chatid']):
+        bot.sendDocument(chat_id=config_map['dev_group_chatid'], document=open('logs/logs.txt', 'rb'))
 
 
 def send_chat_ids(bot, update):
-    if(update.message.chat_id == -1001095167198):
-        bot.sendDocument(chat_id=-1001095167198, document=open('logs/chatid.txt', 'rb'))
+    if(config_map['dev_group_chatid'] != 0 and update.message.chat_id == config_map['dev_group_chatid']):
+        bot.sendDocument(chat_id=config_map['dev_group_chatid'], document=open('logs/chatid.txt', 'rb'))
 
 
 def send_errors(bot, update):
-    if(update.message.chat_id == -1001095167198):
-        bot.sendDocument(chat_id=-1001095167198, document=open('logs/errors.txt', 'rb'))
+    if(config_map['dev_group_chatid'] != 0 and update.message.chat_id == config_map['dev_group_chatid']):
+        bot.sendDocument(chat_id=config_map['dev_group_chatid'], document=open('logs/errors.txt', 'rb'))
 
 
 def spam_channel(bot, message):
@@ -883,7 +882,7 @@ def report(bot, update, args):
                 row = name.fetchone()
 
                 message += "Username: @" + row[0] + "\n" + "Nome: " + row[1] + "\n" + "Cognome: " + row[2] + "\n" + " ".join(args)
-                bot.sendMessage(chat_id =-1001095167198, text = message)
+                bot.sendMessage(chat_id = config_map['dev_group_chatid'], text = message)
                 bot.sendMessage(chat_id = chat_id, text = "Resoconto segnalazione: \n" + message + "\n Grazie per la segnalazione, un rappresentante ti contatterà nel minor tempo possibile.")
 
                 db.close()
