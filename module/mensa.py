@@ -35,7 +35,7 @@ def scrap(bot,job):
         menu = soup.find(SECTION_, class_= CLASS_).find_all("p")[1].find("a") # Contiene nome Menu
     except (IndexError, ValueError):
         print ("Errore mensa")
-    nome_menu = menu.text;
+    nome_menu = menu.text
     link_menu = menu.get("href")
 
     nome_file = nome_menu.lower()
@@ -57,7 +57,7 @@ def mensa_get_menu():
     #Week menu
     weekx =  (2,8,14,21,28,35,41)
     weeky = (6,12,18,25,32,39,45)
-    rprimi = range(weekx[datetime.date.today().weekday()] , weeky[datetime.date.today().weekday()])
+    rprimi = range(weekx[datetime.date.today().weekday()] , weeky[datetime.date.today().weekday()] + 1)
     rsecont = range(weekx[datetime.date.today().weekday()], weeky[datetime.date.today().weekday()] + 1)
     return wb, sh, weekx, weeky, rprimi, rsecont
 
