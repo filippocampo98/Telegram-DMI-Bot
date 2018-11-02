@@ -54,47 +54,58 @@ def scrap(bot,job):
 def mensa_get_menu():
     wb = xlrd.open_workbook("data/mensa.xls")
     sh = wb.sheet_by_index(0)
+
+    #Week range
+    firstdate = datetime.datetime.strptime(sh.cell(0,3).value[5:15],"%d/%m/%Y")
+    secondate = datetime.datetime.strptime(sh.cell(0,3).value[19:35],"%d/%m/%Y")
+
     #Week menu
     weekx =  (2,8,14,21,28,35,41)
     weeky = (6,12,18,25,32,39,45)
     rprimi = range(weekx[datetime.date.today().weekday()] , weeky[datetime.date.today().weekday()] + 1)
     rsecont = range(weekx[datetime.date.today().weekday()], weeky[datetime.date.today().weekday()] + 1)
-    return wb, sh, weekx, weeky, rprimi, rsecont
+    return sh, rprimi, rsecont, firstdate, secondate
 
 def mensa(bot,update):
-	wb, sh, weekx, weeky, rprimi, rsecont = mensa_get_menu()
-	if(datetime.datetime.now().hour < 15):
-		cprimi = 1
-		csecondi = 3
-		ccontorni = 5
-		ind =  "MENÙ PRANZO: %d/%d/%d \n" % (datetime.datetime.now().day, datetime.datetime.now().month,datetime.datetime.now().year)
-	else:
-		cprimi = 7
-		csecondi = 9
-		ccontorni = 11
-		ind = "MENÙ CENA: %d/%d/%d \n" % (datetime.datetime.now().day, datetime.datetime.now().month,datetime.datetime.now().year)
-	messagep = ""
-	messages = ""
-	messagec = ""
-	#Orari mensa
-	timemensa = "🕑 Orario Mensa \nPranzo dalle ore 12,15 alle ore 14,30 \nCena dalle ore 19,00 alle ore 21,30 \n "
-	#Primi
-	for count in rprimi:
-		if count < sh.nrows:
-			messagep += sh.cell(count,cprimi).value
-		messagep += "\n"
-	#Secondi
-	for count in rsecont:
-		if count < sh.nrows:
-			messages += sh.cell(count,csecondi).value
-		messages += "\n"
-	#Contorni
-	for count in rsecont:
-		if count < sh.nrows:
-			messagec += sh.cell(count,ccontorni).value
-		messagec += "\n"
+    sh, rprimi, rsecont, firstdate, secondate = mensa_get_menu()
 
-	bot.sendMessage(chat_id=update.message.chat_id, text = timemensa + "\n🍽" + ind + messagep+ "\n" + messages + "\n" + messagec)
+    if not(firstdate <= datetime.datetime.now() <= secondate):
+        bot.sendMessage(chat_id=update.message.chat_id, text = "⚠️ Menù mensa non disponibile!")
+    else:
+        if(datetime.datetime.now().hour < 15):
+            cprimi = 1
+            csecondi = 3
+            ccontorni = 5
+            ind =  "MENÙ PRANZO: %d/%d/%d \n" % (datetime.datetime.now().day, datetime.datetime.now().month,datetime.datetime.now().year)
+        else:
+            cprimi = 7
+            csecondi = 9
+            ccontorni = 11
+            ind = "MENÙ CENA: %d/%d/%d \n" % (datetime.datetime.now().day, datetime.datetime.now().month,datetime.datetime.now().year)
+        messagep = ""
+        messages = ""
+        messagec = ""
+        #Orari mensa
+        timemensa = "🕑 Orario Mensa \nPranzo dalle ore 12,15 alle ore 14,30 \nCena dalle ore 19,00 alle ore 21,30 \n "
+        #Primi
+        for count in rprimi:
+            if count < sh.nrows:
+                messagep += sh.cell(count,cprimi).value
+            messagep += "\n"
+        #Secondi
+        for count in rsecont:
+            if count < sh.nrows:
+                messages += sh.cell(count,csecondi).value
+            messages += "\n"
+        #Contorni
+        for count in rsecont:
+            if count < sh.nrows:
+                messagec += sh.cell(count,ccontorni).value
+            messagec += "\n"
+
+        bot.sendMessage(chat_id=update.message.chat_id, text = timemensa + "\n🍽" + ind + messagep+ "\n" + messages + "\n" + messagec)
+
+
 
 def mensa_plus(bot, update):
 	chat_id = update.message.chat_id
@@ -184,7 +195,7 @@ def mensa_weekend(bot, update):
     bot.editMessageText(chat_id=chat_id, text=message_text, message_id=update.callback_query.message.message_id)
 
 def mensa_notify_lunch(bot, update):
-    wb, sh, weekx, weeky, rprimi, rsecont = mensa_get_menu()
+    sh, rprimi, rsecont, firstdate, secondate = mensa_get_menu()
     cprimi = 1
     csecondi = 3
     ccontorni = 5
@@ -220,7 +231,10 @@ def mensa_notify_lunch(bot, update):
 
     for row in conn.execute("SELECT chatid FROM subscriptions WHERE mensa = {} OR mensa = {} OR mensa = {} OR mensa = {}".format(x, y, x+3, y+3)):
     	try:
-            bot.sendMessage(chat_id=row[0], text="🍽 " + ind + messagep+ "\n" + messages + "\n" + messagec)
+            if not(firstdate <= datetime.datetime.now() <= secondate):
+                bot.sendMessage(chat_id=row[0], text = "⚠️ Menù mensa non disponibile!")
+            else:
+                bot.sendMessage(chat_id=row[0], text="🍽 " + ind + messagep+ "\n" + messages + "\n" + messagec)
     	except Unauthorized:
     		logger.error('Unauthorized id. Trying to remove from the chat_id list from subscriptions')
     	except Exception as error:
@@ -229,12 +243,15 @@ def mensa_notify_lunch(bot, update):
 
     if config_map['mensa_channel'] != "@channelusername":
         try:
-            bot.sendMessage(chat_id=config_map['mensa_channel'], text="🍽 " + ind + messagep+ "\n" + messages + "\n" + messagec + "\n Powered by @DMI_Bot", parse_mode='HTML')
+            if not(firstdate <= datetime.datetime.now() <= secondate):
+                bot.sendMessage(chat_id=row[0], text = "⚠️ Menù mensa non disponibile!")
+            else:
+                bot.sendMessage(chat_id=config_map['mensa_channel'], text="🍽 " + ind + messagep+ "\n" + messages + "\n" + messagec + "\n Powered by @DMI_Bot", parse_mode='HTML')
         except Exception as error:
             open("logs/errors.txt", "a+").write("{} {}\n".format(error, config_map['mensa_channel']))
 
 def mensa_notify_dinner(bot, update):
-    wb, sh, weekx, weeky, rprimi, rsecont = mensa_get_menu()
+    sh, rprimi, rsecont, firstdate, secondate = mensa_get_menu()
 
     cprimi = 7
     csecondi = 9
@@ -268,7 +285,10 @@ def mensa_notify_dinner(bot, update):
     conn = sqlite3.connect('data/DMI_DB.db')
     for row in conn.execute("SELECT chatid FROM subscriptions WHERE mensa = {} OR mensa = {} OR mensa = {} OR mensa = {}".format(x, y, x+3, y+3)):
     	try:
-            bot.sendMessage(chat_id=row[0], text="🍽" + ind + messagep+ "\n" + messages + "\n" + messagec)
+            if not(firstdate <= datetime.datetime.now() <= secondate):
+                bot.sendMessage(chat_id=row[0], text = "⚠️ Menu mensa non disponibile!")
+            else:
+                bot.sendMessage(chat_id=row[0], text="🍽" + ind + messagep+ "\n" + messages + "\n" + messagec)
     	except Unauthorized:
     		logger.error('Unauthorized id. Trying to remove from the chat_id list from subscriptions')
     	except Exception as error:
@@ -277,6 +297,9 @@ def mensa_notify_dinner(bot, update):
 
     if config_map['mensa_channel'] != "@channelusername":
         try:
-            bot.sendMessage(chat_id=config_map['mensa_channel'], text="🍽" + ind + messagep+ "\n" + messages + "\n" + messagec + "\n Powered by @DMI_Bot", parse_mode='HTML')
+            if not(firstdate <= datetime.datetime.now() <= secondate):
+                bot.sendMessage(chat_id=row[0], text = "⚠️ Menu mensa non disponibile!")
+            else:
+                bot.sendMessage(chat_id=config_map['mensa_channel'], text="🍽" + ind + messagep+ "\n" + messages + "\n" + messagec + "\n Powered by @DMI_Bot", parse_mode='HTML')
         except Exception as error:
             open("logs/errors.txt", "a+").write("{} {}\n".format(error, config_map['mensa_channel']))
