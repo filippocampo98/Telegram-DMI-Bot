@@ -176,10 +176,13 @@ def aulario_url():
     return url
 
 # Easter egg
-def prof_sticker_id(data):
-    text = json.loads(open(data, 'r').read())
-    i = random.randint(0, len(text)-1)
-    return text[i]["id"]
+def prof_sticker_id():
+    db = sqlite3.connect('data/DMI_DB.db')
+    i = db.execute("SELECT * FROM 'stickers' ORDER BY RANDOM() LIMIT 1").fetchone()[0]
+
+    db.close()
+
+    return i
 
 
 def forum_cmd(text):
@@ -598,7 +601,7 @@ def bladrim(bot, update):
 
 def prof_sticker(bot, update):
     check_log(bot, update, "prof_sticker")
-    bot.sendSticker(chat_id=update.message.chat_id, sticker=prof_sticker_id('data/json/stickers.json'))
+    bot.sendSticker(chat_id=update.message.chat_id, sticker=prof_sticker_id())
 
 
 def lei_che_ne_pensa_signorina(bot, update):
