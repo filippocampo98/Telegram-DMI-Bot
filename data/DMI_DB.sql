@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS `lessons` (
 -- exams
 CREATE TABLE IF NOT EXISTS `exams` (
   `anno` INT(2),
+  `corso` VARCHAR(255),
   `docenti` VARCHAR(255),
   `insegnamento` VARCHAR(255),
   `prima` VARCHAR(255),

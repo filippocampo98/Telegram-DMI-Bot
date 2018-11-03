@@ -12,12 +12,14 @@ def esami_output(item, sessions):
 		appeal = item[session]
 		if appeal:
 			appeal = str(appeal)
-			appeal = appeal.replace("['", "")
-			appeal = appeal.replace("']", "")
+			appeal = appeal.replace("[", "")
+			appeal = appeal.replace("]", "")
+			appeal = appeal.replace("'", "")
 			appeal = appeal.split("', '")
 			if "".join(appeal) != "":
 				output += "\n*" + session.title() + ":* " + " | ".join(appeal)
 
+	output += "\n*CDL:* " + item["cdl"]
 	output += "\n*Anno:* " + item["anno"] + "\n"
 
 	return output
