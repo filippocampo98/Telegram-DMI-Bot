@@ -10,7 +10,7 @@ from time import localtime, strftime
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def insert(row, session, items, year):
+'''def insert(row, session, items, year):
 	item = {"insegnamento" : "", "docenti" : "", "prima" : ["", "", ""], "seconda" : ["", ""], "terza" : ["", ""], "straordinaria" : ["", ""], "anno" : year}
 	item["insegnamento"] = (row[1]).text
 	item["docenti"] = (row[2]).text
@@ -31,7 +31,7 @@ def handle_exams(row, session, items, year):
 				if i <= len(element[session])-1:
 					element[session][i-3] = row[i].text
 	if not flag:
-		insert(row, session, items, year)
+		insert(row, session, items, year)'''
 
 def scrape_exams():
 	year_exams = "118" # 2017/2018
@@ -59,7 +59,7 @@ def scrape_exams():
 	}
 
 	courses = ["l-31", "lm-18", "l-35", "lm-40"]
-	arr = ["prima", "seconda", "terza"]
+	session_array = ["prima", "seconda", "terza"]
 	items = []
 	year = ""
 
@@ -68,19 +68,42 @@ def scrape_exams():
 			source = requests.get(url).text
 			soup = bs4.BeautifulSoup(source, "html.parser")
 			table = soup.find(id="tbl_small_font")
-			all_tr = table.find_all("tr")
-
-			for tr in all_tr:
-				firstd = tr.find("td")
-				if not tr.has_attr("class") and not firstd.has_attr("class"):
-					all_td = tr.find_all("td")
-
-					if count == 0:
-						insert(all_td, arr[count], items, year)
-					else:
-						handle_exams(all_td, arr[count], items, year)
-				elif not tr.has_attr("class") and firstd.has_attr("class"):
-					year = firstd.b.text
+			rows = table.find_all("tr") #e dalla tabella estraiamo l'array con tutte le righe
+			for row in rows: #e scorriamo riga per riga
+				if not row.has_attr("class"): #se non ha l'attributo class potrebbe essere una materia oppure l'anno (altrimenti è la riga delle informazioni che non ci interessa)
+					firstcell = row.find("td") #estraiamo la prima cella
+					if not firstcell.has_attr("class"): #se questa non ha l'attributo class è una materia
+						cells = row.find_all("td") #adesso che sappiamo che è una materia, estraiamo tutte le celle per ottenere i dati su di essa
+						session = session_array[count] #in base al valore di count sappiamo la sessione che stiamo analizzando
+						flag = False #variabile sentinella per vedere se la materia che stiamo analizzando è già presente dentro l'array
+						for item in items: #scorriamo tutte le materie fino ad ora inserite (inizialmente, banalmente, saranno 0)
+							if (cells[1]).text == item["insegnamento"]: #se abbiamo trovato la materia nell'array
+								flag = True #setto la sentinella a true che indica che la materia era già presente nell'array delle materia dunque dobbiamo solo aggiungere gli appelli della nuova sessione>1
+								for cell in cells[3:]: #dato che la materia è già presente nell'array, i primi 3 valori (id, docenti e nome) non ci interessano
+									if(cell.has_attr("class")): #se la cella ha l'attributo class allora è un'appello straordinario
+										(item["straordinaria"]).append(cell.text)
+									elif(cell.text.strip() != ""): #altrimenti è un appello della sessione che stiamo analizzando
+										(item[session]).append(cell.text)
+						if not flag: #se non abbiamo trovato la materia che stiamo analizzando attualmente nell'array delle materie vuol dire che nelle sessioni precedenti non aveva appelli (oppure è la prima sessione)
+							if(course == "l-31"):
+								course_name = "Informatica Triennale"
+							elif(course == "lm-18"):
+								course_name = "Informatica Magistrale"
+							elif(course == "l-35"):
+								course_name = "Matematica Triennale"
+							elif(course == "lm-40"):
+								course_name = "Matematica Triennale"
+							new_item = {"insegnamento" : "", "docenti" : "", "prima" : [], "seconda" : [], "terza" : [], "straordinaria" : [], "anno" : year, "cdl" : course_name} #creiamo l'oggetto della nuova materia
+							new_item["insegnamento"] = cells[1].text
+							new_item["docenti"] = cells[2].text
+							for cell in cells[3:]: #come sopra (riga ~29)
+								if(cell.has_attr("class")):
+									(new_item["straordinaria"]).append(cell.text)
+								elif(cell.text.strip() != ""):
+									(new_item[session]).append(cell.text)
+							items.append(new_item) #infine, aggiungiamo la nuova materia all'array delle materie
+					else: #altrimenti, se ha l'attributo class, è la riga che indica l'anno delle materie successive
+						year = firstcell.b.text #quindi aggiorniamo la variabile anno con il valore della prima cella della riga
 
 	columns = "`" + "`, `".join(items[0].keys()) + "`"
 
