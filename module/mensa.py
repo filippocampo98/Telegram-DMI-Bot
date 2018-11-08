@@ -196,103 +196,101 @@ def mensa_weekend(bot, update):
 
 def mensa_notify_lunch(bot, update):
     sh, rprimi, rsecont, firstdate, secondate = mensa_get_menu()
-    cprimi = 1
-    csecondi = 3
-    ccontorni = 5
-    ind =  "MENÙ PRANZO: %d/%d/%d \n" % (datetime.datetime.now().day, datetime.datetime.now().month,datetime.datetime.now().year)
 
-    messagep = ""
-    messages = ""
-    messagec = ""
+    if (firstdate <= datetime.datetime.now() <= secondate):
+        cprimi = 1
+        csecondi = 3
+        ccontorni = 5
+        ind =  "MENÙ PRANZO: %d/%d/%d \n" % (datetime.datetime.now().day, datetime.datetime.now().month,datetime.datetime.now().year)
 
-    #Primi
-    for count in rprimi:
-        if count < sh.nrows:
-            messagep += sh.cell(count,cprimi).value
-        messagep += "\n"
-	#Secondi
-    for count in rsecont:
-        if count < sh.nrows:
-            messages += sh.cell(count,csecondi).value
-        messages += "\n"
-	#Contorni
-    for count in rsecont:
-        if count < sh.nrows:
-            messagec += sh.cell(count,ccontorni).value
-        messagec += "\n"
+        messagep = ""
+        messages = ""
+        messagec = ""
 
-    conn = sqlite3.connect('data/DMI_DB.db')
+        #Primi
+        for count in rprimi:
+            if count < sh.nrows:
+                messagep += sh.cell(count,cprimi).value
+            messagep += "\n"
+        #Secondi
+        for count in rsecont:
+            if count < sh.nrows:
+                messages += sh.cell(count,csecondi).value
+            messages += "\n"
+        #Contorni
+        for count in rsecont:
+            if count < sh.nrows:
+                messagec += sh.cell(count,ccontorni).value
+            messagec += "\n"
 
-    x = 1
-    y = 2
-    if datetime.datetime.today().weekday() == 5 or datetime.datetime.today().weekday() == 6:
-        x += 3
-        y += 3
+        conn = sqlite3.connect('data/DMI_DB.db')
 
-    for row in conn.execute("SELECT chatid FROM subscriptions WHERE mensa = {} OR mensa = {} OR mensa = {} OR mensa = {}".format(x, y, x+3, y+3)):
-    	try:
-            if not(firstdate <= datetime.datetime.now() <= secondate):
-                bot.sendMessage(chat_id=row[0], text = "⚠️ Menù mensa non disponibile!")
-            else:
+        x = 1
+        y = 2
+        if datetime.datetime.today().weekday() == 5 or datetime.datetime.today().weekday() == 6:
+            x += 3
+            y += 3
+
+        for row in conn.execute("SELECT chatid FROM subscriptions WHERE mensa = {} OR mensa = {} OR mensa = {} OR mensa = {}".format(x, y, x+3, y+3)):
+            try:
                 bot.sendMessage(chat_id=row[0], text="🍽 " + ind + messagep+ "\n" + messages + "\n" + messagec)
-    	except Unauthorized:
-    		logger.error('Unauthorized id. Trying to remove from the chat_id list from subscriptions')
-    	except Exception as error:
-    		open("logs/errors.txt", "a+").write(str(error)+" "+str(row[0])+"\n")
-    conn.close()
+            except Unauthorized:
+                logger.error('Unauthorized id. Trying to remove from the chat_id list from subscriptions')
+            except Exception as error:
+                open("logs/errors.txt", "a+").write(str(error)+" "+str(row[0])+"\n")
+        conn.close()
 
-    if config_map['mensa_channel'] != "@channelusername":
-        try:
-            if (firstdate <= datetime.datetime.now() <= secondate):
+        if config_map['mensa_channel'] != "@channelusername":
+            try:
                 bot.sendMessage(chat_id=config_map['mensa_channel'], text="🍽 " + ind + messagep+ "\n" + messages + "\n" + messagec + "\n Powered by @DMI_Bot", parse_mode='HTML')
-        except Exception as error:
-            open("logs/errors.txt", "a+").write("{} {}\n".format(error, config_map['mensa_channel']))
+            except Exception as error:
+                open("logs/errors.txt", "a+").write("{} {}\n".format(error, config_map['mensa_channel']))
 
 def mensa_notify_dinner(bot, update):
     sh, rprimi, rsecont, firstdate, secondate = mensa_get_menu()
 
-    cprimi = 7
-    csecondi = 9
-    ccontorni = 11
-    ind = "MENÙ CENA: %d/%d/%d \n" % (datetime.datetime.now().day, datetime.datetime.now().month,datetime.datetime.now().year)
-    messagep = ""
-    messages = ""
-    messagec = ""
-    #Primi
-    for count in rprimi:
-        if count < sh.nrows:
-            messagep += sh.cell(count,cprimi).value
-        messagep += "\n"
-    #Secondi
-    for count in rsecont:
-        if count < sh.nrows:
-            messages += sh.cell(count,csecondi).value
-        messages += "\n"
-    #Contorni
-    for count in rsecont:
-        if count < sh.nrows:
-            messagec += sh.cell(count,ccontorni).value
-        messagec += "\n"
+    if (firstdate <= datetime.datetime.now() <= secondate):
+        cprimi = 7
+        csecondi = 9
+        ccontorni = 11
+        ind = "MENÙ CENA: %d/%d/%d \n" % (datetime.datetime.now().day, datetime.datetime.now().month,datetime.datetime.now().year)
+        messagep = ""
+        messages = ""
+        messagec = ""
+        #Primi
+        for count in rprimi:
+            if count < sh.nrows:
+                messagep += sh.cell(count,cprimi).value
+            messagep += "\n"
+        #Secondi
+        for count in rsecont:
+            if count < sh.nrows:
+                messages += sh.cell(count,csecondi).value
+            messages += "\n"
+        #Contorni
+        for count in rsecont:
+            if count < sh.nrows:
+                messagec += sh.cell(count,ccontorni).value
+            messagec += "\n"
 
-    x = 2
-    y = 3
-    if datetime.datetime.today().weekday() == 5 or datetime.datetime.today().weekday() == 6:
-        x += 3
-        y += 3
+        x = 2
+        y = 3
+        if datetime.datetime.today().weekday() == 5 or datetime.datetime.today().weekday() == 6:
+            x += 3
+            y += 3
 
-    conn = sqlite3.connect('data/DMI_DB.db')
-    for row in conn.execute("SELECT chatid FROM subscriptions WHERE mensa = {} OR mensa = {} OR mensa = {} OR mensa = {}".format(x, y, x+3, y+3)):
-    	try:
-            if (firstdate <= datetime.datetime.now() <= secondate):
+        conn = sqlite3.connect('data/DMI_DB.db')
+        for row in conn.execute("SELECT chatid FROM subscriptions WHERE mensa = {} OR mensa = {} OR mensa = {} OR mensa = {}".format(x, y, x+3, y+3)):
+            try:
                 bot.sendMessage(chat_id=row[0], text="🍽" + ind + messagep+ "\n" + messages + "\n" + messagec)
-    	except Unauthorized:
-    		logger.error('Unauthorized id. Trying to remove from the chat_id list from subscriptions')
-    	except Exception as error:
-    		open("logs/errors.txt", "a+").write(str(error)+" "+str(row[0])+"\n")
-    conn.close()
+            except Unauthorized:
+                logger.error('Unauthorized id. Trying to remove from the chat_id list from subscriptions')
+            except Exception as error:
+                open("logs/errors.txt", "a+").write(str(error)+" "+str(row[0])+"\n")
+        conn.close()
 
-    if config_map['mensa_channel'] != "@channelusername":
-        try:
-            bot.sendMessage(chat_id=config_map['mensa_channel'], text="🍽" + ind + messagep+ "\n" + messages + "\n" + messagec + "\n Powered by @DMI_Bot", parse_mode='HTML')
-        except Exception as error:
-            open("logs/errors.txt", "a+").write("{} {}\n".format(error, config_map['mensa_channel']))
+        if config_map['mensa_channel'] != "@channelusername":
+            try:
+                bot.sendMessage(chat_id=config_map['mensa_channel'], text="🍽" + ind + messagep+ "\n" + messages + "\n" + messagec + "\n Powered by @DMI_Bot", parse_mode='HTML')
+            except Exception as error:
+                open("logs/errors.txt", "a+").write("{} {}\n".format(error, config_map['mensa_channel']))
