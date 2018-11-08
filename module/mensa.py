@@ -243,9 +243,7 @@ def mensa_notify_lunch(bot, update):
 
     if config_map['mensa_channel'] != "@channelusername":
         try:
-            if not(firstdate <= datetime.datetime.now() <= secondate):
-                bot.sendMessage(chat_id=row[0], text = "⚠️ Menù mensa non disponibile!")
-            else:
+            if (firstdate <= datetime.datetime.now() <= secondate):
                 bot.sendMessage(chat_id=config_map['mensa_channel'], text="🍽 " + ind + messagep+ "\n" + messages + "\n" + messagec + "\n Powered by @DMI_Bot", parse_mode='HTML')
         except Exception as error:
             open("logs/errors.txt", "a+").write("{} {}\n".format(error, config_map['mensa_channel']))
@@ -285,9 +283,7 @@ def mensa_notify_dinner(bot, update):
     conn = sqlite3.connect('data/DMI_DB.db')
     for row in conn.execute("SELECT chatid FROM subscriptions WHERE mensa = {} OR mensa = {} OR mensa = {} OR mensa = {}".format(x, y, x+3, y+3)):
     	try:
-            if not(firstdate <= datetime.datetime.now() <= secondate):
-                bot.sendMessage(chat_id=row[0], text = "⚠️ Menu mensa non disponibile!")
-            else:
+            if (firstdate <= datetime.datetime.now() <= secondate):
                 bot.sendMessage(chat_id=row[0], text="🍽" + ind + messagep+ "\n" + messages + "\n" + messagec)
     	except Unauthorized:
     		logger.error('Unauthorized id. Trying to remove from the chat_id list from subscriptions')
@@ -297,9 +293,6 @@ def mensa_notify_dinner(bot, update):
 
     if config_map['mensa_channel'] != "@channelusername":
         try:
-            if not(firstdate <= datetime.datetime.now() <= secondate):
-                bot.sendMessage(chat_id=row[0], text = "⚠️ Menu mensa non disponibile!")
-            else:
-                bot.sendMessage(chat_id=config_map['mensa_channel'], text="🍽" + ind + messagep+ "\n" + messages + "\n" + messagec + "\n Powered by @DMI_Bot", parse_mode='HTML')
+            bot.sendMessage(chat_id=config_map['mensa_channel'], text="🍽" + ind + messagep+ "\n" + messages + "\n" + messagec + "\n Powered by @DMI_Bot", parse_mode='HTML')
         except Exception as error:
             open("logs/errors.txt", "a+").write("{} {}\n".format(error, config_map['mensa_channel']))
