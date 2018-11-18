@@ -69,7 +69,7 @@ def mensa_get_menu():
 def mensa(bot,update):
     sh, rprimi, rsecont, firstdate, secondate = mensa_get_menu()
 
-    if not(firstdate <= datetime.datetime.now() <= secondate):
+    if not(firstdate.date() <= datetime.datetime.now().date() <= secondate.date()):
         bot.sendMessage(chat_id=update.message.chat_id, text = "⚠️ Menù mensa non disponibile!")
     else:
         if(datetime.datetime.now().hour < 15):
@@ -197,7 +197,7 @@ def mensa_weekend(bot, update):
 def mensa_notify_lunch(bot, update):
     sh, rprimi, rsecont, firstdate, secondate = mensa_get_menu()
 
-    if (firstdate <= datetime.datetime.now() <= secondate):
+    if (firstdate.date() <= datetime.datetime.now().date() <= secondate.date()):
         cprimi = 1
         csecondi = 3
         ccontorni = 5
@@ -249,7 +249,7 @@ def mensa_notify_lunch(bot, update):
 def mensa_notify_dinner(bot, update):
     sh, rprimi, rsecont, firstdate, secondate = mensa_get_menu()
 
-    if (firstdate <= datetime.datetime.now() <= secondate):
+    if (firstdate.date() <= datetime.datetime.now().date() <= secondate.date()):
         cprimi = 7
         csecondi = 9
         ccontorni = 11
