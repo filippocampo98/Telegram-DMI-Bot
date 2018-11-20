@@ -885,7 +885,7 @@ def report(bot, update, args):
                 row = name.fetchone()
 
                 message += "Username: @" + row[0] + "\n" + "Nome: " + row[1] + "\n" + "Cognome: " + row[2] + "\n" + " ".join(args)
-                bot.sendMessage(chat_id = config_map['dev_group_chatid'], text = message)
+                bot.sendMessage(chat_id = config_map['representatives_group'], text = message)
                 bot.sendMessage(chat_id = chat_id, text = "Resoconto segnalazione: \n" + message + "\n Grazie per la segnalazione, un rappresentante ti contatterà nel minor tempo possibile.")
 
                 db.close()
