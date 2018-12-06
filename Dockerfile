@@ -1,9 +1,8 @@
 FROM  ubuntu:18.04
 
+ARG TOKEN
 ENV DMI_BOT_REPO    https://github.com/UNICT-DMI/Telegram-DMI-Bot.git
 ENV DMI_BOT_DIR    /usr/local
-
-ENV TOKEN    _TOKEN_
 
 RUN apt-get update && \
   apt-get install -y \

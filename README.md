@@ -67,13 +67,10 @@ You can enable these commands setting **disable_drive = 0**, configure the Googl
 ### Docker container
 
 #### How to use
-
-First of all configure the file Dockerfile, add the API TOKEN in \_TOKEN\_ (line 6).
-
 Build image dmibot with docker:
 
 ```
-$ docker build ./ -t dmibot
+$ docker build ./ -t dmibot --build-arg TOKEN=<token_API>
 ```
 
 Run the container dmibot:
