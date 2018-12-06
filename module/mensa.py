@@ -6,6 +6,7 @@ import datetime
 import sqlite3
 import logging
 import yaml
+import os
 from os.path import exists, join
 from collections import OrderedDict
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
@@ -50,6 +51,11 @@ def scrap(bot,job):
         f1 = open(PATH+"mensa.xls","wb")
         f.write(result.content)
         f1.write(result.content)
+    
+    if os.path.exists("data/mensa.xls"):
+        os.system("mv data/mensa.xls data/mensa.xls.keep && rm data/*.xls && mv data/mensa.xls.keep data/mensa.xls")
+    else:
+        os.system("rm data/*.xls")
 
 def mensa_get_menu():
     wb = xlrd.open_workbook("data/mensa.xls")
