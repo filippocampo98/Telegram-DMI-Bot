@@ -73,7 +73,7 @@ First of all configure the file Dockerfile, add the API TOKEN in \_TOKEN\_ (line
 Build image dmibot with docker:
 
 ```
-$ docker build -t dmibot .
+$ docker build ./ -t dmibot
 ```
 
 Run the container dmibot:
