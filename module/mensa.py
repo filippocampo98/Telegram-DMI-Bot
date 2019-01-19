@@ -43,27 +43,45 @@ def scrap(bot,job):
     nome_file = nome_file.replace('ù', 'u')
     nome_file = nome_file.replace("menu",'')
     nome_file = nome_file.replace(' ','') + ".xls"
+    nome_file = nome_file.replace("/",".")
 
-    if (not exists(join(PATH,nome_file))): # not =  !
-        #Il file non esiste, crealo
+    if (not exists(join(PATH,nome_file))):
+        # se il file non esiste, crealo
         result = requests.get(link_menu, headers=headers)
+
         f = open(PATH+nome_file, "wb")
-        f1 = open(PATH+"mensa.xls","wb")
         f.write(result.content)
-        f1.write(result.content)
+        f.close()
+
+        sh, _, __, firstdate, secondate = mensa_get_menu(PATH+nome_file)
+
+        if (firstdate <= datetime.datetime.now() <= secondate):
+            f1 = open(PATH+"mensa.xls","wb")
+            f1.write(result.content)
+            f1.close()
     
     if os.path.exists("data/mensa.xls"):
         os.system("mv data/mensa.xls data/mensa.xls.keep && rm data/*.xls && mv data/mensa.xls.keep data/mensa.xls")
     else:
         os.system("rm data/*.xls")
+    
+    logger.info("Menù Mensa loaded.")
 
-def mensa_get_menu():
-    wb = xlrd.open_workbook("data/mensa.xls")
+def mensa_get_menu(mensa_file="data/mensa.xls"):
+    wb = xlrd.open_workbook(mensa_file)
     sh = wb.sheet_by_index(0)
 
+    mensa_date = sh.cell(0,3).value.lower()
+    mensa_date = mensa_date.replace("dal", "")
+    mensa_date = mensa_date.replace("al", "")
+    mensa_date = mensa_date.strip() # trim
+    mensa_date = mensa_date.replace("  ", " ")
+    mensa_date = mensa_date.replace("/19", "/2019")
+    mensa_date = mensa_date.split(" ")
+
     #Week range
-    firstdate = datetime.datetime.strptime(sh.cell(0,3).value[5:15],"%d/%m/%Y")
-    secondate = datetime.datetime.strptime(sh.cell(0,3).value[19:35],"%d/%m/%Y")
+    firstdate = datetime.datetime.strptime(mensa_date[0],"%d/%m/%Y")
+    secondate = datetime.datetime.strptime(mensa_date[1],"%d/%m/%Y")
 
     #Week menu
     weekx =  (2,8,14,21,28,35,41)
