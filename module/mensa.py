@@ -18,7 +18,7 @@ with open('config/settings.yaml', 'r') as yaml_config:
     config_map = yaml.load(yaml_config)
 
 def handle_scrape(bot, job):
-    print("startup")
+
     if exists('data/mensa.xls'):
         _, __, ___, firstdate, secondate = mensa_get_menu()
         if not (firstdate <= datetime.datetime.now() <= secondate):
