@@ -17,8 +17,17 @@ logger = logging.getLogger(__name__)
 with open('config/settings.yaml', 'r') as yaml_config:
     config_map = yaml.load(yaml_config)
 
+def handle_scrape(bot, job):
+    print("startup")
+    if exists('data/mensa.xls'):
+        _, __, ___, firstdate, secondate = mensa_get_menu()
+        if not (firstdate <= datetime.datetime.now() <= secondate):
+            os.remove("data/mensa.xls")
+            scrape(bot, job)
+    else:
+        scrape(bot,job)
 
-def scrap(bot,job):
+def scrape(bot,job):
 
     url = "http://www.ersucatania.gov.it/menu-mensa/"
 
@@ -36,6 +45,7 @@ def scrap(bot,job):
         menu = soup.find(SECTION_, class_= CLASS_).find_all("p")[1].find("a") # Contiene nome Menu
     except (IndexError, ValueError):
         print ("Errore mensa")
+
     nome_menu = menu.text
     link_menu = menu.get("href")
 
@@ -60,7 +70,7 @@ def scrap(bot,job):
             f1.write(result.content)
             f1.close()
     
-    if os.path.exists("data/mensa.xls"):
+    if exists("data/mensa.xls"):
         os.system("mv data/mensa.xls data/mensa.xls.keep && rm data/*.xls && mv data/mensa.xls.keep data/mensa.xls")
     else:
         os.system("rm data/*.xls")
