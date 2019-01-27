@@ -21,7 +21,7 @@ def handle_scrape(bot, job):
 
     if exists('data/mensa.xls'):
         _, __, ___, firstdate, secondate = mensa_get_menu()
-        if not (firstdate <= datetime.datetime.now() <= secondate):
+        if not (firstdate.date() <= datetime.datetime.now().date() <= secondate.date()):
             os.remove("data/mensa.xls")
             scrape(bot, job)
     else:
@@ -65,11 +65,11 @@ def scrape(bot,job):
 
         sh, _, __, firstdate, secondate = mensa_get_menu(PATH+nome_file)
 
-        if (firstdate <= datetime.datetime.now() <= secondate):
+        if (firstdate.date() <= datetime.datetime.now().date() <= secondate.date()):
             f1 = open(PATH+"mensa.xls","wb")
             f1.write(result.content)
             f1.close()
-    
+
     if exists("data/mensa.xls"):
         os.system("mv data/mensa.xls data/mensa.xls.keep && rm data/*.xls && mv data/mensa.xls.keep data/mensa.xls")
     else:
@@ -78,27 +78,29 @@ def scrape(bot,job):
     logger.info("Menù Mensa loaded.")
 
 def mensa_get_menu(mensa_file="data/mensa.xls"):
-    wb = xlrd.open_workbook(mensa_file)
-    sh = wb.sheet_by_index(0)
 
-    mensa_date = sh.cell(0,3).value.lower()
-    mensa_date = mensa_date.replace("dal", "")
-    mensa_date = mensa_date.replace("al", "")
-    mensa_date = mensa_date.strip() # trim
-    mensa_date = mensa_date.replace("  ", " ")
-    mensa_date = mensa_date.replace("/19", "/2019")
-    mensa_date = mensa_date.split(" ")
+    if exists(mensa_file):
+        wb = xlrd.open_workbook(mensa_file)
+        sh = wb.sheet_by_index(0)
 
-    #Week range
-    firstdate = datetime.datetime.strptime(mensa_date[0],"%d/%m/%Y")
-    secondate = datetime.datetime.strptime(mensa_date[1],"%d/%m/%Y")
+        mensa_date = sh.cell(0,3).value.lower()
+        mensa_date = mensa_date.replace("dal", "")
+        mensa_date = mensa_date.replace("al", "")
+        mensa_date = mensa_date.strip() # trim
+        mensa_date = mensa_date.replace("  ", " ")
+        mensa_date = mensa_date.replace("/19", "/2019")
+        mensa_date = mensa_date.split(" ")
 
-    #Week menu
-    weekx =  (2,8,14,21,28,35,41)
-    weeky = (6,12,18,25,32,39,45)
-    rprimi = range(weekx[datetime.date.today().weekday()] , weeky[datetime.date.today().weekday()] + 1)
-    rsecont = range(weekx[datetime.date.today().weekday()], weeky[datetime.date.today().weekday()] + 1)
-    return sh, rprimi, rsecont, firstdate, secondate
+        #Week range
+        firstdate = datetime.datetime.strptime(mensa_date[0],"%d/%m/%Y")
+        secondate = datetime.datetime.strptime(mensa_date[1],"%d/%m/%Y")
+
+        #Week menu
+        weekx =  (2,8,14,21,28,35,41)
+        weeky = (6,12,18,25,32,39,45)
+        rprimi = range(weekx[datetime.date.today().weekday()] , weeky[datetime.date.today().weekday()] + 1)
+        rsecont = range(weekx[datetime.date.today().weekday()], weeky[datetime.date.today().weekday()] + 1)
+        return sh, rprimi, rsecont, firstdate, secondate
 
 def mensa(bot,update):
     sh, rprimi, rsecont, firstdate, secondate = mensa_get_menu()
