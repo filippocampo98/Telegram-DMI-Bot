@@ -83,7 +83,7 @@ def main():
 	#JobQueue
 	j = updater.job_queue
 
-	j.run_repeating(avviso, interval=60) 						# job_dmi_news
+	#j.run_repeating(avviso, interval=60) 						# job_dmi_news
 	j.run_repeating(updater_lep, interval=86400, first=0) 				# job_updater_lep (24h)
 	j.run_once(handle_scrape, 0)							# job_mensa on startup
 	j.run_daily(handle_scrape, datetime.time(11,30,00)) 				# job_mensa at 11:30
