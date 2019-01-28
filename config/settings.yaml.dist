@@ -1,3 +1,5 @@
+token: ""
+
 client_config_backend: settings
 client_config:
   client_id:  <CLIENT ID>
