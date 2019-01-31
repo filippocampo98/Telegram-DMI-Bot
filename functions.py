@@ -43,14 +43,12 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 
-# Token
-tokenconf = open('config/token.conf', 'r').read()
-tokenconf = tokenconf.replace("\n", "")
+# config
 with open('config/settings.yaml', 'r') as yaml_config:
     config_map = yaml.load(yaml_config)
 
-# Token of your telegram bot that you created from @BotFather, write it on token.conf
-TOKEN = tokenconf
+# Token of your telegram bot that you created from @BotFather, write it on settings.yml
+TOKEN = config_map["token"]
 news = ""
 
 def send_message(bot, update, messaggio):
