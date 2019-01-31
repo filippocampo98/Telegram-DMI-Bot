@@ -98,6 +98,7 @@ This project is made possible thanks to the contributions of:
 - [Simone Di Mauro](https://github.com/simone989)
 - [Alessandro Maggio](https://github.com/Tkd-alex)
 - [Alessio Piazza](https://github.com/Squalex95)
+- [Luca Cavallaro](https://github.com/lucacavallaro)
 - [Pierpaolo Pecoraio](https://github.com/Pierpaolo791)
 - [Alessandro Catalano](https://github.com/Wornairz)
 - [Davide Carnemolla](https://github.com/daxcpp)
