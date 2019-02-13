@@ -42,7 +42,9 @@ def scrape(bot,job):
     soup = bs4.BeautifulSoup(result, "html.parser")
 
     try:
-        menu = soup.find(SECTION_, class_= CLASS_).find_all("p")[1].find("a") # Contiene nome Menu
+        menu = soup.find(SECTION_, class_= CLASS_).find_all("p")[1].findChildren("a")[1] # Contiene nome Menu
+        if menu == None:
+            menu = soup.find(SECTION_, class_= CLASS_).find_all("p")[1].findChildren("a")[0] # Contiene nome Menu
     except (IndexError, ValueError):
         print ("Errore mensa")
 
