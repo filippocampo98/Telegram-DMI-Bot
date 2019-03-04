@@ -41,41 +41,34 @@ def scrape(bot,job):
 
     soup = bs4.BeautifulSoup(result, "html.parser")
 
-    multiple_links = []
+    multiple_links = [t for t in soup.select('a[href*=xls]')]
 
-    try:
-        if len(soup.find(SECTION_, class_= CLASS_).find_all("p")[2].findChildren("a")) > 0:
-            multiple_links.append(soup.find(SECTION_, class_= CLASS_).find_all("p")[2].findChildren("a")[0])
+    if len(multiple_links) > 0:
+        for menu in multiple_links:
 
-        multiple_links.append(soup.find(SECTION_, class_= CLASS_).find_all("p")[1].findChildren("a")[0])
-    except (IndexError, ValueError):
-        print ("Errore mensa")
+            nome_menu = menu.text
+            link_menu = menu.get("href")
 
-    for menu in multiple_links:
+            nome_file = nome_menu.lower()
+            nome_file = nome_file.replace('ù', 'u')
+            nome_file = nome_file.replace("menu",'')
+            nome_file = nome_file.replace(' ','') + ".xls"
+            nome_file = nome_file.replace("/",".")
 
-        nome_menu = menu.text
-        link_menu = menu.get("href")
+            if (not exists(join(PATH,nome_file))):
+                # se il file non esiste, crealo
+                result = requests.get(link_menu, headers=headers)
 
-        nome_file = nome_menu.lower()
-        nome_file = nome_file.replace('ù', 'u')
-        nome_file = nome_file.replace("menu",'')
-        nome_file = nome_file.replace(' ','') + ".xls"
-        nome_file = nome_file.replace("/",".")
+                f = open(PATH+nome_file, "wb")
+                f.write(result.content)
+                f.close()
 
-        if (not exists(join(PATH,nome_file))):
-            # se il file non esiste, crealo
-            result = requests.get(link_menu, headers=headers)
+                sh, _, __, firstdate, secondate = mensa_get_menu(PATH+nome_file)
 
-            f = open(PATH+nome_file, "wb")
-            f.write(result.content)
-            f.close()
-
-            sh, _, __, firstdate, secondate = mensa_get_menu(PATH+nome_file)
-
-            if (firstdate.date() <= datetime.datetime.now().date() <= secondate.date()):
-                f1 = open(PATH+"mensa.xls","wb")
-                f1.write(result.content)
-                f1.close()
+                if (firstdate.date() <= datetime.datetime.now().date() <= secondate.date()):
+                    f1 = open(PATH+"mensa.xls","wb")
+                    f1.write(result.content)
+                    f1.close()
 
     if exists("data/mensa.xls"):
         os.system("mv data/mensa.xls data/mensa.xls.keep && rm data/*.xls && mv data/mensa.xls.keep data/mensa.xls")
