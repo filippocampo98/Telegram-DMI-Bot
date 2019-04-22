@@ -202,14 +202,12 @@ def callback(bot, update):
     number_array = 0
 
     update.callback_query.data = update.callback_query.data.replace("Drive_", "")
-    # print('Callback query data: ' + str(update.callback_query.data))
-    if len(update.callback_query.data) < 13:
-        #conn.execute("DELETE FROM 'Chat_id_List'")
-        array_value = update['callback_query']['message']['text'].split(" ")
-        try:
-            if len(array_value) == 4:
-                array_value.insert(0, "None")
 
+    if len(update.callback_query.data) < 13: # "Accetta" (/request command)
+
+        array_value = update['callback_query']['message']['text'].split(" ")
+
+        try:
             if len(array_value) == 5:
                 conn.execute("INSERT INTO 'Chat_id_List' VALUES ("+update.callback_query.data+",'" + array_value[4] + "','" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "') ")
                 bot.sendMessage(chat_id=update.callback_query.data, text="🔓 La tua richiesta è stata accettata. Leggi il file README")
@@ -219,12 +217,13 @@ def callback(bot, update):
                 bot.editMessageText(text=request_elimination_text, chat_id=config_map['dev_group_chatid'], message_id=update.callback_query.message.message_id)
 
                 bot.sendMessage(chat_id=config_map['dev_group_chatid'], text=str(array_value[1]) + " " + str(array_value[2] + str(" è stato inserito nel database")))
-
             elif len(array_value) == 4:
                 conn.execute("INSERT INTO 'Chat_id_List'('Chat_id','Nome','Cognome','Email') VALUES (" + update.callback_query.data + ",'" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "')")
                 bot.sendMessage(chat_id=update.callback_query.data, text="🔓 La tua richiesta è stata accettata. Leggi il file README")
                 bot.sendDocument(chat_id=update.callback_query.data, document=open('data/README.pdf', 'rb'))
 
+                request_elimination_text = "Richiesta di " + str(array_value[1]) + " " + str(array_value[2]) + " estinta"
+                bot.editMessageText(text=request_elimination_text, chat_id=config_map['dev_group_chatid'], message_id=update.callback_query.message.message_id)
             else:
                 bot.sendMessage(chat_id=config_map['dev_group_chatid'], text=str("ERRORE INSERIMENTO: ") + str(update['callback_query']['message']['text']) + " " + str(update['callback_query']['data']))
             conn.commit()
@@ -882,7 +881,10 @@ def report(bot, update, args):
                 name = db.execute("SELECT Username,Nome,Cognome FROM 'Chat_id_List' WHERE Chat_id = %s" %chat_id)
                 row = name.fetchone()
 
-                message += "Username: @" + row[0] + "\n" + "Nome: " + row[1] + "\n" + "Cognome: " + row[2] + "\n" + " ".join(args)
+                if row[0] is None:
+                    message += "Nome: " + row[1] + "\n" + "Cognome: " + row[2] + "\n" + " ".join(args)
+                else:
+                    message += "Username: @" + row[0] + "\n" + "Nome: " + row[1] + "\n" + "Cognome: " + row[2] + "\n" + " ".join(args)
                 bot.sendMessage(chat_id = config_map['representatives_group'], text = message)
                 bot.sendMessage(chat_id = chat_id, text = "Resoconto segnalazione: \n" + message + "\n Grazie per la segnalazione, un rappresentante ti contatterà nel minor tempo possibile.")
 
