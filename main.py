@@ -56,9 +56,6 @@ def main():
 	dp.add_handler(CommandHandler('biblioteca', lambda bot, update: informative_callback(bot, update, 'biblioteca')))
 	dp.add_handler(CommandHandler('cus', lambda bot, update: informative_callback(bot, update, 'cus')))
 
-	dp.add_handler(CommandHandler('mensa', mensa_cmd))
-	dp.add_handler(CommandHandler('mensa_plus', mensa_plus_cmd))
-
 	dp.add_handler(CommandHandler('lezioni', lambda bot, update, args: lezioni(bot, update, args), pass_args=True))
 	dp.add_handler(CommandHandler('esami', lambda bot, update, args: esami(bot, update, args), pass_args=True))
 
@@ -85,11 +82,7 @@ def main():
 
 	#j.run_repeating(avviso, interval=60) 						# job_dmi_news
 	j.run_repeating(updater_lep, interval=86400, first=0) 				# job_updater_lep (24h)
-	j.run_once(handle_scrape, 0)							# job_mensa on startup
-	j.run_daily(handle_scrape, datetime.time(11,30,00)) 				# job_mensa at 11:30
-	j.run_daily(mensa_notify_lunch, datetime.time(11, 45, 00), name='At 11:45') 	# job_mensa_lunch
-	j.run_daily(mensa_notify_dinner, datetime.time(18, 45, 00), name='At 18:45') 	# job_mensa_dinner
-
+	
 	if (config_map['debug']['disable_drive'] == 0):
 		dp.add_handler(CommandHandler('drive',drive))
 

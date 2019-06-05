@@ -36,7 +36,7 @@ from module.scraper_exams import scrape_exams
 from module.scraper_lessons import scrape_lessons
 from module.scraper_professors import scrape_prof
 from module.scraper_notices import scrape_notices
-from module.mensa import *
+
 from module.gitlab import gitlab_handler
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -115,7 +115,6 @@ def help_cmd():
     output += "📖 /esami - linka il calendario degli esami\n"
     output += "🗓 /aulario - linka l\'aulario\n"
     output += "👔 /prof <nome> - es. /prof Barbanera\n"
-    output += "🍽 /mensa - orario mensa\n"
     output += "👥 /rappresentanti - elenco dei rappresentanti del DMI\n"
     output += "📚 /biblioteca - orario biblioteca DMI\n"
     output += CUSicon[random.randint(0, 5)] + " /cus sede e contatti\n\n"
@@ -466,15 +465,6 @@ def button_handler(bot, update):
     elif data.startswith('git_'):
         gitlab_handler(bot, update, data.replace('git_', ''))
 
-    elif (data == "mensa_help"):
-        mensa_cmd(bot, update.callback_query)
-
-    elif data.startswith("mensa_weekend"):
-        mensa_weekend(bot, update)
-
-    elif data.startswith("mensa_"):
-        mensa_subscription(bot, update)
-
     elif data == "enablenews" or data == "disablenews":
         globals()[data](bot, query)
 
@@ -504,7 +494,6 @@ def help(bot, update):
     )
     keyboard.append(
         [
-            InlineKeyboardButton("🍽 Mensa",                                callback_data="mensa_help"),
             InlineKeyboardButton("👥 Rappresentanti",                       callback_data="sm_rapp_menu"),
             InlineKeyboardButton("📚 Biblioteca",                           callback_data="biblioteca"),
             InlineKeyboardButton(CUSicon[random.randint(0, 5)] + " CUS",    callback_data="cus")
@@ -824,15 +813,6 @@ def updater_lep(bot, job):
 def start(bot, update):
     bot.sendMessage(chat_id=update.message.chat_id, text="Benvenuto! Questo bot è stato realizzato dagli studenti del Corso di Laurea in Informatica al fine di suppotare gli studenti del DMI! Per scoprire cosa puoi fare usa /help")
 
-
-def mensa_cmd(bot, update):
-    check_log(bot, update, "mensa")
-    mensa(bot, update)
-
-
-def mensa_plus_cmd(bot, update):
-    check_log(bot, update, "mensa_plus")
-    mensa_plus(bot, update)
 
 
 def newscommand(bot, update):
