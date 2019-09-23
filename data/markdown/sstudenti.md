@@ -1,9 +1,9 @@
 Segreteria studenti
 Sede presso la Cittadella Universitaria (vicino la mensa)
 
-Via S. Sofia, 64 ed. 11 - 95125 Catania
-📞 095 738 6107
-📞 095 738 1111
+Via S. Sofia, 64 ed. 11 - 95125 Catania  
+📞 095 738 6107  
+📞 095 738 1111  
 📞 095.7386103, 6119, 6109, 6125, 6129, 6123, 6122, 6106, 6107, 6121
 ✉️ settore.scientifico@unict.it
 
