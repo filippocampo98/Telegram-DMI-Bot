@@ -499,7 +499,7 @@ def help(bot, update):
             InlineKeyboardButton("👥 Rappresentanti",                       callback_data="sm_rapp_menu"),
             InlineKeyboardButton("📚 Biblioteca",                           callback_data="biblioteca"),
             InlineKeyboardButton(CUSicon[random.randint(0, 5)] + " CUS",    callback_data="cus"),
-            InlineKeyboardButton("  Cloud",   callback_data="cloud")
+            InlineKeyboardButton("☁️ Cloud",   callback_data="cloud")
         ]
     )
 
