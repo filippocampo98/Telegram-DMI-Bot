@@ -76,13 +76,14 @@ def main():
 	dp.add_handler(CommandHandler('errors', send_errors))
 	dp.add_handler(CommandHandler('start', start))
 	dp.add_handler(CommandHandler('avviso', newscommand))
+	dp.add_handler(CommandHandler('cloud', lambda bot, update: informative_callback(bot, update, 'cloud')))
 
 	#JobQueue
 	j = updater.job_queue
 
 	#j.run_repeating(avviso, interval=60) 						# job_dmi_news
 	j.run_repeating(updater_lep, interval=86400, first=0) 				# job_updater_lep (24h)
-	
+
 	if (config_map['debug']['disable_drive'] == 0):
 		dp.add_handler(CommandHandler('drive',drive))
 
