@@ -76,6 +76,7 @@ def main():
 	dp.add_handler(CommandHandler('errors', send_errors))
 	dp.add_handler(CommandHandler('start', start))
 	dp.add_handler(CommandHandler('avviso', newscommand))
+	dp.add_handler(CommandHandler('cloud', lambda bot, update: informative_callback(bot, update, 'cloud')))
 
 	#JobQueue
 	j = updater.job_queue

@@ -103,5 +103,6 @@ This project is made possible thanks to the contributions of:
 - [Davide Carnemolla](https://github.com/daxcpp)
 - [Salvo Distefano](https://github.com/RayperZ)
 - [Mario Gazzara](https://github.com/gazer99)
+- [Francesco Coppola](https://github.com/BeastHunter19/)
 
 

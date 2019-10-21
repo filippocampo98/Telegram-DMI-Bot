@@ -117,7 +117,8 @@ def help_cmd():
     output += "👔 /prof <nome> - es. /prof Barbanera\n"
     output += "👥 /rappresentanti - elenco dei rappresentanti del DMI\n"
     output += "📚 /biblioteca - orario biblioteca DMI\n"
-    output += CUSicon[random.randint(0, 5)] + " /cus sede e contatti\n\n"
+    output += CUSicon[random.randint(0, 5)] + " /cus sede e contatti\n"
+    output += "  /cloud - linka le cartelle condivise su cloud\n\n"
     output += "Segreteria orari e contatti:\n"
     output += "/sdidattica - segreteria didattica\n"
     output += "/sstudenti - segreteria studenti\n"
@@ -146,6 +147,7 @@ def informative_callback(update: Update, context: CallbackContext, cmd):
     check_log(update, context, cmd)
     message_text = read_md(cmd)
     context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text, parse_mode='Markdown')
+    bot.sendMessage(chat_id=update.message.chat_id, text=message_text, parse_mode='markdown')
 
 
 def exit_cmd():
@@ -171,6 +173,7 @@ def mesami_url():
 def aulario_url():
     url = 'http://aule.dmi.unict.it/aulario/roschedule.php'
     return url
+
 
 # Easter egg
 def prof_sticker_id():
@@ -475,7 +478,6 @@ def button_handler(update: Update, context: CallbackContext):
         context.bot.editMessageText(
             text=message_text, chat_id=chat_id, message_id=message_id)
 
-
 def help(update: Update, context: CallbackContext):
     check_log(update, context, "help")
     chat_id = update.message.chat_id
@@ -496,7 +498,8 @@ def help(update: Update, context: CallbackContext):
         [
             InlineKeyboardButton("👥 Rappresentanti",                       callback_data="sm_rapp_menu"),
             InlineKeyboardButton("📚 Biblioteca",                           callback_data="biblioteca"),
-            InlineKeyboardButton(CUSicon[random.randint(0, 5)] + " CUS",    callback_data="cus")
+            InlineKeyboardButton(CUSicon[random.randint(0, 5)] + " CUS",    callback_data="cus"),
+            InlineKeyboardButton("☁️ Cloud",   callback_data="cloud")
         ]
     )
 
