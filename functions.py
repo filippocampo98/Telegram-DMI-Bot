@@ -70,7 +70,7 @@ def lezioni(update: Update, context: CallbackContext, *m):
 
 
 def esami(update: Update, context: CallbackContext):
-    check_log(update, context.bot, "esami")
+    check_log(update, context, "esami")
     message_text = esami_cmd(context.args)
     if len(message_text) > 4096:
         send_message(update, context, message_text)
@@ -202,29 +202,29 @@ def callback(update: Update, context: CallbackContext):
     number_row = 0
     number_array = 0
 
-    context.callback_query.data = context.callback_query.data.replace("Drive_", "")
+    update.callback_query.data = update.callback_query.data.replace("Drive_", "")
 
-    if len(context.callback_query.data) < 13: # "Accetta" (/request command)
+    if len(update.callback_query.data) < 13: # "Accetta" (/request command)
 
         array_value = update['callback_query']['message']['text'].split(" ")
 
         try:
             if len(array_value) == 5:
-                conn.execute("INSERT INTO 'Chat_id_List' VALUES ("+context.callback_query.data+",'" + array_value[4] + "','" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "') ")
-                context.bot.sendMessage(chat_id=context.callback_query.data, text="🔓 La tua richiesta è stata accettata. Leggi il file README")
-                context.bot.sendDocument(chat_id=context.callback_query.data, document=open('data/README.pdf', 'rb'))
+                conn.execute("INSERT INTO 'Chat_id_List' VALUES ("+update.callback_query.data+",'" + array_value[4] + "','" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "') ")
+                context.bot.sendMessage(chat_id=update.callback_query.data, text="🔓 La tua richiesta è stata accettata. Leggi il file README")
+                context.bot.sendDocument(chat_id=update.callback_query.data, document=open('data/README.pdf', 'rb'))
 
                 request_elimination_text = "Richiesta di " + str(array_value[1]) + " " + str(array_value[2]) + " estinta"
-                context.bot.editMessageText(text=request_elimination_text, chat_id=config_map['dev_group_chatid'], message_id=context.callback_query.message.message_id)
+                context.bot.editMessageText(text=request_elimination_text, chat_id=config_map['dev_group_chatid'], message_id=update.callback_query.message.message_id)
 
                 context.bot.sendMessage(chat_id=config_map['dev_group_chatid'], text=str(array_value[1]) + " " + str(array_value[2] + str(" è stato inserito nel database")))
             elif len(array_value) == 4:
-                conn.execute("INSERT INTO 'Chat_id_List'('Chat_id','Nome','Cognome','Email') VALUES (" + context.callback_query.data + ",'" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "')")
-                context.bot.sendMessage(chat_id=context.callback_query.data, text="🔓 La tua richiesta è stata accettata. Leggi il file README")
-                context.bot.sendDocument(chat_id=context.callback_query.data, document=open('data/README.pdf', 'rb'))
+                conn.execute("INSERT INTO 'Chat_id_List'('Chat_id','Nome','Cognome','Email') VALUES (" + update.callback_query.data + ",'" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "')")
+                context.bot.sendMessage(chat_id=update.callback_query.data, text="🔓 La tua richiesta è stata accettata. Leggi il file README")
+                context.bot.sendDocument(chat_id=update.callback_query.data, document=open('data/README.pdf', 'rb'))
 
                 request_elimination_text = "Richiesta di " + str(array_value[1]) + " " + str(array_value[2]) + " estinta"
-                context.bot.editMessageText(text=request_elimination_text, chat_id=config_map['dev_group_chatid'], message_id=context.callback_query.message.message_id)
+                context.bot.editMessageText(text=request_elimination_text, chat_id=config_map['dev_group_chatid'], message_id=update.callback_query.message.message_id)
             else:
                 context.bot.sendMessage(chat_id=config_map['dev_group_chatid'], text=str("ERRORE INSERIMENTO: ") + str(update['callback_query']['message']['text']) + " " + str(update['callback_query']['data']))
             conn.commit()
@@ -244,7 +244,8 @@ def callback(update: Update, context: CallbackContext):
             drive2 = GoogleDrive(gauth2)
             bot2 = telegram.Bot(TOKEN)
 
-            file1 = drive2.CreateFile({'id': context.callback_query.data})
+            file1 = drive2.CreateFile({'id': update.callback_query.data})
+
             if file1['mimeType'] == "application/vnd.google-apps.folder":
                 file_list2 = None
 
@@ -317,6 +318,7 @@ def callback(update: Update, context: CallbackContext):
             else:
                 try:
                     file_d = drive2.CreateFile({'id': file1['id']})
+
                     if int(file_d['fileSize']) < 5e+7:
                         file_d.GetContentFile('file/'+file1context['title'])
                         file_s = file1['title']
@@ -418,7 +420,7 @@ def drive(update: Update, context: CallbackContext):
 
             number_row = 0
             number_array = 0
-
+            
             for file1 in file_list:
                 if file1['mimeType'] == "application/vnd.google-apps.folder":
                     if number_row >= 3:
@@ -454,7 +456,7 @@ def button_handler(update: Update, context: CallbackContext):
     # Submenu
     if data.startswith("sm_"):
         func_name = data[3:len(data)]
-        globals()[func_name](context.bot, query, chat_id, message_id)
+        globals()[func_name](query, context, chat_id, message_id)
 
     elif data == "esami_button" or data == "lezioni_button" or data == "help_cmd" or data == "exit_cmd":
         message_text = globals()[data]()
@@ -468,7 +470,7 @@ def button_handler(update: Update, context: CallbackContext):
         gitlab_handler(update, context, data.replace('git_', ''))
 
     elif data == "enablenews" or data == "disablenews":
-        globals()[data](context.bot, query)
+        globals()[data](query, context)
 
     # Simple text
     elif data != "_div":

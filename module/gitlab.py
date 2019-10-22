@@ -254,8 +254,8 @@ def download_blob_file_async(update: Update, context: CallbackContext, blob=None
 
         db_result = db.execute(query.format(blob_id)).fetchone()
         download_blob_file_async_internal(
-            bot,
             update,
+            context,
             blob_id,
             blob_name,
             db_result
