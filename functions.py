@@ -245,7 +245,7 @@ def callback(update: Update, context: CallbackContext):
             bot2 = telegram.Bot(TOKEN)
 
             file1 = drive2.CreateFile({'id': update.callback_query.data})
-
+            file1.FetchMetadata()
             if file1['mimeType'] == "application/vnd.google-apps.folder":
                 file_list2 = None
 
@@ -278,7 +278,7 @@ def callback(update: Update, context: CallbackContext):
                 }
 
                 for file2 in file_list2:
-
+                    file2.FetchMetadata()
                     if file2['mimeType'] == "application/vnd.google-apps.folder":
                         if number_row >= 1:
                             keyboard2.append([InlineKeyboardButton("🗂 "+file2['title'], callback_data="Drive_" + file2['id'])])
@@ -318,9 +318,9 @@ def callback(update: Update, context: CallbackContext):
             else:
                 try:
                     file_d = drive2.CreateFile({'id': file1['id']})
-
+                    file_d.FetchMetadata()
                     if int(file_d['fileSize']) < 5e+7:
-                        file_d.GetContentFile('file/'+file1context['title'])
+                        file_d.GetContentFile('file/'+file1['title'])
                         file_s = file1['title']
                         filex = open(str("file/" + file_s), "rb")
                         bot2.sendChatAction(chat_id=update['callback_query']['from_user']['id'], action="UPLOAD_DOCUMENT")
@@ -420,7 +420,7 @@ def drive(update: Update, context: CallbackContext):
 
             number_row = 0
             number_array = 0
-            
+
             for file1 in file_list:
                 if file1['mimeType'] == "application/vnd.google-apps.folder":
                     if number_row >= 3:
