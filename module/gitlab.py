@@ -1,4 +1,4 @@
-from telegram.ext import run_async
+from telegram.ext import run_async, CallbackContext
 from urllib.parse import quote
 import requests
 import sqlite3
@@ -12,7 +12,7 @@ import re
 import os
 import io
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 
 # Logger
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -69,7 +69,7 @@ def init_api():
             session=session
         )
 
-def get_chat_id(update):
+def get_chat_id(update: Update):
     """
         Return the chat ID from update object
 
@@ -192,7 +192,7 @@ def get_blob_file(project_id, blob_id):
         return None
 
 @run_async
-def download_blob_file_async_internal(bot, update, blob_id, blob_name, db_result):
+def download_blob_file_async_internal(update: Update, context: CallbackContext, blob_id, blob_name, db_result):
     """
         Download a file asynchronously and send it if the size is less than 50MB, otherwise send the download link
 
@@ -221,14 +221,14 @@ def download_blob_file_async_internal(bot, update, blob_id, blob_name, db_result
                     file_handle.write(download.content)
 
             with open('file/%s' % file_name, 'rb') as downloaded_file:
-                bot.sendChatAction(chat_id=chat_id, action="UPLOAD_DOCUMENT")
-                bot.sendDocument(chat_id=chat_id, document=downloaded_file)
+                context.bot.sendChatAction(chat_id=chat_id, action="UPLOAD_DOCUMENT")
+                context.bot.sendDocument(chat_id=chat_id, document=downloaded_file)
 
             os.remove('file/%s' % file_name)
         else:
-            bot.sendMessage(chat_id=chat_id, text="⚠️ Il file è troppo grande per il download diretto!\nScaricalo al seguente link:\n%s" % download_url)
+            context.bot.sendMessage(chat_id=chat_id, text="⚠️ Il file è troppo grande per il download diretto!\nScaricalo al seguente link:\n%s" % download_url)
 
-def download_blob_file_async(bot, update, blob=None):
+def download_blob_file_async(update: Update, context: CallbackContext, blob=None):
     """
         Return the handle to the file if below the maximum size otherwise the download link
 
@@ -287,7 +287,7 @@ def format_keyboard_buttons(buttons=[]):
 
     return keyboard
 
-def send_message(bot, update, message, buttons=[[]], blob=None):
+def send_message(update: Update, context: CallbackContext, message, buttons=[[]], blob=None):
     """
         Send a reply message with text and button or upload a document
 
@@ -303,18 +303,18 @@ def send_message(bot, update, message, buttons=[[]], blob=None):
 
     if chat_id:
         if blob:
-            download_blob_file_async(bot, update, blob)
+            download_blob_file_async(update, context, blob)
         else:
             buttons = format_keyboard_buttons(buttons)
             reply_markup = InlineKeyboardMarkup(buttons)
 
-            bot.sendMessage(
+            context.bot.sendMessage(
                 chat_id=chat_id,
                 text=message,
                 reply_markup=reply_markup
             )
 
-def gitlab_handler(bot, update, data=None):
+def gitlab_handler(update: Update, context: CallbackContext, data=None):
     """
         Handle every action of /git and /gitlab command
 
@@ -390,8 +390,8 @@ def gitlab_handler(bot, update, data=None):
 
     title = parent[2] if blob_id and len(parent) == 3 else parent[1]
     send_message(
-        bot,
         update,
+        context,
         title,
         buttons,
         blob

@@ -147,7 +147,6 @@ def informative_callback(update: Update, context: CallbackContext, cmd):
     check_log(update, context, cmd)
     message_text = read_md(cmd)
     context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text, parse_mode='Markdown')
-    bot.sendMessage(chat_id=update.message.chat_id, text=message_text, parse_mode='markdown')
 
 
 def exit_cmd():
@@ -309,11 +308,11 @@ def callback(update: Update, context: CallbackContext):
                     keyboard2.append([InlineKeyboardButton("🔙", callback_data="Drive_" + file1['parents'][0]['id'])])
 
                 reply_markup3 = InlineKeyboardMarkup(keyboard2)
-                context.bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text=file1['title']+":", reply_markup=reply_markup3)
+                bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text=file1['title']+":", reply_markup=reply_markup3)
 
             elif file1['mimeType'] == "application/vnd.google-apps.document":
-                context.bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text="Impossibile scaricare questo file poichè esso è un google document, Andare sul seguente link")
-                context.bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text=file1['exportLinks']['application/pdf'])
+                bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text="Impossibile scaricare questo file poichè esso è un google document, Andare sul seguente link")
+                bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text=file1['exportLinks']['application/pdf'])
 
             else:
                 try:
@@ -322,16 +321,16 @@ def callback(update: Update, context: CallbackContext):
                         file_d.GetContentFile('file/'+file1context['title'])
                         file_s = file1['title']
                         filex = open(str("file/" + file_s), "rb")
-                        context.bot2.sendChatAction(chat_id=update['callback_query']['from_user']['id'], action="UPLOAD_DOCUMENT")
-                        context.bot2.sendDocument(chat_id=update['callback_query']['from_user']['id'], document=filex)
+                        bot2.sendChatAction(chat_id=update['callback_query']['from_user']['id'], action="UPLOAD_DOCUMENT")
+                        bot2.sendDocument(chat_id=update['callback_query']['from_user']['id'], document=filex)
                         os.remove(str("file/" + file_s))
                     else:
-                        context.bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text="File troppo grande per il download diretto, scarica dal seguente link")
+                        bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text="File troppo grande per il download diretto, scarica dal seguente link")
                         # file_d['downloadUrl']
-                        context.bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text=file_d['alternateLink'])
+                        bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text=file_d['alternateLink'])
                 except Exception as e:
                     print("- Drive error: {}".format(e))
-                    context.bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text="Impossibile scaricare questo file, contattare gli sviluppatori del bot")
+                    bot2.sendMessage(chat_id=update['callback_query']['from_user']['id'], text="Impossibile scaricare questo file, contattare gli sviluppatori del bot")
                     open("logs/errors.txt", "a+").write(str(e) + str(file_d['title'])+"\n")
 
             sys.exit(0)
@@ -343,7 +342,7 @@ def callback(update: Update, context: CallbackContext):
 
 def request(update: Update, context: CallbackContext):
     conn = sqlite3.connect('data/DMI_DB.db')
-    chat_id = context.message.chat_id
+    chat_id = update.message.chat_id
 
     if chat_id > 0:
         # if we do not find any chat_id in the db
@@ -355,10 +354,10 @@ def request(update: Update, context: CallbackContext):
             if update['message']['from_user']['username']:
                 username = update['message']['from_user']['username']
 
-            context.message.text = re.sub('<|>', '', context.message.text)
+            update.message.text = re.sub('<|>', '', update.message.text)
 
-            if len(context.message.text.split(" ")) == 4 and "@" in context.message.text.split(" ")[3] and "." in context.message.text.split()[3]:
-                text_send = str(context.message.text) + " " + username
+            if len(update.message.text.split(" ")) == 4 and "@" in update.message.text.split(" ")[3] and "." in update.message.text.split()[3]:
+                text_send = str(update.message.text) + " " + username
                 keyboard.append([InlineKeyboardButton("Accetta", callback_data="Drive_"+str(chat_id))])
                 reply_markup2 = InlineKeyboardMarkup(keyboard)
                 context.bot.sendMessage(chat_id=config_map['dev_group_chatid'], text=text_send, reply_markup=reply_markup2)
@@ -375,11 +374,11 @@ def request(update: Update, context: CallbackContext):
 
 def add_db(update: Update, context: CallbackContext):
     conn = sqlite3.connect('data/DMI_DB.db')
-    chat_id = context.message.chat_id
+    chat_id = update.message.chat_id
 
     if (config_map['dev_group_chatid'] != 0 and chat_id == config_map['dev_group_chatid']):
         # /add nome cognome e-mail username chatid
-        array_value = context.message.text.split(" ")
+        array_value = update.message.text.split(" ")
         if len(array_value) == 6:
             conn.execute("INSERT INTO 'Chat_id_List' VALUES (" + array_value[5] + ",'" + array_value[4] + "','" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "') ")
             context.bot.sendMessage(chat_id=array_value[5], text="🔓 La tua richiesta è stata accettata. Leggi il file README")
@@ -404,7 +403,7 @@ def drive(update: Update, context: CallbackContext):
     gauth.CommandLineAuth()
     # gauth.LocalWebserverAuth()
     drive = GoogleDrive(gauth)
-    chat_id = context.message.chat_id
+    chat_id = update.message.chat_id
     id_drive = '0B7-Gi4nb88hremEzWnh3QmN3ZlU'
     if chat_id < 0:
         context.bot.sendMessage(chat_id=chat_id, text="La funzione /drive non è ammessa nei gruppi")
@@ -610,8 +609,8 @@ def prof(update: Update, context: CallbackContext):
 
 def forum_bot(update: Update, context: CallbackContext):
     check_log(update, context, "forum_bot")
-    message_text = forum_cmd(context.message.text)
-    context.bot.sendMessage(chat_id=context.message.chat_id, text=message_text)
+    message_text = forum_cmd(update.message.text)
+    context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
 
 
 def get_short_link(url):
@@ -636,15 +635,15 @@ def shortit(message):
 
 
 def news_(update: Update, context: CallbackContext):
-    if (config_map['spamnews_news_chatid'] != 0 and context.message.chat_id == config_map['spamnews_news_chatid']):
+    if (config_map['spamnews_news_chatid'] != 0 and update.message.chat_id == config_map['spamnews_news_chatid']):
         global news
-        news = context.message.text.replace("/news ", "")
-        news = context.message.text.replace("/news", "")
+        news = update.message.text.replace("/news ", "")
+        news = update.message.text.replace("/news", "")
 #		news = shortit(news)
-        context.bot.sendMessage(chat_id=context.message.chat_id, text="News Aggiornata!")
+        context.bot.sendMessage(chat_id=update.message.chat_id, text="News Aggiornata!")
 
 def spamnews(update: Update, context: CallbackContext):
-    if (config_map['spamnews_news_chatid'] != 0 and context.message.chat_id == config_map['spamnews_news_chatid']):
+    if (config_map['spamnews_news_chatid'] != 0 and update.message.chat_id == config_map['spamnews_news_chatid']):
         chat_ids = open('logs/chatid.txt', 'r').read()
         chat_ids = chat_ids.split("\n")
         list_chat_ids = chat_ids
@@ -673,14 +672,14 @@ def spamnews(update: Update, context: CallbackContext):
 
         spam_channel(bot, news)
 
-        context.bot.sendMessage(chat_id=context.message.chat_id, text="News spammata!")
+        context.bot.sendMessage(chat_id=update.message.chat_id, text="News spammata!")
 
 
 def disablenews(update: Update, context: CallbackContext):
     check_log(update, context, "disablenews")
 
     chat_ids = open('logs/chatid.txt', 'r').read()
-    chat_id = context.message.chat_id
+    chat_id = update.message.chat_id
 
     if not ("+"+str(chat_id)) in chat_ids:
         chat_ids = chat_ids.replace(str(chat_id), "+"+str(chat_id))
@@ -689,7 +688,7 @@ def disablenews(update: Update, context: CallbackContext):
     else:
         message_test = "News già disabilitate!"
 
-    context.bot.sendMessage(chat_id=context.message.chat_id, text=message_test)
+    context.bot.sendMessage(chat_id=update.message.chat_id, text=message_test)
 
 
 def enablenews(update: Update, context: CallbackContext):
@@ -710,7 +709,7 @@ def enablenews(update: Update, context: CallbackContext):
 
 def stats_gen(update: Update, context: CallbackContext, days):
     conn = sqlite3.connect('data/DMI_DB.db')
-    chat_id = context.message.chat_id
+    chat_id = update.message.chat_id
     query = ""
     text = ""
 
@@ -766,12 +765,12 @@ def give_chat_id(update: Update, context: CallbackContext):
 
 
 def send_log(update: Update, context: CallbackContext):
-    if(config_map['dev_group_chatid'] != 0 and context.message.chat_id == config_map['dev_group_chatid']):
+    if(config_map['dev_group_chatid'] != 0 and update.message.chat_id == config_map['dev_group_chatid']):
         context.bot.sendDocument(chat_id=config_map['dev_group_chatid'], document=open('logs/logs.txt', 'rb'))
 
 
 def send_chat_ids(update: Update, context: CallbackContext):
-    if(config_map['dev_group_chatid'] != 0 and context.message.chat_id == config_map['dev_group_chatid']):
+    if(config_map['dev_group_chatid'] != 0 and update.message.chat_id == config_map['dev_group_chatid']):
         context.bot.sendDocument(chat_id=config_map['dev_group_chatid'], document=open('logs/chatid.txt', 'rb'))
 
 
@@ -833,8 +832,8 @@ def newscommand(update: Update, context: CallbackContext):
 def git(update: Update, context: CallbackContext):
     check_log(update, context, "gitlab")
 
-    chat_id = context.message.chat_id
-    executed_command = context.message.text.split(' ')[0]
+    chat_id = update.message.chat_id
+    executed_command = update.message.text.split(' ')[0]
 
     if chat_id < 0:
         context.bot.sendMessage(chat_id=chat_id, text="❗️ La funzione %s non è ammessa nei gruppi" % executed_command)
@@ -850,9 +849,9 @@ def git(update: Update, context: CallbackContext):
 
 def report(update: Update, context: CallbackContext):
     check_log(update, context, "report")
-    chat_id = context.message.chat_id
-    chat_username = context.message.from_user.username
-    executed_command = context.message.text.split(' ')[0]
+    chat_id = update.message.chat_id
+    chat_username = update.message.from_user.username
+    executed_command = update.message.text.split(' ')[0]
 
 
     if chat_id < 0:

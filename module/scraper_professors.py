@@ -90,7 +90,7 @@ def scrape_prof():
 
     values = ""
     for i in items:
-    	values += '("'+'", "'.join(str(v) for v in i.values())+'"),'
+    	values += '("'+'", "'.join(str(v).replace('"', '') for v in i.values())+'"),'
     values = values[:-1]
 
     query = "INSERT INTO professors ({}) VALUES {}".format(columns, values)
