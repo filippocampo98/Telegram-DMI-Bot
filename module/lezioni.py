@@ -28,7 +28,7 @@ def lezioni_condition(items, condition, *arg):
     output = set()
     for item in items:
         if(arg):
-            if(arg[0] in item[condition].lower()):
+            if(arg[0] in str(item[condition]).lower()):
                 output.add(lezioni_output(item))
         else:
             if(condition.replace('ì','i') in item and item[condition.replace('ì','i')] != ""):
@@ -40,7 +40,7 @@ def lezioni_condition_mult(items, days, years):
     output = set()
     for item in items:
         for day in days:
-            if ([year for year in years if year in item["anno"].lower()]) and (day.replace('ì','i') in item and item[day.replace('ì','i')] != ""):
+            if ([year for year in years if year in str(item["anno"]).lower()]) and (day.replace('ì','i') in item and item[day.replace('ì','i')] != ""):
                 output.add(lezioni_output(item))
     return output
 
@@ -65,9 +65,9 @@ def lezioni_cmd(bot, update, args):
         conn.close()
 
         daylist = list(calendar.day_name)
-        daylist = [x.lower().replace('ì', 'i') for x in daylist]
+        daylist = [str(x).lower().replace('ì', 'i') for x in daylist]
         #Clear arguments - Trasform all to lower case utf-8 (ì) - Remove word 'anno' and len<2
-        args = [x.lower() for x in args if len(x) > 2]
+        args = [str(x).lower() for x in args if len(x) > 2]
 
         try:
 
@@ -90,7 +90,7 @@ def lezioni_cmd(bot, update, args):
                 elif(args[0] in ("primo", "secondo", "terzo")):
                     output = lezioni_condition(items, "anno", args[0])
 
-                elif([item["nome"].lower().find(args[0]) for item in items]):
+                elif([str(item["nome"]).lower().find(args[0]) for item in items]):
                     output = lezioni_condition(items, "nome", args[0])
 
                 if not len(output):

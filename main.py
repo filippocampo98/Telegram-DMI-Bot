@@ -2,11 +2,11 @@
 from functions import *
 
 with open('config/settings.yaml') as yaml_config:
-	config_map = yaml.load(yaml_config)
+	config_map = yaml.load(yaml_config, Loader=yaml.SafeLoader)
 
 bot = telegram.Bot(config_map["token"])
 
-def logging_message(bot, update):
+def logging_message(update: Update, context: CallbackContext):
 	try:
 		message_id = update.message.message_id #ID MESSAGGIO
 		user = update.message.from_user # Restituisce un oggetto Telegram.User
@@ -33,7 +33,7 @@ def logging_message(bot, update):
 
 
 def main():
-	updater = Updater(TOKEN, request_kwargs={'read_timeout': 20, 'connect_timeout': 20})
+	updater = Updater(TOKEN, request_kwargs={'read_timeout': 20, 'connect_timeout': 20}, use_context=True)
 	dp = updater.dispatcher
 	dp.add_handler(MessageHandler(Filters.all, logging_message),1)
 	dp.add_handler(CallbackQueryHandler(button_handler))
@@ -42,41 +42,41 @@ def main():
 	dp.add_handler(CommandHandler('smonta_portoni',smonta_portoni))
 	dp.add_handler(CommandHandler('santino',santino))
 	dp.add_handler(CommandHandler('prof_sticker' ,prof_sticker))
-	dp.add_handler(RegexHandler('/lezioni cazzeggio',bladrim))
+	dp.add_handler(MessageHandler(Filters.regex('/lezioni cazzeggio'), bladrim))
 	dp.add_handler(CommandHandler('leiCheNePensaSignorina',lei_che_ne_pensa_signorina))
-	# dp.add_handler(RegexHandler('/forum',forum_bot))
+	# dp.add_handler(MessageHandler(Filters.regex('/forum'), forum_bot))
 
 	#Informative command
-	dp.add_handler(CommandHandler('sdidattica', lambda bot, update: informative_callback(bot, update, 'sdidattica')))
-	dp.add_handler(CommandHandler('sstudenti', lambda bot, update: informative_callback(bot, update, 'sstudenti')))
-	dp.add_handler(CommandHandler('cea', lambda bot, update: informative_callback(bot, update, 'cea')))
-	dp.add_handler(CommandHandler('ersu', lambda bot, update: informative_callback(bot, update, 'ersu')))
-	dp.add_handler(CommandHandler('ufficioersu', lambda bot, update: informative_callback(bot, update, 'ufficioersu')))
-	dp.add_handler(CommandHandler('urp', lambda bot, update: informative_callback(bot, update, 'urp')))
-	dp.add_handler(CommandHandler('biblioteca', lambda bot, update: informative_callback(bot, update, 'biblioteca')))
-	dp.add_handler(CommandHandler('cus', lambda bot, update: informative_callback(bot, update, 'cus')))
+	dp.add_handler(CommandHandler('sdidattica', lambda update, context: informative_callback(update, context, 'sdidattica')))
+	dp.add_handler(CommandHandler('sstudenti', lambda update, context: informative_callback(update, context, 'sstudenti')))
+	dp.add_handler(CommandHandler('cea', lambda update, context: informative_callback(update, context, 'cea')))
+	dp.add_handler(CommandHandler('ersu', lambda update, context: informative_callback(update, context, 'ersu')))
+	dp.add_handler(CommandHandler('ufficioersu', lambda update, context: informative_callback(update, context, 'ufficioersu')))
+	dp.add_handler(CommandHandler('urp', lambda update, context: informative_callback(update, context, 'urp')))
+	dp.add_handler(CommandHandler('biblioteca', lambda update, context: informative_callback(update, context, 'biblioteca')))
+	dp.add_handler(CommandHandler('cus', lambda update, context: informative_callback(update, context, 'cus')))
 
-	dp.add_handler(CommandHandler('lezioni', lambda bot, update, args: lezioni(bot, update, args), pass_args=True))
-	dp.add_handler(CommandHandler('esami', lambda bot, update, args: esami(bot, update, args), pass_args=True))
+	dp.add_handler(CommandHandler('lezioni', lambda update, context: lezioni(update, context)))
+	dp.add_handler(CommandHandler('esami', lambda update, context: esami(update, context)))
 
-	dp.add_handler(CommandHandler('prof', prof, pass_args=True))
+	dp.add_handler(CommandHandler('prof', prof))
 
-	dp.add_handler(CommandHandler('aulario', lambda bot, update: informative_callback(bot, update, 'aulario')))
+	dp.add_handler(CommandHandler('aulario', lambda update, context: informative_callback(update, context, 'aulario')))
 	dp.add_handler(CommandHandler('help',help))
-	dp.add_handler(CommandHandler('contributors', lambda bot, update: informative_callback(bot, update, 'contributors')))
+	dp.add_handler(CommandHandler('contributors', lambda update, context: informative_callback(update, context, 'contributors')))
 
-	dp.add_handler(CommandHandler('rappresentanti', lambda bot, update: informative_callback(bot, update, 'rappresentanti')))
-	dp.add_handler(CommandHandler('rappresentanti_dmi', lambda bot, update: informative_callback(bot, update, 'rappresentanti_dmi')))
-	dp.add_handler(CommandHandler('rappresentanti_informatica', lambda bot, update: informative_callback(bot, update, 'rappresentanti_informatica')))
-	dp.add_handler(CommandHandler('rappresentanti_matematica', lambda bot, update: informative_callback(bot, update, 'rappresentanti_matematica')))
-	dp.add_handler(CommandHandler('report', report, pass_args=True))
+	dp.add_handler(CommandHandler('rappresentanti', lambda update, context: informative_callback(update, context, 'rappresentanti')))
+	dp.add_handler(CommandHandler('rappresentanti_dmi', lambda update, context: informative_callback(update, context, 'rappresentanti_dmi')))
+	dp.add_handler(CommandHandler('rappresentanti_informatica', lambda update, context: informative_callback(update, context, 'rappresentanti_informatica')))
+	dp.add_handler(CommandHandler('rappresentanti_matematica', lambda update, context: informative_callback(update, context, 'rappresentanti_matematica')))
+	dp.add_handler(CommandHandler('report', report))
 	dp.add_handler(CommandHandler('chatid',give_chat_id))
 	dp.add_handler(CommandHandler('send_log', send_log))
 	dp.add_handler(CommandHandler('send_chat_ids', send_chat_ids))
 	dp.add_handler(CommandHandler('errors', send_errors))
 	dp.add_handler(CommandHandler('start', start))
 	dp.add_handler(CommandHandler('avviso', newscommand))
-	dp.add_handler(CommandHandler('cloud', lambda bot, update: informative_callback(bot, update, 'cloud')))
+	dp.add_handler(CommandHandler('cloud', lambda update, context: informative_callback(update, context, 'cloud')))
 
 	#JobQueue
 	j = updater.job_queue
@@ -93,15 +93,15 @@ def main():
 
 	if	config_map['debug']['disable_drive'] == 0 or \
 		config_map['debug']['disable_gitlab'] == 0:
-			dp.add_handler(RegexHandler('/request', request))
-			dp.add_handler(RegexHandler('/add_db', add_db))
+			dp.add_handler(MessageHandler(Filters.regex('/request'), request))
+			dp.add_handler(MessageHandler(Filters.regex('/add_db'), add_db))
 
 	if (config_map['debug']['disable_db'] == 0):
 		dp.add_handler(CommandHandler('stats',stats))
 		dp.add_handler(CommandHandler('stats_tot',stats_tot))
 
 	if (config_map['debug']['disable_chatid_logs'] == 0):
-		dp.add_handler(RegexHandler('/news',news_))
+		dp.add_handler(MessageHandler(Filters.regex('/news'), news_))
 		dp.add_handler(CommandHandler('spamnews',spamnews))
 		dp.add_handler(CommandHandler('disablenews',disablenews))
 		dp.add_handler(CommandHandler('enablenews',enablenews))

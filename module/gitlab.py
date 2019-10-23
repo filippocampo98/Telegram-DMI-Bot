@@ -1,4 +1,4 @@
-from telegram.ext import run_async
+from telegram.ext import run_async, CallbackContext
 from urllib.parse import quote
 import requests
 import sqlite3
@@ -12,14 +12,14 @@ import re
 import os
 import io
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 
 # Logger
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 with open('config/settings.yaml', 'r') as yaml_config:
-    config_map = yaml.load(yaml_config)
+    config_map = yaml.load(yaml_config, Loader=yaml.SafeLoader)
 
     GITLAB_AUTH_TOKEN = config_map['gitlab']['token']
     GITLAB_ROOT_GROUP = config_map['gitlab']['root']
@@ -41,13 +41,13 @@ formats = {
 def new_session(token):
     """
         Create a new session using the authentication token passed as argument.
-    
+
         Parameters:
             token: Authentication Token for GitLab APIs
     """
 
     global session
-    
+
     session = requests.Session()
     session.headers.update({
         'Private-Token': token
@@ -69,7 +69,7 @@ def init_api():
             session=session
         )
 
-def get_chat_id(update):
+def get_chat_id(update: Update):
     """
         Return the chat ID from update object
 
@@ -82,7 +82,7 @@ def get_chat_id(update):
     if hasattr(update, "callback_query"):
         if hasattr(update.callback_query, "message"):
             chat_id = update.callback_query.message.chat.id
-    
+
     if not chat_id:
         chat_id = update.message.chat_id
 
@@ -183,7 +183,7 @@ def get_blob_file(project_id, blob_id):
 
         if blob_content.startswith('version https://git-lfs.github.com/spec/v1'):
             blob_size = re.findall('size (\d+)?', blob_content)[0]
-        
+
         return {
             'size': blob_size,
             'content': blob_content
@@ -192,7 +192,7 @@ def get_blob_file(project_id, blob_id):
         return None
 
 @run_async
-def download_blob_file_async_internal(bot, update, blob_id, blob_name, db_result):
+def download_blob_file_async_internal(update: Update, context: CallbackContext, blob_id, blob_name, db_result):
     """
         Download a file asynchronously and send it if the size is less than 50MB, otherwise send the download link
 
@@ -221,14 +221,14 @@ def download_blob_file_async_internal(bot, update, blob_id, blob_name, db_result
                     file_handle.write(download.content)
 
             with open('file/%s' % file_name, 'rb') as downloaded_file:
-                bot.sendChatAction(chat_id=chat_id, action="UPLOAD_DOCUMENT")
-                bot.sendDocument(chat_id=chat_id, document=downloaded_file)
-            
+                context.bot.sendChatAction(chat_id=chat_id, action="UPLOAD_DOCUMENT")
+                context.bot.sendDocument(chat_id=chat_id, document=downloaded_file)
+
             os.remove('file/%s' % file_name)
         else:
-            bot.sendMessage(chat_id=chat_id, text="⚠️ Il file è troppo grande per il download diretto!\nScaricalo al seguente link:\n%s" % download_url)
+            context.bot.sendMessage(chat_id=chat_id, text="⚠️ Il file è troppo grande per il download diretto!\nScaricalo al seguente link:\n%s" % download_url)
 
-def download_blob_file_async(bot, update, blob=None):
+def download_blob_file_async(update: Update, context: CallbackContext, blob=None):
     """
         Return the handle to the file if below the maximum size otherwise the download link
 
@@ -254,8 +254,8 @@ def download_blob_file_async(bot, update, blob=None):
 
         db_result = db.execute(query.format(blob_id)).fetchone()
         download_blob_file_async_internal(
-            bot,
             update,
+            context,
             blob_id,
             blob_name,
             db_result
@@ -287,7 +287,7 @@ def format_keyboard_buttons(buttons=[]):
 
     return keyboard
 
-def send_message(bot, update, message, buttons=[[]], blob=None):
+def send_message(update: Update, context: CallbackContext, message, buttons=[[]], blob=None):
     """
         Send a reply message with text and button or upload a document
 
@@ -303,18 +303,18 @@ def send_message(bot, update, message, buttons=[[]], blob=None):
 
     if chat_id:
         if blob:
-            download_blob_file_async(bot, update, blob)
+            download_blob_file_async(update, context, blob)
         else:
             buttons = format_keyboard_buttons(buttons)
             reply_markup = InlineKeyboardMarkup(buttons)
 
-            bot.sendMessage(
+            context.bot.sendMessage(
                 chat_id=chat_id,
                 text=message,
                 reply_markup=reply_markup
             )
 
-def gitlab_handler(bot, update, data=None):
+def gitlab_handler(update: Update, context: CallbackContext, data=None):
     """
         Handle every action of /git and /gitlab command
 
@@ -338,7 +338,7 @@ def gitlab_handler(bot, update, data=None):
 
     if not data:
         subgroups = get_subgroups(GITLAB_ROOT_GROUP)
-        
+
         for subgroup in subgroups:
             db.execute("INSERT OR REPLACE INTO gitlab (id, parent_id, name, type) VALUES (?, ?, ?, ?)", (subgroup.id, subgroup.parent_id, subgroup.name, 'subgroup'))
             buttons.append(InlineKeyboardButton("🗂 %s" % subgroup.name, callback_data='git_s_%s' % subgroup.id))
@@ -349,11 +349,11 @@ def gitlab_handler(bot, update, data=None):
             query = "SELECT * FROM\
                 (SELECT parent_id, name FROM gitlab WHERE id = %s),\
                 (SELECT name FROM gitlab WHERE id = '%s')"
-            
+
             db_result = db.execute(query % (origin_id, blob_id)).fetchone()
         else:
             db_result = db.execute("SELECT parent_id, name FROM gitlab WHERE id = %s" % origin_id).fetchone()
-        
+
         if db_result:
             parent = db_result
 
@@ -384,14 +384,14 @@ def gitlab_handler(bot, update, data=None):
                 'id': blob_id,
                 'name': parent[2]
             }
-            
+
         if origin_id != str(GITLAB_ROOT_GROUP):
             buttons.append([InlineKeyboardButton("🔙", callback_data='git_x_%s' % parent[0])])
-        
+
     title = parent[2] if blob_id and len(parent) == 3 else parent[1]
     send_message(
-        bot,
         update,
+        context,
         title,
         buttons,
         blob
