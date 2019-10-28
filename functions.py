@@ -133,6 +133,7 @@ def help_cmd():
     output += "/disablenews \n"
     output += "/enablenews\n"
     output += "/contributors"
+    output += "/regolamentodidattico"
     return output
 
 
@@ -158,6 +159,9 @@ def esami_button():
     output = "Scrivi /esami inserendo almeno uno dei seguenti parametri: giorno, materia, sessione (prima, seconda, terza, straordinaria)"
     return output
 
+def regolamentodidattico_button():
+    output="Scrivi /regolamentodidattico per richiedere il regolamento didattico del tuo anno"
+    return output
 
 def lezioni_button():
     output = "Scrivi /lezioni inserendo almeno uno dei seguenti parametri: giorno, materia"
@@ -495,6 +499,11 @@ def help(update: Update, context: CallbackContext):
             InlineKeyboardButton("Lezioni",                 callback_data="lezioni_button")
         ]
     )
+
+    keyboard.append(
+        [InlineKeyboardButton("Regolamento Didattico", callback_data="reolamentodidattico_button")]
+    )
+
     keyboard.append(
         [
             InlineKeyboardButton("👥 Rappresentanti",                       callback_data="sm_rapp_menu"),
@@ -881,3 +890,96 @@ def report(update: Update, context: CallbackContext):
 
         else:
             context.bot.sendMessage(chat_id = chat_id, text="Errore. Inserisci la tua segnalazione dopo /report (Ad esempio /report Invasione ingegneri in corso.)")
+
+def regolamentodidattico(update, context):
+  update.message.reply_text(first_text(), reply_markup=regolamentodidattico_keyboard())
+
+def regdid(update, context):
+    query = update.callback_query
+    context.bot.edit_message_text(chat_id=query.message.chat_id, message_id=query.message.message_id, text=first_text(), reply_markup=regolamentodidattico_keyboard())
+
+def triennale(update, context):
+  query = update.callback_query
+  context.bot.edit_message_text(chat_id=query.message.chat_id, message_id=query.message.message_id, text=imm_text(), reply_markup=triennale_keyboard())
+
+def magistrale(update, context):
+  query = update.callback_query
+  context.bot.edit_message_text(chat_id=query.message.chat_id, message_id=query.message.message_id, text=imm_text(), reply_markup=magistrale_keyboard())
+
+def regolamenti(update, context):
+    query = update.callback_query
+    data= query.data
+    chat_id=update.effective_chat.id
+    if data=='Regolamento Didattico 2019/2020':
+        context.bot.send_document(chat_id=chat_id, document='http://web.dmi.unict.it/sites/default/files/files/Regolamento%202019-20%20L%2031_Informatica.pdf')
+    
+    elif data=='Regolamento Didattico 2018/2019':
+        context.bot.send_document(chat_id=chat_id, document='http://web.dmi.unict.it/sites/default/files/files/L%2031%20Informatica(1).pdf')
+    
+    elif data=='Regolamento Didattico 2017/2018':
+        context.bot.send_document(chat_id=chat_id, document='http://web.dmi.unict.it/sites/default/files/files/Regolamento%20L%2031%20Informatica%202017-18.pdf')
+
+    elif data=='Regolamento Didattico 2016/2017':
+        context.bot.send_document(chat_id=chat_id, document='http://web.dmi.unict.it/sites/default/files/files/Regolamento%20L%2031%20Informatica%202016-17.pdf')
+
+    elif data=='Regolamento Didattico 2015/2016':
+        context.bot.send_document(chat_id=chat_id, document='http://web.dmi.unict.it/sites/default/files/files/Regolamento%20L%2031%20Informatica%202015-16.pdf')
+    
+    elif data=='Regolamento Didattico 2014/2015':
+        context.bot.send_document(chat_id=chat_id, document='http://web.dmi.unict.it/sites/default/files/files/Didattica%20Programmata%20e%20elenco%20propedeuticit%C3%A0%202014-2015.pdf')
+    
+    elif data=='Regolamento Didattico 2013/2014':
+        context.bot.send_document(chat_id=chat_id, document='http://web.dmi.unict.it/sites/default/files/files/regolamentoDidattico_L31_Informatica_1314.pdf')
+
+    elif data=='Regolamento Didattico 2012/2013':
+        context.bot.send_document(chat_id=chat_id, document='http://web.dmi.unict.it/sites/default/files/files/regolamentoDidattico_L31_Informatica_1213.pdf')
+
+    elif data=='Regolamento Didattico 2019/2020_m':
+        context.bot.send_document(chat_id=chat_id, document='http://web.dmi.unict.it/sites/default/files/Regolamento%20Didattico%20LM18%201920_0.pdf')
+    
+    elif data=='Regolamento Didattico 2018/2019_m':
+        context.bot.send_document(chat_id=chat_id, document='http://web.dmi.unict.it/sites/default/files/documenti_sito/Regolamento%20Didattico%20LM18%201819.pdf')
+    
+    elif data=='Regolamento Didattico 2017/2018_m':
+        context.bot.send_document(chat_id=chat_id, document='http://web.dmi.unict.it/sites/default/files/documenti_sito/Regolamento%20Didattico%20LM18%201718.pdf')
+
+    elif data=='Regolamento Didattico 2016/2017_m':
+        context.bot.send_document(chat_id=chat_id, document='http://web.dmi.unict.it/sites/default/files/documenti_sito/LM%2018%20Informatica_1617.pdf')
+
+    elif data=='Regolamento Didattico 2015/2016_m':
+        context.bot.send_document(chat_id=chat_id, document='http://web.dmi.unict.it/sites/default/files/documenti_sito/Regolamento%20Didattico%20LM18%201516.pdf')    
+    
+
+
+    context.bot.edit_message_text(chat_id=query.message.chat_id, message_id=query.message.message_id, text="Ecco il file richiesto:",)
+    
+def regolamentodidattico_keyboard():
+  keyboard = [[InlineKeyboardButton('Triennale', callback_data='triennale_button'), InlineKeyboardButton('Magistrale', callback_data='magistrale_button')]]
+  return InlineKeyboardMarkup(keyboard)
+
+def triennale_keyboard():
+  keyboard = [[InlineKeyboardButton('Regolamento Didattico 2019/2020', callback_data='Regolamento Didattico 2019/2020')],
+              [InlineKeyboardButton('Regolamento Didattico 2018/2019', callback_data='Regolamento Didattico 2018/2019')],
+              [InlineKeyboardButton('Regolamento Didattico 2017/2018', callback_data='Regolamento Didattico 2017/2018')],
+              [InlineKeyboardButton('Regolamento Didattico 2016/2017', callback_data='Regolamento Didattico 2016/2017')],
+              [InlineKeyboardButton('Regolamento Didattico 2015/2016', callback_data='Regolamento Didattico 2015/2016')],
+              [InlineKeyboardButton('Regolamento Didattico 2014/2015', callback_data='Regolamento Didattico 2014/2015')],
+              [InlineKeyboardButton('Regolamento Didattico 2013/2014', callback_data='Regolamento Didattico 2013/2014')],
+              [InlineKeyboardButton('Regolamento Didattico 2012/2013', callback_data='Regolamento Didattico 2012/2013')],
+              [InlineKeyboardButton('Indietro', callback_data='regdid_button')]]
+  return InlineKeyboardMarkup(keyboard)
+
+def magistrale_keyboard():
+  keyboard = [[InlineKeyboardButton('Regolamento Didattico 2019/2020', callback_data='Regolamento Didattico 2019/2020_m')],
+              [InlineKeyboardButton('Regolamento Didattico 2018/2019', callback_data='Regolamento Didattico 2018/2019_m,')],
+              [InlineKeyboardButton('Regolamento Didattico 2017/2018', callback_data='Regolamento Didattico 2017/2018_m')],
+              [InlineKeyboardButton('Regolamento Didattico 2016/2017', callback_data='Regolamento Didattico 2016/2017_m')],
+              [InlineKeyboardButton('Regolamento Didattico 2015/2016', callback_data='Regolamento Didattico 2015/2016_m')],
+              [InlineKeyboardButton('Indietro', callback_data='regdid_button')]]
+  return InlineKeyboardMarkup(keyboard)
+
+def first_text():
+  return 'Scegliere uno dei seguenti corsi:'
+
+def imm_text():
+  return 'Scegliere il regolamento in base al proprio anno di immatricolazione:'

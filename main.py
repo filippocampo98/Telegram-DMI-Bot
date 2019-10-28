@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from functions import *
 
+
 with open('config/settings.yaml') as yaml_config:
 	config_map = yaml.load(yaml_config, Loader=yaml.SafeLoader)
 
@@ -33,6 +34,7 @@ def logging_message(update: Update, context: CallbackContext):
 
 
 def main():
+	TOKEN='1055374961:AAHlNLPJep88UIRIMJvBqjX6rR3kHSdMFEk'
 	updater = Updater(TOKEN, request_kwargs={'read_timeout': 20, 'connect_timeout': 20}, use_context=True)
 	dp = updater.dispatcher
 	dp.add_handler(MessageHandler(Filters.all, logging_message),1)
@@ -77,6 +79,14 @@ def main():
 	dp.add_handler(CommandHandler('start', start))
 	dp.add_handler(CommandHandler('avviso', newscommand))
 	dp.add_handler(CommandHandler('cloud', lambda update, context: informative_callback(update, context, 'cloud')))
+    
+    #regolamentodidattico
+    dp.add_handler(CommandHandler('regolamentodidattico', regolamentodidattico))
+    dp.add_handler(CallbackQueryHandler(triennale, pattern='triennale_button'))
+    dp.add_handler(CallbackQueryHandler(magistrale, pattern='magistrale_button'))
+    dp.add_handler(CallbackQueryHandler(regdid, pattern='regdid_button'))
+    dp.add_handler(CallbackQueryHandler(regolamenti))
+
 
 	#JobQueue
 	j = updater.job_queue
