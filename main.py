@@ -34,7 +34,6 @@ def logging_message(update: Update, context: CallbackContext):
 
 
 def main():
-	TOKEN='1055374961:AAHlNLPJep88UIRIMJvBqjX6rR3kHSdMFEk'
 	updater = Updater(TOKEN, request_kwargs={'read_timeout': 20, 'connect_timeout': 20}, use_context=True)
 	dp = updater.dispatcher
 	dp.add_handler(MessageHandler(Filters.all, logging_message),1)
