@@ -23,11 +23,5 @@ debug:
     disable_drive: 1
     disable_gitlab: 1
 
-shortener_key: <GOOGLE_API_KEY>
-
-news_channel: '@channelusername'
-mensa_channel: '@channelusername'
-
-spamnews_news_chatid: 0
 dev_group_chatid: 0 
 representatives_group: 0

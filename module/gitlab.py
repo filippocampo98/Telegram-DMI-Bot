@@ -314,14 +314,13 @@ def send_message(update: Update, context: CallbackContext, message, buttons=[[]]
                 reply_markup=reply_markup
             )
 
-def gitlab_handler(update: Update, context: CallbackContext, data=None):
+def gitlab_handler(update: Update, context: CallbackContext):
     """
         Handle every action of /git and /gitlab command
 
         Parameters:
             bot: "bot" object of Telegram API
             update: "update" object of Telegram API
-            data: Callback data used to switch actions
     """
 
     global db
@@ -335,6 +334,11 @@ def gitlab_handler(update: Update, context: CallbackContext, data=None):
 
     parent = (GITLAB_ROOT_GROUP, "DMI UNICT - Appunti & Risorse:")
     buttons = []
+
+    data = None
+    query = update.callback_query
+    if query is not None and query.data is not None:
+      data = query.data.replace("git_", "")
 
     if not data:
         subgroups = get_subgroups(GITLAB_ROOT_GROUP)
