@@ -21,13 +21,6 @@ CREATE TABLE IF NOT EXISTS stat_list (
 	DateCommand DATE
 );
 
--- subscriptions
-CREATE TABLE IF NOT EXISTS `subscriptions` (
-  `chatid` INT(11) NOT NULL,
-  `mensa` INT(11),
-  `news` INT(11)
-);
-
 -- professors
 CREATE TABLE IF NOT EXISTS `professors` (
   "ID" INT(11) NOT NULL PRIMARY KEY,

@@ -11,7 +11,6 @@ from pydrive.drive import GoogleDrive
 from pydrive.auth import GoogleAuth
 
 # Custom classes
-from classes.EasterEgg import EasterEgg
 from classes.StringParser import StringParser
 
 # System libraries
@@ -24,11 +23,11 @@ import os
 import sys
 import requests
 import sqlite3
-import yaml
 import logging
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
+from module.shared import read_md, check_log, config_map
 from module.lezioni import lezioni_cmd
 from module.esami import esami_cmd
 from module.professori import prof_cmd
@@ -36,20 +35,15 @@ from module.scraper_exams import scrape_exams
 from module.scraper_lessons import scrape_lessons
 from module.scraper_professors import scrape_prof
 from module.scraper_notices import scrape_notices
-
 from module.gitlab import gitlab_handler
+from module.easter_egg_func import *
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-# config
-with open('config/settings.yaml', 'r') as yaml_config:
-    config_map = yaml.load(yaml_config, Loader=yaml.SafeLoader)
-
 # Token of your telegram bot that you created from @BotFather, write it on settings.yml
 TOKEN = config_map["token"]
-news = ""
 
 def send_message(update: Update, context: CallbackContext, messaggio):
     msg = ""
@@ -76,29 +70,6 @@ def esami(update: Update, context: CallbackContext):
         send_message(update, context, message_text)
     else:
         context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text, parse_mode='Markdown')
-
-
-def forum(sezione):
-    response = urlopen("http://forum.informatica.unict.it/")
-    html_doc = response.read()
-    s = BeautifulSoup(html_doc, 'html.parser')
-    s.prettify()
-    dictionary = {}
-    for range_limit, main_table in enumerate(s.findAll("div", class_="tborder")):
-        if(range_limit >= 3):  # If che limita le sezioni a quelle interessate, evitando di stampare sottosezioni come "News" della categoria "Software"
-            break
-        for td_of_table in main_table.findAll("td", class_="windowbg3"):
-            for span_under in td_of_table.findAll("span", class_="smalltext"):
-                for anchor_tags in span_under.find_all('a'):
-                    anchor_tags_splitted = anchor_tags.string.split(",")
-                    anchor_tags_without_cfu = StringParser.remove_cfu(anchor_tags_splitted[0])
-
-                    if(sezione == anchor_tags_without_cfu.lower()):
-                        dictionary[anchor_tags_without_cfu.lower()] = anchor_tags['href']
-                        return dictionary
-
-    return False  # Redefine with @Veeenz API
-
 
 # Commands
 CUSicon = {0: "🏋",
@@ -130,17 +101,8 @@ def help_cmd():
     output += "~Bot~\n"
     output += "📂 /drive - accedi a drive\n"
     output += "📂 /git - /gitlab - accedi a gitlab\n"
-    output += "/disablenews \n"
-    output += "/enablenews\n"
     output += "/contributors"
     return output
-
-
-def read_md(namefile):
-    in_file = open("data/markdown/" + namefile + ".md", "r")
-    text = in_file.read()
-    in_file.close()
-    return text
 
 
 def informative_callback(update: Update, context: CallbackContext, cmd):
@@ -158,42 +120,9 @@ def esami_button():
     output = "Scrivi /esami inserendo almeno uno dei seguenti parametri: giorno, materia, sessione (prima, seconda, terza, straordinaria)"
     return output
 
-
 def lezioni_button():
     output = "Scrivi /lezioni inserendo almeno uno dei seguenti parametri: giorno, materia"
     return output
-
-
-def mesami_url():
-    url = "http://web.dmi.unict.it/Didattica/Laurea%20Magistrale%20in%20Informatica%20LM-18/Calendario%20degli%20Esami"
-    return url
-
-
-def aulario_url():
-    url = 'http://aule.dmi.unict.it/aulario/roschedule.php'
-    return url
-
-
-# Easter egg
-def prof_sticker_id():
-    db = sqlite3.connect('data/DMI_DB.db')
-    i = db.execute("SELECT * FROM 'stickers' ORDER BY RANDOM() LIMIT 1").fetchone()[0]
-
-    db.close()
-
-    return i
-
-
-def forum_cmd(text):
-    text = text.replace("/forum ", "")
-    dict_url_sezioni = forum(text)
-    if not (dict_url_sezioni == False):
-        for titoli in dict_url_sezioni:
-            output = StringParser.starts_with_upper(titoli) + ": " + str(dict_url_sezioni[titoli])
-    else:
-        output = "La sezione non e' stata trovata."
-    return output
-
 
 def callback(update: Update, context: CallbackContext):
     conn = sqlite3.connect('data/DMI_DB.db')
@@ -446,39 +375,6 @@ def drive(update: Update, context: CallbackContext):
     conn.close()
 
 
-# CallbackQueryHandler
-def button_handler(update: Update, context: CallbackContext):
-    query = update.callback_query
-    chat_id = query.message.chat_id
-    message_id = query.message.message_id
-    data = query.data
-
-    # Submenu
-    if data.startswith("sm_"):
-        func_name = data[3:len(data)]
-        globals()[func_name](query, context, chat_id, message_id)
-
-    elif data == "esami_button" or data == "lezioni_button" or data == "help_cmd" or data == "exit_cmd":
-        message_text = globals()[data]()
-        context.bot.editMessageText(
-            text=message_text, chat_id=chat_id, message_id=message_id)
-
-    elif data.startswith("Drive_"):
-        callback(update, context)
-
-    elif data.startswith('git_'):
-        gitlab_handler(update, context, data.replace('git_', ''))
-
-    elif data == "enablenews" or data == "disablenews":
-        globals()[data](query, context)
-
-    # Simple text
-    elif data != "_div":
-        message_text = read_md(data)
-        check_log(update, context, data, 1)
-        context.bot.editMessageText(
-            text=message_text, chat_id=chat_id, message_id=message_id)
-
 def help(update: Update, context: CallbackContext):
     check_log(update, context, "help")
     chat_id = update.message.chat_id
@@ -489,18 +385,19 @@ def help(update: Update, context: CallbackContext):
 
     keyboard.append(
         [
-            InlineKeyboardButton("📖 Esami (Triennale)",    callback_data="esami_button"),
-            InlineKeyboardButton("📖 Esami (Magistrale)",   url=mesami_url()),
-            InlineKeyboardButton("🗓 Aulario",              url=aulario_url()),
-            InlineKeyboardButton("Lezioni",                 callback_data="lezioni_button")
+            InlineKeyboardButton("📖 Esami (Triennale)",    url='http://dev7.unict.it/_esami.php?cds=X81'),
+            InlineKeyboardButton("📖 Esami (Magistrale)",   url='http://dev7.unict.it/_esami.php?cds=W82'),
+            InlineKeyboardButton("🗓 Aulario",              url='http://aule.dmi.unict.it/aulario/roschedule.php'),
+            InlineKeyboardButton("Lezioni",                 url='http://web.dmi.unict.it/corsi/l-31/orario-lezioni')
         ]
     )
+
     keyboard.append(
         [
             InlineKeyboardButton("👥 Rappresentanti",                       callback_data="sm_rapp_menu"),
-            InlineKeyboardButton("📚 Biblioteca",                           callback_data="biblioteca"),
-            InlineKeyboardButton(CUSicon[random.randint(0, 5)] + " CUS",    callback_data="cus"),
-            InlineKeyboardButton("☁️ Cloud",   callback_data="cloud")
+            InlineKeyboardButton("📚 Biblioteca",                           callback_data="md_biblioteca"),
+            InlineKeyboardButton(CUSicon[random.randint(0, 5)] + " CUS",    callback_data="md_cus"),
+            InlineKeyboardButton("☁️ Cloud",                                 callback_data="md_cloud")
         ]
     )
 
@@ -508,9 +405,9 @@ def help(update: Update, context: CallbackContext):
 
     keyboard.append(
         [
-            InlineKeyboardButton("Seg. Didattica",  callback_data="sdidattica"),
-            InlineKeyboardButton("Seg. Studenti",   callback_data="sstudenti"),
-            InlineKeyboardButton("CEA",             callback_data="cea")
+            InlineKeyboardButton("Seg. Didattica",  callback_data="md_sdidattica"),
+            InlineKeyboardButton("Seg. Studenti",   callback_data="md_sstudenti"),
+            InlineKeyboardButton("CEA",             callback_data="md_cea")
         ]
     )
 
@@ -518,9 +415,9 @@ def help(update: Update, context: CallbackContext):
 
     keyboard.append(
         [
-            InlineKeyboardButton("ERSU",          callback_data="ersu"),
-            InlineKeyboardButton("Ufficio ERSU",  callback_data="ufficioersu"),
-            InlineKeyboardButton("URP",           callback_data="urp")
+            InlineKeyboardButton("ERSU",          callback_data="md_ersu"),
+            InlineKeyboardButton("Ufficio ERSU",  callback_data="md_ufficioersu"),
+            InlineKeyboardButton("URP",           callback_data="md_urp")
         ]
     )
 
@@ -528,15 +425,9 @@ def help(update: Update, context: CallbackContext):
 
     keyboard.append(
         [
-            InlineKeyboardButton("Iscriviti alle news",     callback_data="enablenews"),
-            InlineKeyboardButton("Disiscriviti dalle news", callback_data="disablenews")
-        ]
-    )
-    keyboard.append(
-        [
-            InlineKeyboardButton("📂 Drive",     callback_data="drive"),
-            InlineKeyboardButton("📂 GitLab",     callback_data="gitlab"),
-            InlineKeyboardButton("Contributors", callback_data="contributors"),
+            InlineKeyboardButton("📂 Drive",     callback_data="md_drive"),
+            InlineKeyboardButton("📂 GitLab",    callback_data="md_gitlab"),
+            InlineKeyboardButton("Contributors", callback_data="md_contributors"),
         ]
     )
 
@@ -558,46 +449,15 @@ def rapp_menu(update: Update, context: CallbackContext, chat_id, message_id):
 
     keyboard.append(
         [
-            InlineKeyboardButton("Rapp. DMI",         callback_data="rappresentanti_dmi"),
-            InlineKeyboardButton("Rapp. Informatica", callback_data="rappresentanti_informatica"),
-            InlineKeyboardButton("Rapp. Matematica",  callback_data="rappresentanti_matematica"),
+            InlineKeyboardButton("Rapp. DMI",         callback_data="md_rappresentanti_dmi"),
+            InlineKeyboardButton("Rapp. Informatica", callback_data="md_rappresentanti_informatica"),
+            InlineKeyboardButton("Rapp. Matematica",  callback_data="md_rappresentanti_matematica"),
         ]
     )
 
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     context.bot.editMessageText(text=message_text, chat_id=chat_id, message_id=message_id, reply_markup=reply_markup)
-
-
-def smonta_portoni(update: Update, context: CallbackContext):
-    check_log(update, context, "smonta_portoni")
-    message_text = EasterEgg.get_smonta_portoni()
-    context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
-
-
-def santino(update: Update, context: CallbackContext):
-    chat_id = update.message.chat_id
-    if (chat_id == -1001031103640 or chat_id == config_map['dev_group_chatid']):
-        check_log(update, context, "santino")
-        message_text = EasterEgg.get_santino()
-        context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
-
-
-def bladrim(update: Update, context: CallbackContext):
-    check_log(update, context, "bladrim")
-    message_text = EasterEgg.get_bladrim()
-    context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
-
-
-def prof_sticker(update: Update, context: CallbackContext):
-    check_log(update, context, "prof_sticker")
-    context.bot.sendSticker(chat_id=update.message.chat_id, sticker=prof_sticker_id())
-
-
-def lei_che_ne_pensa_signorina(update: Update, context: CallbackContext):
-    check_log(update, context, "leiCheNePensaSignorina")
-    message_text = EasterEgg.get_lei_che_ne_pensa_signorina()
-    context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
 
 
 def prof(update: Update, context: CallbackContext):
@@ -607,106 +467,6 @@ def prof(update: Update, context: CallbackContext):
         send_message(update, context, message_text)
     else:
         context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text, parse_mode='Markdown')
-
-
-def forum_bot(update: Update, context: CallbackContext):
-    check_log(update, context, "forum_bot")
-    message_text = forum_cmd(update.message.text)
-    context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
-
-
-def get_short_link(url):
-    post_url = 'https://www.googleapis.com/urlshortener/v1/url?key={}'.format(config_map['shortener_key'])
-    payload = {'longUrl': url}
-    headers = {'content-type': 'application/json'}
-    r = requests.post(post_url, data=json.dumps(payload), headers=headers)
-    return r.json()['id']
-
-
-def shortit(message):
-    url_regex = re.compile('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
-    urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message)
-    news = url_regex.sub('{URL}', message)
-    urls.reverse()
-    updated_message = ''
-    for word in news.split(" "):
-        if word == '{URL}':
-            word = get_short_link(urls.pop())
-        updated_message += word+' '
-    return updated_message
-
-
-def news_(update: Update, context: CallbackContext):
-    if (config_map['spamnews_news_chatid'] != 0 and update.message.chat_id == config_map['spamnews_news_chatid']):
-        global news
-        news = update.message.text.replace("/news ", "")
-        news = update.message.text.replace("/news", "")
-#		news = shortit(news)
-        context.bot.sendMessage(chat_id=update.message.chat_id, text="News Aggiornata!")
-
-def spamnews(update: Update, context: CallbackContext):
-    if (config_map['spamnews_news_chatid'] != 0 and update.message.chat_id == config_map['spamnews_news_chatid']):
-        chat_ids = open('logs/chatid.txt', 'r').read()
-        chat_ids = chat_ids.split("\n")
-        list_chat_ids = chat_ids
-
-        for chat_id in chat_ids:
-            try:
-                # This command is rarely used. Only for IMPORTANT news. It is right to spam in groups
-                if not "+" in chat_id:
-                    bot.sendMessage(chat_id=chat_id, text=news)
-            except Unauthorized:
-                logger.error('Unauthorized id. Trying to remove from the chat_id list...' + str(chat_id))
-                list_chat_ids.remove(chat_id)
-            except Exception as error:
-                if "Group migrated to supergroup" in str(error):
-                    logger.error(str(error) + " (" + str(chat_id) + ")")
-                    new_chat_id = str(error).replace("Group migrated to supergroup. New chat id: ", "")
-                    new_chat_id = new_chat_id.replace("\n", "")
-                    list_chat_ids.remove(chat_id)
-                    list_chat_ids.append(new_chat_id)
-                else:
-                    open("logs/errors.txt", "a+").write(str(error) + " " + str(chat_id)+"\n")
-
-        list_chat_ids = '\n'.join(list_chat_ids)
-        list_chat_ids = list_chat_ids.replace("\n\n", "\n")
-        open('logs/chatid.txt', 'w').write(list_chat_ids)
-
-        spam_channel(bot, news)
-
-        context.bot.sendMessage(chat_id=update.message.chat_id, text="News spammata!")
-
-
-def disablenews(update: Update, context: CallbackContext):
-    check_log(update, context, "disablenews")
-
-    chat_ids = open('logs/chatid.txt', 'r').read()
-    chat_id = update.message.chat_id
-
-    if not ("+"+str(chat_id)) in chat_ids:
-        chat_ids = chat_ids.replace(str(chat_id), "+"+str(chat_id))
-        message_test = "News disabilitate!"
-        open('logs/chatid.txt', 'w').write(chat_ids)
-    else:
-        message_test = "News già disabilitate!"
-
-    context.bot.sendMessage(chat_id=update.message.chat_id, text=message_test)
-
-
-def enablenews(update: Update, context: CallbackContext):
-    check_log(update, context, "enablenews")
-
-    chat_ids = open('logs/chatid.txt', 'r').read()
-    chat_id = update.message.chat_id
-
-    if ("+"+str(chat_id)) in chat_ids:
-        chat_ids = chat_ids.replace("+"+str(chat_id), str(chat_id))
-        message_text = "News abilitate!"
-        open('logs/chatid.txt', 'w').write(chat_ids)
-    else:
-        message_text = "News già abilitate!"
-
-    context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text)
 
 
 def stats_gen(update: Update, context: CallbackContext, days):
@@ -742,26 +502,6 @@ def stats_tot(update: Update, context: CallbackContext):
     stats_gen(update, context, 0)
 
 
-def check_log(update: Update, context: CallbackContext, type, callback=0):
-    if callback:
-        update = update.callback_query
-
-    chat_id = update.message.chat_id
-
-    if (config_map['debug']['disable_db'] == 0):
-        today = str(date.today())
-        conn = sqlite3.connect('data/DMI_DB.db')
-        conn.execute("INSERT INTO stat_list VALUES ('"+ str(type) + "',"+str(chat_id)+",'"+str(today)+" ')")
-        conn.commit()
-        conn.close()
-
-    if (config_map['debug']['disable_chatid_logs'] == 0):
-        a_log = open("logs/chatid.txt", "a+")
-        r_log = open("logs/chatid.txt", "r+")
-        if not str(chat_id) in r_log.read():
-            a_log.write(str(chat_id)+"\n")
-
-
 def give_chat_id(update: Update, context: CallbackContext):
     update.message.reply_text(str(update.message.chat_id))
 
@@ -780,36 +520,6 @@ def send_errors(update: Update, context: CallbackContext):
     if(config_map['dev_group_chatid'] != 0 and update.message.chat_id == config_map['dev_group_chatid']):
         context.bot.sendDocument(chat_id=config_map['dev_group_chatid'], document=open('logs/errors.txt', 'rb'))
 
-
-def spam_channel(update: Update, context: CallbackContext):
-    try:
-        context.bot.sendMessage(chat_id=config_map['news_channel'], text=message, parse_mode='HTML')
-    except Exception as error:
-        open("logs/errors.txt", "a+").write("{} {}\n".format(error, config_map['news_channel']))
-
-
-def avviso(context):
-    job = context.job
-    scrape_notices()
-
-    if os.path.isfile("data/avviso.dat"):
-        testo = open("data/avviso.dat").read()
-        if testo != "":
-            chat_ids = open("logs/chatid.txt", "r").read()
-            chat_ids = chat_ids.split("\n")
-            for chat_id in chat_ids:
-                try:
-                    # Ignore chat_id with disabled news. Ignore chat_id groups.
-                    if not chat_id.startswith(("+", "-")):
-                        context.bot.sendMessage(chat_id=chat_id, text=testo, parse_mode='HTML')
-                except Exception as error:
-                    open("logs/errors.txt", "a+").write(str(error) + " " + str(chat_id)+"\n")
-
-            spam_channel(bot, testo)
-
-        os.remove("data/avviso.dat")
-
-
 def updater_lep(context):
     job = context.job
     scrape_lessons()
@@ -819,17 +529,6 @@ def updater_lep(context):
 
 def start(update: Update, context: CallbackContext):
     context.bot.sendMessage(chat_id=update.message.chat_id, text="Benvenuto! Questo bot è stato realizzato dagli studenti del Corso di Laurea in Informatica al fine di suppotare gli studenti del DMI! Per scoprire cosa puoi fare usa /help")
-
-
-
-def newscommand(update: Update, context: CallbackContext):
-    check_log(update, context, "avvisi")
-    global news
-    if news == "":
-        context.bot.sendMessage(chat_id=update.message.chat_id, text="Non ho nulla da mostrarti.")
-    else:
-        context.bot.sendMessage(chat_id=update.message.chat_id, text=news)
-
 
 def git(update: Update, context: CallbackContext):
     check_log(update, context, "gitlab")
@@ -881,3 +580,44 @@ def report(update: Update, context: CallbackContext):
 
         else:
             context.bot.sendMessage(chat_id = chat_id, text="Errore. Inserisci la tua segnalazione dopo /report (Ad esempio /report Invasione ingegneri in corso.)")
+
+
+# Callback Query Handlers
+
+def submenu_handler(update: Update, context: CallbackContext):
+    query = update.callback_query
+    data = query.data
+
+    func_name = data[3:len(data)]
+    globals()[func_name](
+      query,
+      context,
+      query.message.chat_id,
+      query.message.message_id
+    )
+  
+def generic_button_handler(update: Update, context: CallbackContext):
+    query = update.callback_query
+    data = query.data
+
+    message_text = globals()[data]()
+    context.bot.editMessageText(
+      text=message_text,
+      chat_id=query.message.chat_id,
+      message_id=query.message.message_id
+    )
+
+def md_handler(update: Update, context: CallbackContext):
+    query = update.callback_query
+
+    data = query.data.replace("md_", "")
+
+    message_text = read_md(data)
+    check_log(update, context, data, 1)
+
+    context.bot.editMessageText(
+      text=message_text,
+      chat_id=query.message.chat_id,
+      message_id=query.message.message_id,
+      parse_mode='Markdown'
+    )
