@@ -37,6 +37,7 @@ from module.scraper_professors import scrape_prof
 from module.scraper_notices import scrape_notices
 from module.gitlab import gitlab_handler
 from module.easter_egg_func import *
+from module.regolamento_didattico import *
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -102,6 +103,7 @@ def help_cmd():
     output += "📂 /drive - accedi a drive\n"
     output += "📂 /git - /gitlab - accedi a gitlab\n"
     output += "/contributors"
+    output += "/regolamentodidattico"
     return output
 
 
@@ -393,6 +395,10 @@ def help(update: Update, context: CallbackContext):
     )
 
     keyboard.append(
+        [InlineKeyboardButton("Regolamento Didattico", callback_data="regolamentodidattico_button")]
+    )
+
+    keyboard.append(
         [
             InlineKeyboardButton("👥 Rappresentanti",                       callback_data="sm_rapp_menu"),
             InlineKeyboardButton("📚 Biblioteca",                           callback_data="md_biblioteca"),
@@ -580,7 +586,6 @@ def report(update: Update, context: CallbackContext):
 
         else:
             context.bot.sendMessage(chat_id = chat_id, text="Errore. Inserisci la tua segnalazione dopo /report (Ad esempio /report Invasione ingegneri in corso.)")
-
 
 # Callback Query Handlers
 
