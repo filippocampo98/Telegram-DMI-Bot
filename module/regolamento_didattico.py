@@ -1,8 +1,17 @@
 # -*- coding: utf-8 -*-
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.ext import CallbackContext
+from module.shared import check_log
 
 def regolamentodidattico(update: Update, context: CallbackContext):
-  update.message.reply_text(first_text(), reply_markup=regolamentodidattico_keyboard())
+    check_log(update, context, "regolamentodidattico")
+    update.message.reply_text(first_text(), reply_markup=regolamentodidattico_keyboard())
+
+def regolamentodidattico_button(update: Update, context: CallbackContext):
+  check_log(update, context, "regolamentodidattico", 1)
+
+  query = update.callback_query
+  context.bot.edit_message_text(chat_id=query.message.chat_id, message_id=query.message.message_id, text=first_text(), reply_markup=regolamentodidattico_keyboard())
 
 def regdid(update: Update, context: CallbackContext):
     query = update.callback_query
@@ -19,7 +28,7 @@ def magistrale(update: Update, context: CallbackContext):
 def regolamenti(update: Update, context: CallbackContext):
     query = update.callback_query
     data = query.data
-    chat_id =update.effective_chat.id
+    chat_id = update.effective_chat.id
 
     reg_doc = {
       'Regolamento Didattico 2019/2020': 'http://web.dmi.unict.it/sites/default/files/files/Regolamento%202019-20%20L%2031_Informatica.pdf',

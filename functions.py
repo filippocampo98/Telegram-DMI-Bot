@@ -122,10 +122,6 @@ def esami_button():
     output = "Scrivi /esami inserendo almeno uno dei seguenti parametri: giorno, materia, sessione (prima, seconda, terza, straordinaria)"
     return output
 
-def regolamentodidattico_button():
-    output="Scrivi /regolamentodidattico per richiedere il regolamento didattico del tuo anno"
-    return output
-
 def lezioni_button():
     output = "Scrivi /lezioni inserendo almeno uno dei seguenti parametri: giorno, materia"
     return output
@@ -399,7 +395,7 @@ def help(update: Update, context: CallbackContext):
     )
 
     keyboard.append(
-        [InlineKeyboardButton("Regolamento Didattico", callback_data="reolamentodidattico_button")]
+        [InlineKeyboardButton("Regolamento Didattico", callback_data="regolamentodidattico_button")]
     )
 
     keyboard.append(

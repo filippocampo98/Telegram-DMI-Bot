@@ -82,13 +82,13 @@ def main():
 	dp.add_handler(CallbackQueryHandler(callback,               pattern='Drive_*'))
 	dp.add_handler(CallbackQueryHandler(gitlab_handler,         pattern='git_*'))
 
-  # regolamento didattico
-  dp.add_handler(CommandHandler('regolamentodidattico', regolamentodidattico))
-  dp.add_handler(CallbackQueryHandler(triennale,   pattern='reg_triennale_button'))
-  dp.add_handler(CallbackQueryHandler(magistrale,  pattern='reg_magistrale_button'))
-  dp.add_handler(CallbackQueryHandler(regdid,      pattern='regdid_button'))
-  dp.add_handler(CallbackQueryHandler(regolamenti, pattern='Regolamento*'))
-
+	# regolamento didattico
+	dp.add_handler(CommandHandler('regolamentodidattico', regolamentodidattico))
+	dp.add_handler(CallbackQueryHandler(triennale,                   pattern='reg_triennale_button'))
+	dp.add_handler(CallbackQueryHandler(magistrale,                  pattern='reg_magistrale_button'))
+	dp.add_handler(CallbackQueryHandler(regdid,                      pattern='regdid_button'))
+	dp.add_handler(CallbackQueryHandler(regolamenti,                 pattern='Regolamento*'))
+	dp.add_handler(CallbackQueryHandler(regolamentodidattico_button, pattern='regolamentodidattico_button'))
 
 	#JobQueue
 	j = updater.job_queue
