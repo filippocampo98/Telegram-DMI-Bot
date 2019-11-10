@@ -1,0 +1,18 @@
+cacheable: true
+type: inline 
+markup:
+- [
+  {text: "📖 Esami (Triennale)", url: "http://dev7.unict.it/_esami.php?cds=X81"},
+  {text: "📖 Esami (Magistrale)",   url: "http://dev7.unict.it/_esami.php?cds=W82"},
+  {text: "🗓 Aulario", url: "http://aule.dmi.unict.it/aulario/roschedule.php"},
+  {text: "Lezioni", url: "http://web.dmi.unict.it/corsi/l-31/orario-lezioni"}
+]
+- [
+  {text: "Regolamento Didattico", callback_data: "regolamentodidattico_button"}
+]
+- [
+  {text: "👥 Rappresentanti", callback_data: "sm_rapp_menu"},
+  {text: "📚 Biblioteca", callback_data: "md_biblioteca"},
+  {text: "CUS", callback_data: "md_cus"},
+  {text: "️ Cloud", callback_data: "md_cloud"}
+]
