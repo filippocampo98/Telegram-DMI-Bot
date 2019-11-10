@@ -35,14 +35,6 @@ If you want to test the bot by creating your personal istance, follow this steps
 
 ### Special functions
 
-#### - /news /spamnews
-
-You can enable these commands setting **disable_chatid_logs = 0**
-
-These functions allow to send to all users that used at least once the bot and stored in logs/chatid.txt a message.
-**/news** with this command you write the message (example: /news "This is a news!").
-With **/spamnews** the bot will send to all users the message.
-
 Notes: only some users are allowed to use these commands indeed there is an if condition that check the chatid of the user that can use them
 
 #### - /stats

@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 from functions import *
-
-
-with open('config/settings.yaml') as yaml_config:
-	config_map = yaml.load(yaml_config, Loader=yaml.SafeLoader)
+from module.shared import config_map
 
 bot = telegram.Bot(config_map["token"])
 
@@ -37,7 +34,6 @@ def main():
 	updater = Updater(TOKEN, request_kwargs={'read_timeout': 20, 'connect_timeout': 20}, use_context=True)
 	dp = updater.dispatcher
 	dp.add_handler(MessageHandler(Filters.all, logging_message),1)
-	dp.add_handler(CallbackQueryHandler(button_handler))
 
 	#Easter Egg
 	dp.add_handler(CommandHandler('smonta_portoni',smonta_portoni))
@@ -45,7 +41,6 @@ def main():
 	dp.add_handler(CommandHandler('prof_sticker' ,prof_sticker))
 	dp.add_handler(MessageHandler(Filters.regex('/lezioni cazzeggio'), bladrim))
 	dp.add_handler(CommandHandler('leiCheNePensaSignorina',lei_che_ne_pensa_signorina))
-	# dp.add_handler(MessageHandler(Filters.regex('/forum'), forum_bot))
 
 	#Informative command
 	dp.add_handler(CommandHandler('sdidattica', lambda update, context: informative_callback(update, context, 'sdidattica')))
@@ -76,21 +71,28 @@ def main():
 	dp.add_handler(CommandHandler('send_chat_ids', send_chat_ids))
 	dp.add_handler(CommandHandler('errors', send_errors))
 	dp.add_handler(CommandHandler('start', start))
-	dp.add_handler(CommandHandler('avviso', newscommand))
 	dp.add_handler(CommandHandler('cloud', lambda update, context: informative_callback(update, context, 'cloud')))
-    
-    #regolamentodidattico
-    dp.add_handler(CommandHandler('regolamentodidattico', regolamentodidattico))
-    dp.add_handler(CallbackQueryHandler(triennale, pattern='triennale_button'))
-    dp.add_handler(CallbackQueryHandler(magistrale, pattern='magistrale_button'))
-    dp.add_handler(CallbackQueryHandler(regdid, pattern='regdid_button'))
-    dp.add_handler(CallbackQueryHandler(regolamenti))
+
+  # generic buttons
+	dp.add_handler(CallbackQueryHandler(generic_button_handler, pattern='^(esami_buttonlezioni_button|help_cmd|exit_cmd)'))
+	dp.add_handler(CallbackQueryHandler(submenu_handler,        pattern='sm_*'))
+	dp.add_handler(CallbackQueryHandler(md_handler,             pattern='md_*'))
+
+  # drive & gitlab buttons
+	dp.add_handler(CallbackQueryHandler(callback,               pattern='Drive_*'))
+	dp.add_handler(CallbackQueryHandler(gitlab_handler,         pattern='git_*'))
+
+  # regolamento didattico
+  dp.add_handler(CommandHandler('regolamentodidattico', regolamentodidattico))
+  dp.add_handler(CallbackQueryHandler(triennale,   pattern='reg_triennale_button'))
+  dp.add_handler(CallbackQueryHandler(magistrale,  pattern='reg_magistrale_button'))
+  dp.add_handler(CallbackQueryHandler(regdid,      pattern='regdid_button'))
+  dp.add_handler(CallbackQueryHandler(regolamenti, pattern='Regolamento*'))
 
 
 	#JobQueue
 	j = updater.job_queue
 
-	#j.run_repeating(avviso, interval=60) 						# job_dmi_news
 	j.run_repeating(updater_lep, interval=86400, first=0) 				# job_updater_lep (24h)
 
 	if (config_map['debug']['disable_drive'] == 0):
@@ -108,14 +110,6 @@ def main():
 	if (config_map['debug']['disable_db'] == 0):
 		dp.add_handler(CommandHandler('stats',stats))
 		dp.add_handler(CommandHandler('stats_tot',stats_tot))
-
-	if (config_map['debug']['disable_chatid_logs'] == 0):
-		dp.add_handler(MessageHandler(Filters.regex('/news'), news_))
-		dp.add_handler(CommandHandler('spamnews',spamnews))
-		dp.add_handler(CommandHandler('disablenews',disablenews))
-		dp.add_handler(CommandHandler('enablenews',enablenews))
-
-	dp.add_handler(CallbackQueryHandler(callback))
 
 	updater.start_polling()
 	updater.idle()
