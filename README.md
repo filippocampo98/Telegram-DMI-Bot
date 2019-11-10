@@ -96,5 +96,5 @@ This project is made possible thanks to the contributions of:
 - [Salvo Distefano](https://github.com/RayperZ)
 - [Mario Gazzara](https://github.com/gazer99)
 - [Francesco Coppola](https://github.com/BeastHunter19/)
-
+- [Luca Longo](https://github.com/D4ed4lUS94)
 
