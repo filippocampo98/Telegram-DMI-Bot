@@ -8,11 +8,39 @@ markup:
   {text: "Lezioni", url: "http://web.dmi.unict.it/corsi/l-31/orario-lezioni"}
 ]
 - [
-  {text: "Regolamento Didattico", callback_data: "regolamentodidattico_button"}
+  {text: "Regolamento Didattico", callback_data: "_div"}
 ]
 - [
-  {text: "👥 Rappresentanti", callback_data: "sm_rapp_menu"},
+  {text: "👥 Rappresentanti", callback_data: "menu,switch,rappresentanti"},
   {text: "📚 Biblioteca", callback_data: "md_biblioteca"},
   {text: "CUS", callback_data: "md_cus"},
   {text: "️ Cloud", callback_data: "md_cloud"}
+]
+- [
+  {text: " ~ Segreteria orari e contatti ~ ", callback_data: "_div"}
+]
+- [
+  {text: "Seg. Didattica",  callback_data: "md_sdidattica"},
+  {text: "Seg. Studenti",  callback_data: "md_sstudenti"},
+  {text: "CEA",  callback_data: "md_cea"}
+]
+- [
+  {text: " ~ ERSU orari e contatti ~ ", callback_data: "_div"}
+]
+- [
+  {text: "ERSU", callback_data: "md_ersu"},
+  {text: "Ufficio ERSU", callback_data: "md_ufficioersu"},
+  {text: "URP", callback_data: "md_urp"}
+]
+- [
+  {text: " ~ Bot e varie ~ ", callback_data: "_div"}
+]
+- [
+  {text: "📂 Drive", callback_data: "md_drive"},
+  {text: "📂 GitLab", callback_data: "md_gitlab"},
+  {text: "Contributors", callback_data: "md_contributors"}
+]
+- [
+  {text: "Tutti i comandi", callback_data: "help_cmd"},
+  {text: "Chiudi", callback_data: "exit_cmd"}
 ]

@@ -128,4 +128,5 @@ pydrive
 pydrive/*
 .vscode
 
-
+# Log files
+*.logs
