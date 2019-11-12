@@ -2,7 +2,7 @@ import telegram, yaml, logging
 
 from telegram.ext import CallbackQueryHandler
 
-from modules.dmibot.handlers.callback.dummy import dummy_callback_handler
+from modules.dmibot.handlers.callback.mdmsg import mdmsg_callback_handler
 
 def load_callback_handlers(dispatcher):
-    dispatcher.add_handler(CallbackQueryHandler(dummy_callback_handler, pattern="dummy,.*"))
+    dispatcher.add_handler(CallbackQueryHandler(mdmsg_callback_handler, pattern="mdmsg,.*"))

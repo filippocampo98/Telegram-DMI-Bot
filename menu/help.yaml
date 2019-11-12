@@ -12,33 +12,33 @@ markup:
 ]
 - [
   {text: "👥 Rappresentanti", callback_data: "menu,switch,rappresentanti"},
-  {text: "📚 Biblioteca", callback_data: "md_biblioteca"},
-  {text: "CUS", callback_data: "md_cus"},
-  {text: "️ Cloud", callback_data: "md_cloud"}
+  {text: "📚 Biblioteca", callback_data: "mdmsg,biblioteca"},
+  {text: "CUS", callback_data: "mdmsg,cus"},
+  {text: "️ Cloud", callback_data: "mdmsg,cloud"}
 ]
 - [
   {text: " ~ Segreteria orari e contatti ~ ", callback_data: "_div"}
 ]
 - [
-  {text: "Seg. Didattica",  callback_data: "md_sdidattica"},
-  {text: "Seg. Studenti",  callback_data: "md_sstudenti"},
-  {text: "CEA",  callback_data: "md_cea"}
+  {text: "Seg. Didattica",  callback_data: "mdmsg,sdidattica"},
+  {text: "Seg. Studenti",  callback_data: "mdmsg,sstudenti"},
+  {text: "CEA",  callback_data: "mdmsg,cea"}
 ]
 - [
   {text: " ~ ERSU orari e contatti ~ ", callback_data: "_div"}
 ]
 - [
-  {text: "ERSU", callback_data: "md_ersu"},
-  {text: "Ufficio ERSU", callback_data: "md_ufficioersu"},
-  {text: "URP", callback_data: "md_urp"}
+  {text: "ERSU", callback_data: "mdmsg,ersu"},
+  {text: "Ufficio ERSU", callback_data: "mdmsg,ufficioersu"},
+  {text: "URP", callback_data: "mdmsg,urp"}
 ]
 - [
   {text: " ~ Bot e varie ~ ", callback_data: "_div"}
 ]
 - [
-  {text: "📂 Drive", callback_data: "md_drive"},
-  {text: "📂 GitLab", callback_data: "md_gitlab"},
-  {text: "Contributors", callback_data: "md_contributors"}
+  {text: "📂 Drive", callback_data: "mdmsg,drive"},
+  {text: "📂 GitLab", callback_data: "mdmsg,gitlab"},
+  {text: "Contributors", callback_data: "mdmsg,contributors"}
 ]
 - [
   {text: "Tutti i comandi", callback_data: "help_cmd"},

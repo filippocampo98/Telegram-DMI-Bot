@@ -2,7 +2,7 @@ cacheable: true
 type: inline 
 markup:
 - [
-  {text: "Rapp. DMI", callback_data: "md_rappresentanti_dmi"},
-  {text: "Rapp. Informatica", callback_data: "md_rappresentanti_informatica"},
-  {text: "Rapp. Matematica", callback_data: "md_rappresentanti_matematica"}
+  {text: "Rapp. DMI", callback_data: "mdmsg,rappresentanti_dmi"},
+  {text: "Rapp. Informatica", callback_data: "mdmsg,rappresentanti_informatica"},
+  {text: "Rapp. Matematica", callback_data: "mdmsg,rappresentanti_matematica"}
 ]
