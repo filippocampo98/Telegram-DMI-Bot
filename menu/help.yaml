@@ -41,6 +41,6 @@ markup:
   {text: "Contributors", callback_data: "mdmsg,contributors"}
 ]
 - [
-  {text: "Tutti i comandi", callback_data: "help_cmd"},
-  {text: "Chiudi", callback_data: "exit_cmd"}
+  {text: "Tutti i comandi", callback_data: "mdmsg,comandi"},
+  {text: "Chiudi", callback_data: "menu_cmd,exit"}
 ]
