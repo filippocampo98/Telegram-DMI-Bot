@@ -1,6 +1,6 @@
 import logging
 
-from modules.dmibot.utils.exams_utils import * 
+from modules.dmibot.utils.lessons_utils import * 
 
 def main():
     logging.basicConfig(
@@ -8,7 +8,7 @@ def main():
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
 
-    scrape_exams()
+    scrape_lessons()
 
 if __name__ == "__main__":
     main()
