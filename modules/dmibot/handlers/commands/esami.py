@@ -91,8 +91,6 @@ def esami_cmd_handler(update, context):
 
     output = split_esami_output(output)
 
-    print(output)
-
     for block in output:
         bot.send_message(
             chat_id = chat_id,
