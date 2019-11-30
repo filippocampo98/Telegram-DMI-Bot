@@ -3,6 +3,7 @@ import requests
 import json
 import logging
 import sqlite3
+from shared import get_current_year_exams
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -22,7 +23,7 @@ def get_giorno(giorno):
         return 0
 
 def scrape_lessons():
-    year_exams = "118" # 2017/2018
+    year_exams = get_current_year_exams() # codice da anno accademico corrente formato 1 + year[-2:], es: "120" per 2019/2020
     ids = ["l-31","l-35","lm-18","lm-40"]
 
     items = []

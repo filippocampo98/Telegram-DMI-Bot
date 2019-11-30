@@ -6,6 +6,7 @@ import json
 import logging
 import sqlite3
 from time import localtime, strftime
+from shared import get_current_year_exams
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -34,7 +35,7 @@ logger = logging.getLogger(__name__)
 # 		insert(row, session, items, year)
 
 def scrape_exams():
-	year_exams = "118" # 2017/2018
+	year_exams = get_current_year_exams() # codice da anno accademico corrente formato 1 + year[-2:], es: "120" per 2019/2020
 	url_exams = {
 		"l-31":	[ # Informatica Triennale
 			"http://web.dmi.unict.it/corsi/l-31/esami?sessione=1&aa="+year_exams,
