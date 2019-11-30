@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 # 		insert(row, session, items, year)
 
 def scrape_exams():
-	year_exams = "118" # 2017/2018
+	year_exams = "120" # 2019/2020
 	url_exams = {
 		"l-31":	[ # Informatica Triennale
 			"http://web.dmi.unict.it/corsi/l-31/esami?sessione=1&aa="+year_exams,
