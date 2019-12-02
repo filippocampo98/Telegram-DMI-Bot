@@ -1,6 +1,5 @@
 import sqlite3
 import yaml
-import pytz
 
 from telegram import Update
 from telegram.ext import CallbackContext
@@ -34,15 +33,3 @@ def check_log(update: Update, context: CallbackContext, type, callback=0):
         r_log = open("logs/chatid.txt", "r+")
         if not str(chat_id) in r_log.read():
             a_log.write(str(chat_id)+"\n")
-
-def get_current_year_exams():
-    month = 9       #month change
-    day = 30        #day change
-    tz = pytz.timezone('Europe/Rome')
-    time = datetime.now(tz)
-    checkNewYear = datetime(year=time.year, month=month, day=day)
-    checkNewYear = tz.localize(checkNewYear)
-    year = time.year
-    if time > checkNewYear:
-        year = time.year + 1
-    return "1" + str(year)[-2:]
