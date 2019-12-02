@@ -49,7 +49,7 @@ def esami_condition(items, field, value, *session):
 def check_output(output):
 	if len(output):
 		output_str = '\n'.join(list(output))
-		output_str += "\n Risultati trovati: " + str(len(output))
+		output_str += "\nRisultati trovati: " + str(len(output))
 	else:
 		output_str = "Nessun risultato trovato :(\n"
 

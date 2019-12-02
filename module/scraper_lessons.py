@@ -22,7 +22,7 @@ def get_giorno(giorno):
         return 0
 
 def scrape_lessons():
-    year_exams = "118" # 2017/2018
+    year_exams = "120" # 2019/2020
     ids = ["l-31","l-35","lm-18","lm-40"]
 
     items = []
