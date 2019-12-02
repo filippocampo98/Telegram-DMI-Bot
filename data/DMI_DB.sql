@@ -1,18 +1,12 @@
 -- chat_id_list
 CREATE TABLE IF NOT EXISTS `Chat_id_List` (
-  `id` int(11) NOT NULL,
+  `id` INTEGER PRIMARY KEY,
   `Chat_id` int(11) NOT NULL,
   `Username` text NOT NULL,
   `Nome` int(11) NOT NULL,
   `Cognome` int(11) NOT NULL,
   `E-mail` int(11) NOT NULL
 );
-
-ALTER TABLE `Chat_id_List`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `Chat_id_List`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 -- stat_list
 CREATE TABLE IF NOT EXISTS stat_list (
@@ -49,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `lessons` (
 -- exams
 CREATE TABLE IF NOT EXISTS `exams` (
   `anno` INT(2),
-  `corso` VARCHAR(255),
+  `cdl` VARCHAR(255),
   `docenti` VARCHAR(255),
   `insegnamento` VARCHAR(255),
   `prima` VARCHAR(255),
@@ -59,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `exams` (
 );
 
 -- gitlab
-CREATE TABLE "gitlab" (
+CREATE TABLE IF NOT EXISTS `gitlab` (
   `id` TEXT NOT NULL UNIQUE,
   `parent_id` INTEGER,
   `pathname` TEXT,
@@ -67,10 +61,10 @@ CREATE TABLE "gitlab" (
   `name` TEXT,
   `type` TEXT NOT NULL,
   PRIMARY KEY(`id`)
-)
+);
 
 --stickers
-CREATE TABLE 'stickers' (
+CREATE TABLE IF NOT EXISTS `stickers` (
 'id' TEXT
 );
 
