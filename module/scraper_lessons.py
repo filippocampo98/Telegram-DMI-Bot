@@ -3,7 +3,6 @@ import requests
 import json
 import logging
 import sqlite3
-from shared import get_current_year_exams
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -22,10 +21,8 @@ def get_giorno(giorno):
     else:
         return 0
 
-def scrape_lessons():
-    year_exams = get_current_year_exams() # codice da anno accademico corrente formato 1 + year[-2:], es: "120" per 2019/2020
+def scrape_lessons(year_exams):
     ids = ["l-31","l-35","lm-18","lm-40"]
-
     items = []
     for id_ in ids:
         urls = [
@@ -37,9 +34,9 @@ def scrape_lessons():
             soup = bs4.BeautifulSoup(sorgente, "html.parser")
 
             if soup.find('b',id='attivo').text[0] == 'S':
-                semestre = 2;
+                semestre = 2
             elif soup.find('b',id='attivo').text[0] == 'P':
-                semestre = 1;
+                semestre = 1
 
             table = soup.find('table',id='tbl_small_font')
             tr_all =  table.find_all('tr')
