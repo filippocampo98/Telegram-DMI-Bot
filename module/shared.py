@@ -3,7 +3,7 @@ import yaml
 
 from telegram import Update
 from telegram.ext import CallbackContext
-from datetime import date
+from datetime import date, datetime
 
 # config
 with open('config/settings.yaml', 'r') as yaml_config:
