@@ -528,23 +528,23 @@ def updater_lep(context):
     job = context.job
     year_exam = get_year_code(11 , 30) # aaaa/12/01 (cambio nuovo anno esami) data dal quale esami del vecchio a nuovo anno coesistono
     scrape_exams("1" + str(year_exam), delete= True) # flag che permette di eliminare tutti gli esami presenti in tabella exams
-    if(checkPrintOldExam(year_exam)):
+    if(check_print_old_exams(year_exam)):
         scrape_exams("1" + str(int(year_exam) - 1))
     scrape_lessons("1" + str(get_year_code(9 , 20))) # aaaa/09/21 (cambio nuovo anno lezioni) data dal quale vengono prelevate le lezioni del nuovo anno
     scrape_prof()
 
-def checkPrintOldExam(year_exam):
+def check_print_old_exams(year_exam):
     date_time = get_current_date()
-    ckdate = get_ckdate(date_time.year, 12, 23) # aaaa/12/24 data dal quale vengono prelevati solo gli esami del nuovo anno
+    ckdate = get_checkdate(date_time.year, 12, 23) # aaaa/12/24 data dal quale vengono prelevati solo gli esami del nuovo anno
     if((year_exam != str(date_time.year)[-2:]) and date_time < ckdate):
         return True
     return False
 
-def get_ckdate(year, month, day):
+def get_checkdate(year, month, day):
     tz = pytz.timezone('Europe/Rome')
-    ckdate = datetime(year= year, month= month, day= day)
-    ckdate = tz.localize(ckdate)
-    return ckdate
+    checkdate = datetime(year= year, month= month, day= day)
+    checkdate = tz.localize(checkdate)
+    return checkdate
 
 def get_current_date():
     tz = pytz.timezone('Europe/Rome')
@@ -553,9 +553,9 @@ def get_current_date():
 
 def get_year_code(month, day):
     date_time = get_current_date()
-    checkNewYear = get_ckdate(date_time.year, month, day)
+    check_new_year = get_checkdate(date_time.year, month, day)
     year = date_time.year
-    if date_time > checkNewYear:
+    if date_time > check_new_year:
         year = date_time.year + 1
     return str(year)[-2:]
 
