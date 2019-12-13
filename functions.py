@@ -574,9 +574,9 @@ def report(update: Update, context: CallbackContext):
                 row = name.fetchone()
 
                 if row[0] is None:
-                    message += "Nome: " + row[1] + "\n" + "Cognome: " + row[2] + "\n" + " ".join(args)
+                    message += "Nome: " + row[1] + "\n" + "Cognome: " + row[2] + "\n" + " ".join(context.args)
                 else:
-                    message += "Username: @" + row[0] + "\n" + "Nome: " + row[1] + "\n" + "Cognome: " + row[2] + "\n" + " ".join(args)
+                    message += "Username: @" + row[0] + "\n" + "Nome: " + row[1] + "\n" + "Cognome: " + row[2] + "\n" + " ".join(context.args)
                 context.bot.sendMessage(chat_id = config_map['representatives_group'], text = message)
                 context.bot.sendMessage(chat_id = chat_id, text = "Resoconto segnalazione: \n" + message + "\n Grazie per la segnalazione, un rappresentante ti contatterà nel minor tempo possibile.")
 
