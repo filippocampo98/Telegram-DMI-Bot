@@ -16,7 +16,6 @@ from classes.StringParser import StringParser
 # System libraries
 from datetime import date, datetime, timedelta
 import json
-import datetime
 import re
 import random
 import os
@@ -24,6 +23,7 @@ import sys
 import requests
 import sqlite3
 import logging
+import pytz
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
@@ -503,10 +503,8 @@ def stats(update: Update, context: CallbackContext):
         days = 30
     stats_gen(update, context, days)
 
-
 def stats_tot(update: Update, context: CallbackContext):
     stats_gen(update, context, 0)
-
 
 def give_chat_id(update: Update, context: CallbackContext):
     update.message.reply_text(str(update.message.chat_id))
@@ -528,10 +526,38 @@ def send_errors(update: Update, context: CallbackContext):
 
 def updater_lep(context):
     job = context.job
-    scrape_lessons()
-    scrape_exams()
+    year_exam = get_year_code(11 , 30) # aaaa/12/01 (cambio nuovo anno esami) data dal quale esami del vecchio a nuovo anno coesistono
+    scrape_exams("1" + str(year_exam), delete= True) # flag che permette di eliminare tutti gli esami presenti in tabella exams
+    if(check_print_old_exams(year_exam)):
+        scrape_exams("1" + str(int(year_exam) - 1))
+    scrape_lessons("1" + str(get_year_code(9 , 20))) # aaaa/09/21 (cambio nuovo anno lezioni) data dal quale vengono prelevate le lezioni del nuovo anno
     scrape_prof()
 
+def check_print_old_exams(year_exam):
+    date_time = get_current_date()
+    ckdate = get_checkdate(date_time.year, 12, 23) # aaaa/12/24 data dal quale vengono prelevati solo gli esami del nuovo anno
+    if((year_exam != str(date_time.year)[-2:]) and date_time < ckdate):
+        return True
+    return False
+
+def get_checkdate(year, month, day):
+    tz = pytz.timezone('Europe/Rome')
+    checkdate = datetime(year= year, month= month, day= day)
+    checkdate = tz.localize(checkdate)
+    return checkdate
+
+def get_current_date():
+    tz = pytz.timezone('Europe/Rome')
+    date_time = datetime.now(tz)
+    return date_time
+
+def get_year_code(month, day):
+    date_time = get_current_date()
+    check_new_year = get_checkdate(date_time.year, month, day)
+    year = date_time.year
+    if date_time > check_new_year:
+        year = date_time.year + 1
+    return str(year)[-2:]
 
 def start(update: Update, context: CallbackContext):
     context.bot.sendMessage(chat_id=update.message.chat_id, text="Benvenuto! Questo bot è stato realizzato dagli studenti del Corso di Laurea in Informatica al fine di suppotare gli studenti del DMI! Per scoprire cosa puoi fare usa /help")

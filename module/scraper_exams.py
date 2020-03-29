@@ -10,31 +10,7 @@ from time import localtime, strftime
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# def insert(row, session, items, year):
-# 	item = {"insegnamento" : "", "docenti" : "", "prima" : ["", "", ""], "seconda" : ["", ""], "terza" : ["", ""], "straordinaria" : ["", ""], "anno" : year}
-# 	item["insegnamento"] = (row[1]).text
-# 	item["docenti"] = (row[2]).text
-# 	for i in range(len(row))[3:]:
-# 		if (row[i]).has_attr("class"):
-# 			ses_temp = "straordinaria"
-# 			(item[ses_temp])[i-3-2] = ((row[i]).text)
-# 		elif (row[i]).text.strip() != "":
-# 			(item[session])[i-3] = ((row[i]).text)
-# 	items.append(item)
-
-# def handle_exams(row, session, items, year):
-# 	flag = False
-# 	for element in items:
-# 		if row[1].text == element["insegnamento"]:
-# 			flag = True
-# 			for i in range(len(row))[3:]:
-# 				if i <= len(element[session])-1:
-# 					element[session][i-3] = row[i].text
-# 	if not flag:
-# 		insert(row, session, items, year)
-
-def scrape_exams():
-	year_exams = "120" # 2019/2020
+def scrape_exams(year_exams, delete= False):
 	url_exams = {
 		"l-31":	[ # Informatica Triennale
 			"http://web.dmi.unict.it/corsi/l-31/esami?sessione=1&aa="+year_exams,
@@ -115,7 +91,8 @@ def scrape_exams():
 	query = "INSERT INTO exams ({}) VALUES {}".format(columns, values)
 
 	conn = sqlite3.connect('data/DMI_DB.db')
-	conn.execute('DELETE FROM `exams`;') # TRUNCATE professors
+	if(delete):
+		conn.execute('DELETE FROM `exams`;') # TRUNCATE professors
 	conn.execute(query)
 	conn.commit()
 	conn.close()

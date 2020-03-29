@@ -21,10 +21,8 @@ def get_giorno(giorno):
     else:
         return 0
 
-def scrape_lessons():
-    year_exams = "120" # 2019/2020
+def scrape_lessons(year_exams):
     ids = ["l-31","l-35","lm-18","lm-40"]
-
     items = []
     for id_ in ids:
         urls = [
@@ -36,9 +34,9 @@ def scrape_lessons():
             soup = bs4.BeautifulSoup(sorgente, "html.parser")
 
             if soup.find('b',id='attivo').text[0] == 'S':
-                semestre = 2;
+                semestre = 2
             elif soup.find('b',id='attivo').text[0] == 'P':
-                semestre = 1;
+                semestre = 1
 
             table = soup.find('table',id='tbl_small_font')
             tr_all =  table.find_all('tr')
