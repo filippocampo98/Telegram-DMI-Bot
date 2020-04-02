@@ -184,14 +184,14 @@ def callback(update: Update, context: CallbackContext):
                     istance_file = drive2.ListFile({'q': "'"+file1['id']+"' in parents and trashed=false", 'orderBy': 'folder,title'})
                     file_list2 = istance_file.GetList()
                     with open("./logs/debugDrive.txt", "a") as debugfile:
-                        debugfile.write("- Log time:\n {}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+                        debugfile.write("- Log time:\n {}".format(datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
                         debugfile.write("- File:\n {}".format(str(json.dumps(file1))))
                         debugfile.write("- IstanceFile:\n {}".format(str(json.dumps(istance_file))))
                         debugfile.write("- FileList:\n {}".format(str(json.dumps(file_list2))))
                         debugfile.write("\n------------\n")
                 except Exception as e:
                     with open("./logs/debugDrive.txt", "a") as debugfile:
-                        debugfile.write("- Log time:\n {}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+                        debugfile.write("- Log time:\n {}".format(datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
                         debugfile.write("- Error:\n {}".format(e))
                         debugfile.write("\n------------\n")
                     print("- Drive error: {}".format(e))
