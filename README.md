@@ -97,4 +97,5 @@ This project is made possible thanks to the contributions of:
 - [Mario Gazzara](https://github.com/gazer99)
 - [Francesco Coppola](https://github.com/BeastHunter19/)
 - [Luca Longo](https://github.com/D4ed4lUS94)
+- [Danilo Santitto](https://github.com/Warcreed)
 
