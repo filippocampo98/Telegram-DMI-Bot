@@ -387,8 +387,8 @@ def help(update: Update, context: CallbackContext):
 
     keyboard.append(
         [
-            InlineKeyboardButton("📖 Esami (Triennale)",    url='http://dev7.unict.it/_esami.php?cds=X81'),
-            InlineKeyboardButton("📖 Esami (Magistrale)",   url='http://dev7.unict.it/_esami.php?cds=W82'),
+            InlineKeyboardButton("📖 Esami (Triennale)",    url='http://dev7.unict.it/_esami_x_curl.php?cds=X81&aa=1' + str(get_year_code(12 , 20))),
+            InlineKeyboardButton("📖 Esami (Magistrale)",   url='http://dev7.unict.it/_esami_x_curl.php?cds=W82&aa=1' + str(get_year_code(12 , 20))),
             InlineKeyboardButton("🗓 Aulario",              url='http://aule.dmi.unict.it/aulario/roschedule.php'),
             InlineKeyboardButton("Lezioni",                 url='http://web.dmi.unict.it/corsi/l-31/orario-lezioni')
         ]
