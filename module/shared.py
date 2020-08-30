@@ -10,7 +10,7 @@ with open('config/settings.yaml', 'r') as yaml_config:
     config_map = yaml.load(yaml_config, Loader=yaml.SafeLoader)
 
 def read_md(namefile):
-    in_file = open("data/markdown/" + namefile + ".md", "r")
+    in_file = open("data/markdown/" + namefile + ".md", "r", encoding="utf8")
     text = in_file.read()
     in_file.close()
     return text

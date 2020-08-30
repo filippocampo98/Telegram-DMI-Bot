@@ -107,7 +107,8 @@ def help_cmd():
     return output
 
 
-def informative_callback(update: Update, context: CallbackContext, cmd):
+def informative_callback(update: Update, context: CallbackContext):
+    cmd = update.message.text.split(' ')[0][1:] #prende solo la prima parola (cioè il comando) ed esclude lo slash
     check_log(update, context, cmd)
     message_text = read_md(cmd)
     context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text, parse_mode='Markdown')
