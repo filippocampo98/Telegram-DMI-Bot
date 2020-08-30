@@ -20,7 +20,7 @@ def logging_message(update: Update, context: CallbackContext):
 					"chat_id:" 			+ str(chat.id) + "\n" + \
 					"chat_type:" 			+ str(chat.type)+"\n" + "chat_title:" + str(chat.title) + "\n" + \
 					"___TESTO___\n" + \
-					"text:" 				+ str(text) + \
+					"text:" 				+ str(text) + "\n" + \
 					"date:" 				+ str(date) + \
 					"\n_____________\n"
 
@@ -43,35 +43,35 @@ def main():
 	dp.add_handler(CommandHandler('leiCheNePensaSignorina',lei_che_ne_pensa_signorina))
 
 	#Informative command
-	dp.add_handler(CommandHandler('sdidattica', lambda update, context: informative_callback(update, context, 'sdidattica')))
-	dp.add_handler(CommandHandler('sstudenti', lambda update, context: informative_callback(update, context, 'sstudenti')))
-	dp.add_handler(CommandHandler('cea', lambda update, context: informative_callback(update, context, 'cea')))
-	dp.add_handler(CommandHandler('ersu', lambda update, context: informative_callback(update, context, 'ersu')))
-	dp.add_handler(CommandHandler('ufficioersu', lambda update, context: informative_callback(update, context, 'ufficioersu')))
-	dp.add_handler(CommandHandler('urp', lambda update, context: informative_callback(update, context, 'urp')))
-	dp.add_handler(CommandHandler('biblioteca', lambda update, context: informative_callback(update, context, 'biblioteca')))
-	dp.add_handler(CommandHandler('cus', lambda update, context: informative_callback(update, context, 'cus')))
+	dp.add_handler(CommandHandler('sdidattica', informative_callback))
+	dp.add_handler(CommandHandler('sstudenti', informative_callback))
+	dp.add_handler(CommandHandler('cea', informative_callback))
+	dp.add_handler(CommandHandler('ersu', informative_callback))
+	dp.add_handler(CommandHandler('ufficioersu', informative_callback))
+	dp.add_handler(CommandHandler('urp', informative_callback))
+	dp.add_handler(CommandHandler('biblioteca', informative_callback))
+	dp.add_handler(CommandHandler('cus', informative_callback))
 
-	dp.add_handler(CommandHandler('lezioni', lambda update, context: lezioni(update, context)))
-	dp.add_handler(CommandHandler('esami', lambda update, context: esami(update, context)))
+	dp.add_handler(CommandHandler('lezioni', lezioni))
+	dp.add_handler(CommandHandler('esami',esami))
 
 	dp.add_handler(CommandHandler('prof', prof))
 
-	dp.add_handler(CommandHandler('aulario', lambda update, context: informative_callback(update, context, 'aulario')))
+	dp.add_handler(CommandHandler('aulario', informative_callback))
 	dp.add_handler(CommandHandler('help',help))
-	dp.add_handler(CommandHandler('contributors', lambda update, context: informative_callback(update, context, 'contributors')))
+	dp.add_handler(CommandHandler('contributors', informative_callback))
 
-	dp.add_handler(CommandHandler('rappresentanti', lambda update, context: informative_callback(update, context, 'rappresentanti')))
-	dp.add_handler(CommandHandler('rappresentanti_dmi', lambda update, context: informative_callback(update, context, 'rappresentanti_dmi')))
-	dp.add_handler(CommandHandler('rappresentanti_informatica', lambda update, context: informative_callback(update, context, 'rappresentanti_informatica')))
-	dp.add_handler(CommandHandler('rappresentanti_matematica', lambda update, context: informative_callback(update, context, 'rappresentanti_matematica')))
+	dp.add_handler(CommandHandler('rappresentanti', informative_callback))
+	dp.add_handler(CommandHandler('rappresentanti_dmi', informative_callback))
+	dp.add_handler(CommandHandler('rappresentanti_informatica', informative_callback))
+	dp.add_handler(CommandHandler('rappresentanti_matematica', informative_callback))
 	dp.add_handler(CommandHandler('report', report))
 	dp.add_handler(CommandHandler('chatid',give_chat_id))
 	dp.add_handler(CommandHandler('send_log', send_log))
 	dp.add_handler(CommandHandler('send_chat_ids', send_chat_ids))
 	dp.add_handler(CommandHandler('errors', send_errors))
 	dp.add_handler(CommandHandler('start', start))
-	dp.add_handler(CommandHandler('cloud', lambda update, context: informative_callback(update, context, 'cloud')))
+	dp.add_handler(CommandHandler('cloud', informative_callback))
 
   # generic buttons
 	dp.add_handler(CallbackQueryHandler(generic_button_handler, pattern='^(esami_buttonlezioni_button|help_cmd|exit_cmd)'))

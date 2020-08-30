@@ -24,7 +24,7 @@ def esami_output(item, sessions):
 
 	return output
 
-def esami_condition(items, field, value, *session):
+def esami_condition(items, field, value, session = False):
 	output = set()
 
 	if field == "anno":
