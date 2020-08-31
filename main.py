@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from functions import TOKEN, Bot, Updater, MessageHandler, CommandHandler, CallbackQueryHandler, Filters, telegram, Update, CallbackContext,\
 	smonta_portoni, santino, prof_sticker, bladrim, lei_che_ne_pensa_signorina, informative_callback, lezioni, esami, prof, report, give_chat_id, send_log, send_chat_ids, send_errors, start, callback, help,\
-	regolamenti, regolamentodidattico, regolamentodidattico_button, regolamentodidattico_keyboard, triennale, magistrale, regdid,\
+	regolamenti, regolamentodidattico, regolamentodidattico_button, regolamentodidattico_keyboard, triennale, magistrale, regdid, esami_handler, esami_input_insegnamento,\
 	generic_button_handler, gitlab_handler, submenu_handler, md_handler,\
 	updater_lep, git, drive, stats, stats_tot, request, add_db #importati solo componenti utilizzati nel main
 from module.shared import config_map
@@ -78,7 +78,7 @@ def main():
 	dp.add_handler(CommandHandler('cloud', informative_callback))
 
   # generic buttons
-	dp.add_handler(CallbackQueryHandler(generic_button_handler, pattern='^(esami_button|lezioni_button|help_cmd|exit_cmd)'))
+	dp.add_handler(CallbackQueryHandler(generic_button_handler, pattern='^(lezioni_button|help_cmd|exit_cmd)'))
 	dp.add_handler(CallbackQueryHandler(submenu_handler,        pattern='sm_*'))
 	dp.add_handler(CallbackQueryHandler(md_handler,             pattern='md_*'))
 
@@ -93,6 +93,10 @@ def main():
 	dp.add_handler(CallbackQueryHandler(regdid,                      pattern='regdid_button'))
 	dp.add_handler(CallbackQueryHandler(regolamenti,                 pattern='Regolamento*'))
 	dp.add_handler(CallbackQueryHandler(regolamentodidattico_button, pattern='regolamentodidattico_button'))
+
+	#esami
+	dp.add_handler(MessageHandler(Filters.regex(r"^(?!=<[/])ins:\s+"), esami_input_insegnamento))
+	dp.add_handler(CallbackQueryHandler(esami_handler, pattern='esami_button_*'))
 
 	#JobQueue
 	j = updater.job_queue

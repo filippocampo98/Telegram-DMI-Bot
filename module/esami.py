@@ -4,19 +4,21 @@ import json
 import sqlite3
 import re
 
-def esami_output(item, sessions):
+def esami_output(item):
 
 	output = "*Insegnamento:* " + item["insegnamento"]
 	output += "\n*Docenti:* " + item["docenti"]
 
-	for session in sessions:
-		appeals = item[session]
-		if appeals:
+	for session in ("prima", "seconda", "terza", "straordinaria"):
+		if session in item.keys():
+			appeals = item[session]
 			appeals = str(appeals)			
 			appeals = re.sub(r"(?P<ora>([01]?\d|2[0-3]):[0-5][0-9])(?P<parola>\w)", r"\g<ora> - \g<parola>", appeals) #aggiunge un - per separare orario e luogo dell'esame
 			appeals = appeals.split("', '") #separa i vari appelli della sessione
 			for i, appeal in enumerate(appeals):
-				appeals[i] = re.sub(r"[\['\]]", "", appeal) #elimina eventuali caratteri [ ' ] rimasti
+				appeals[i] = re.sub(r"[\['\]]", "", appeal) #rimuove eventuali caratteri [ ' ] rimasti in ogni appello
+				appeals[i] = re.sub(r"(?P<link>https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))", r"[link](\g<link>)", appeals[i]) #cattura eventuali link e li rende inoffensivi per il markdown
+				appeals[i] = re.sub(r"_(?![^(]*[)])", " ", appeals[i]) #rimuove eventuali caratteri _ rimasti che non siano nei link
 			if "".join(appeals) != "":
 				output += "\n*" + session.title() + ":*\n" + "\n".join(appeals)
 
@@ -25,31 +27,9 @@ def esami_output(item, sessions):
 
 	return output
 
-def esami_condition(items, field, value, session = False):
-	output = set()
-
-	if field == "anno":
-		years = {
-			"primo": "1° anno",
-			"secondo": "2° anno",
-			"terzo": "3° anno"
-		}
-		value = years[value]
-
-	if session:
-		for item in items:
-			if ([appeal for appeal in item[value] if appeal]):
-				output.add(esami_output(item, [value]))
-	else:
-		for item in items:
-			if(value in item[field].lower()):
-				output.add(esami_output(item, ("prima", "seconda", "terza", "straordinaria")))
-
-	return output
-
 def check_output(output):
 	if len(output):
-		output_str = '\n'.join(list(output))
+		output_str = '\n'.join(output)
 		output_str += "\nRisultati trovati: " + str(len(output))
 	else:
 		output_str = "Nessun risultato trovato :(\n"
@@ -62,76 +42,36 @@ def dict_factory(cursor, row):
         d[col[0]] = row[idx]
     return d
 
-def esami_cmd(args):
-	output_str = "Inserisci un parametro valido\n"
+def esami_cmd(userDict):
+	output_str = []
+ 	#stringa contenente le sessioni per cui la flag è true, separate da ", " 	
+	select_sessione = ", ".join([key for key, value in userDict.items() if userDict.get(key, False) and "sessione" in key]).replace("sessione", "") #=> , prima, seconda, terza
+	#stringa contenente le sessioni per cui la flag è true, separate da " = '[]' and not " 		
+	where_sessione = " = '[]' and not ".join([key for key, value in userDict.items() if userDict.get(key, False) and "sessione" in key]).replace("sessione", "") #=> and not prima = '[] and not terza = '[]' 
+	#stringa contenente gli anni per cui la flag è true, separate da "' and anno = '"	
+	where_anno = "' and anno = '".join([key for key, value in userDict.items() if userDict.get(key, False) and "anno" in key]) #=>  and anno = '1° anno' and anno = '3° anno'
+	#stringa contenente l'insegnamento, se presente		
+	where_insegnamento = userDict.get("insegnamento", "") #=> and insegnamento LIKE '%stringa%'
 
-	if args:
-		output = set()
+	query = """SELECT anno, cdl, docenti, insegnamento{} 
+			   FROM exams
+			   WHERE true {} {} {}""".format(
+	", " + select_sessione if select_sessione else ", prima, seconda, terza, straordinaria",
+	"and not " + where_sessione + " = '[]'" if where_sessione else "",
+	"and anno = '" + where_anno + "'" if where_anno else "",
+	"and insegnamento LIKE '%" + where_insegnamento + "%'" if where_insegnamento else ""
+	)
 
-		conn = sqlite3.connect('data/DMI_DB.db')
-		conn.row_factory = dict_factory
-		cur = conn.cursor()
-		cur.execute("SELECT * FROM exams")
-		items = cur.fetchall()
-		conn.close()
+	conn = sqlite3.connect('data/DMI_DB.db')
+	conn.row_factory = dict_factory
+	cur = conn.cursor()
+	try:
+		cur.execute(query)
+	except:
+		print("The following exams query could not be executed (command \\esami)")
+		print(query) #per controllare cosa è andato storto
 
-		# Clear arguments - Trasform all to lower case - Remove word 'anno', 'sessione'
-		args = [x.lower() for x in args if len(x) > 2]
-		if 'anno' in args:
-			args.remove('anno')
+	for item in cur.fetchall():
+		output_str.append(esami_output(item))
 
-		if 'sessione' in args:
-			args.remove('sessione')
-
-		# Study case
-		if len(args) == 1:
-
-			if args[0] in ("primo", "secondo", "terzo"):
-				output = esami_condition(items, "anno", args[0])
-
-			elif args[0] in ("prima", "seconda", "terza", "straordinaria"):
-				output = esami_condition(items, "sessione", args[0], True)
-
-			elif [item["insegnamento"].lower().find(args[0]) for item in items]:
-				output = esami_condition(items, "insegnamento", args[0])
-
-			output_str = check_output(output)
-
-		elif len(args) > 1:
-
-			# Create an array of session and years if in arguments
-			sessions = list(set(args).intersection(("prima", "seconda", "terza", "straordinaria")))
-			years = list(set(args).intersection(("primo", "secondo", "terzo")))
-
-			_years = {
-				"primo": "1° anno",
-				"secondo": "2° anno",
-				"terzo": "3° anno"
-			}
-			for i in range(len(years)):
-				years[i] = _years[years[i]]
-
-			if sessions and years:
-				for item in items:
-					if (item["anno"] in years) and ([session for session in sessions if [appeal for appeal in item[session] if appeal]]):
-						output.add(esami_output(item, sessions))
-
-			elif sessions and not years:
-				# If years array is empty and session not, the other word are subjects
-				subjects = [arg for arg in args if arg not in(sessions)]
-
-				if subjects:
-					for item in items:
-						for subject in subjects:
-							if [session for session in sessions if [appeal for appeal in item[session] if appeal]] and subject in item["insegnamento"].lower():
-								output.add(esami_output(item, sessions))
-
-			elif not sessions and not years:
-				for arg in args:
-					output = output.union(esami_condition(items, "insegnamento", arg))
-
-			output_str = check_output(output)
-	else:
-		output_str = "Inserisci almeno uno dei seguenti parametri: giorno, materia, sessione (prima, seconda, terza, straordinaria)."
-
-	return output_str
+	return check_output(output_str)

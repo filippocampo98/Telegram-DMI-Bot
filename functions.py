@@ -47,15 +47,19 @@ logger = logging.getLogger(__name__)
 TOKEN = config_map["token"]
 
 def send_message(update: Update, context: CallbackContext, messaggio):
+    chat_id = update.message.chat_id if update.message else update.callback_query.message.chat_id #prova a prendere il chat_id da update.message, altrimenti prova da update.callback_query.message
     msg = ""
     righe = messaggio.split('\n')
     for riga in righe:
         if riga.strip() == "" and len(msg) > 3000:
-            context.bot.sendMessage(chat_id=update.message.chat_id, text=msg, parse_mode='Markdown')
-            msg = ""
+            try:
+                context.bot.sendMessage(chat_id=chat_id, text=msg, parse_mode='Markdown')
+                msg = ""
+            except:
+                logger.error("in: functions.py - send_message: the message is badly formatted")
         else:
             msg += riga + "\n"
-    context.bot.sendMessage(chat_id=update.message.chat_id, text=msg, parse_mode='Markdown')
+    context.bot.sendMessage(chat_id=chat_id, text=msg, parse_mode='Markdown')
 
 
 def lezioni(update: Update, context: CallbackContext, *m):
@@ -64,13 +68,49 @@ def lezioni(update: Update, context: CallbackContext, *m):
     context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text, parse_mode='Markdown')
 
 
+def get_esami_text_InlineKeyboard(context: CallbackContext) -> (str, InlineKeyboardMarkup): #restituisce una tuple formata da (message_text, InlineKeyboardMarkup)
+    keyboard = [[]]
+
+    text_anno = ", ".join([key for key, value in context.user_data.items() if context.user_data.get(key, False) and "anno" in key]) #stringa contenente gli anni per cui la flag è true
+    text_sessione = ", ".join([key for key, value in context.user_data.items() if context.user_data.get(key, False) and "sessione" in key]).replace("sessione", "") #stringa contenente le sessioni per cui la flag è true
+    text_insegnamento = context.user_data.get("insegnamento", "") #stringa contenente l'insegnamento
+
+    message_text = "Anno: {}\nSessione: {}\nInsegnamento: {}"\
+        .format(text_anno if text_anno else "tutti",\
+                text_sessione if text_sessione else "tutti",\
+                text_insegnamento if text_insegnamento else "tutti")
+    keyboard.append([InlineKeyboardButton(" ~ Personalizza la ricerca ~ ", callback_data="_div")])
+    keyboard.append(
+            [
+                InlineKeyboardButton(" Anno ", callback_data="sm_esami_button_anno"),
+                InlineKeyboardButton(" Sessione ", callback_data="sm_esami_button_sessione"),
+            ]
+        )
+    keyboard.append(
+            [
+                InlineKeyboardButton(" Insegnamento ", callback_data="sm_esami_button_insegnamento"),
+                InlineKeyboardButton(" Cerca ", callback_data="esami_button_search")
+            ]
+        )
+
+    return message_text, InlineKeyboardMarkup(keyboard)
+
+
 def esami(update: Update, context: CallbackContext):
     check_log(update, context, "esami")
-    message_text = esami_cmd(context.args)
-    if len(message_text) > 4096:
-        send_message(update, context, message_text)
-    else:
-        context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text, parse_mode='Markdown')
+    context.user_data.clear() #ripulisce il dict dell'user da eventuali dati presenti
+    reply = get_esami_text_InlineKeyboard(context)
+    context.bot.sendMessage(chat_id=update.message.chat_id, text=reply[0], reply_markup=reply[1])
+
+
+def esami_input_insegnamento(update: Update, context: CallbackContext):
+    if context.user_data.get('cmd', 'null') == "input_insegnamento": #se effettivamente l'user aveva richiesto di modificare l'insegnamento...
+        check_log(update, context, "esami_input_insegnamento")
+        context.user_data['insegnamento'] = re.sub(r"^(?!=<[/])ins:\s+", "", update.message.text) #ottieni il nome dell'insegnamento e salvalo nel dict
+        del context.user_data['cmd'] #elimina la possibilità di modificare l'insegnamento fino a quando l'apposito button non viene premuto di nuovo
+        reply = get_esami_text_InlineKeyboard(context)
+        context.bot.sendMessage(chat_id=update.message.chat_id, text=reply[0], reply_markup=reply[1])
+
 
 # Commands
 CUSicon = {0: "🏋",
@@ -652,3 +692,67 @@ def md_handler(update: Update, context: CallbackContext):
       message_id=query.message.message_id,
       parse_mode='Markdown'
     )
+
+
+def esami_handler(update: Update, context: CallbackContext):
+    callbackData = update.callback_query.data
+    if "anno" in callbackData:
+        context.user_data[callbackData[-7:]] = not context.user_data.get(callbackData[-7:], False) #inverti la flag presente al momento, o mettila ad true se non era presente 
+    elif "sessione" in callbackData:
+        context.user_data['sessione' + callbackData[22:]] = not context.user_data.get('sessione' + callbackData[22:], False) #inverti la flag presente al momento, o mettila ad true se non era presente 
+    elif "search" in callbackData:
+        message_text = esami_cmd(context.user_data) #ottieni il risultato della query che soddisfa le richieste
+        send_message(update, context, message_text) #manda il messaggio suddividendo la lunga stringa in puù messaggi
+        context.user_data.clear() #ripulisci il dict
+        return
+    else:
+        logger.error("esami_handler: an error has occurred")
+
+    reply = get_esami_text_InlineKeyboard(context)
+
+    context.bot.editMessageText(text=reply[0], chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id, reply_markup=reply[1])
+
+
+def esami_button_sessione(update: Update, context: CallbackContext, chat_id, message_id):
+    keyboard = [[]]
+    message_text = "Seleziona la sessione che ti interessa"
+
+    keyboard.append(
+        [
+            InlineKeyboardButton("prima", callback_data="esami_button_sessione_prima"),
+            InlineKeyboardButton("seconda", callback_data="esami_button_sessione_seconda"),
+        ]
+    )
+    keyboard.append(
+        [
+            InlineKeyboardButton("terza", callback_data="esami_button_sessione_terza"),
+            InlineKeyboardButton("straordinaria", callback_data="esami_button_sessione_straordinaria"),
+        ]
+    )
+
+    context.bot.editMessageText(text=message_text, chat_id=chat_id, message_id=message_id, reply_markup=InlineKeyboardMarkup(keyboard))
+
+
+def esami_button_insegnamento(update: Update, context: CallbackContext, chat_id, message_id):
+    context.user_data['cmd'] = "input_insegnamento" #è in attesa di un messaggio nel formato corretto che imposti il valore del campo insegnamento
+    message_text = "Inserire l'insegnamento desiderato nel formato:\n" + \
+                   "ins: nome insegnamento\n" + \
+                   "Esempio:\n" +\
+                   "ins: SisTeMi oPeRaTIvI"
+
+    context.bot.editMessageText(text=message_text, chat_id=chat_id, message_id=message_id)
+
+
+def esami_button_anno(update: Update, context: CallbackContext, chat_id, message_id):
+    keyboard = [[]]
+    message_text = "Seleziona l'anno che ti interessa"
+
+    keyboard.append(
+        [
+            InlineKeyboardButton("1° anno", callback_data="esami_button_anno_1° anno"),
+            InlineKeyboardButton("2° anno", callback_data="esami_button_anno_2° anno"),
+            InlineKeyboardButton("3° anno", callback_data="esami_button_anno_3° anno"),
+        ]
+    )
+
+    context.bot.editMessageText(text=message_text, chat_id=chat_id, message_id=message_id, reply_markup=InlineKeyboardMarkup(keyboard))
