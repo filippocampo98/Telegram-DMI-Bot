@@ -2,6 +2,7 @@
 
 import json
 import sqlite3
+import re
 
 def esami_output(item, sessions):
 
@@ -9,15 +10,15 @@ def esami_output(item, sessions):
 	output += "\n*Docenti:* " + item["docenti"]
 
 	for session in sessions:
-		appeal = item[session]
-		if appeal:
-			appeal = str(appeal)
-			appeal = appeal.replace("[", "")
-			appeal = appeal.replace("]", "")
-			appeal = appeal.replace("'", "")
-			appeal = appeal.split("', '")
-			if "".join(appeal) != "":
-				output += "\n*" + session.title() + ":* " + " | ".join(appeal)
+		appeals = item[session]
+		if appeals:
+			appeals = str(appeals)			
+			appeals = re.sub(r"(?P<ora>([01]?\d|2[0-3]):[0-5][0-9])(?P<parola>\w)", r"\g<ora> - \g<parola>", appeals) #aggiunge un - per separare orario e luogo dell'esame
+			appeals = appeals.split("', '") #separa i vari appelli della sessione
+			for i, appeal in enumerate(appeals):
+				appeals[i] = re.sub(r"[\['\]]", "", appeal) #elimina eventuali caratteri [ ' ] rimasti
+			if "".join(appeals) != "":
+				output += "\n*" + session.title() + ":*\n" + "\n".join(appeals)
 
 	output += "\n*CDL:* " + item["cdl"]
 	output += "\n*Anno:* " + item["anno"] + "\n"

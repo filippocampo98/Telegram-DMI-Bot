@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
-from functions import *
+from functions import TOKEN, Bot, Updater, MessageHandler, CommandHandler, CallbackQueryHandler, Filters, telegram, Update, CallbackContext,\
+	smonta_portoni, santino, prof_sticker, bladrim, lei_che_ne_pensa_signorina, informative_callback, lezioni, esami, prof, report, give_chat_id, send_log, send_chat_ids, send_errors, start, callback, help,\
+	regolamenti, regolamentodidattico, regolamentodidattico_button, regolamentodidattico_keyboard, triennale, magistrale, regdid,\
+	generic_button_handler, gitlab_handler, submenu_handler, md_handler,\
+	updater_lep, git, drive, stats, stats_tot, request, add_db #importati solo componenti utilizzati nel main
 from module.shared import config_map
 
 bot = telegram.Bot(config_map["token"])
@@ -58,7 +62,7 @@ def main():
 	dp.add_handler(CommandHandler('prof', prof))
 
 	dp.add_handler(CommandHandler('aulario', informative_callback))
-	dp.add_handler(CommandHandler('help',help))
+	dp.add_handler(CommandHandler('help', help))
 	dp.add_handler(CommandHandler('contributors', informative_callback))
 
 	dp.add_handler(CommandHandler('rappresentanti', informative_callback))
@@ -74,7 +78,7 @@ def main():
 	dp.add_handler(CommandHandler('cloud', informative_callback))
 
   # generic buttons
-	dp.add_handler(CallbackQueryHandler(generic_button_handler, pattern='^(esami_buttonlezioni_button|help_cmd|exit_cmd)'))
+	dp.add_handler(CallbackQueryHandler(generic_button_handler, pattern='^(esami_button|lezioni_button|help_cmd|exit_cmd)'))
 	dp.add_handler(CallbackQueryHandler(submenu_handler,        pattern='sm_*'))
 	dp.add_handler(CallbackQueryHandler(md_handler,             pattern='md_*'))
 

@@ -108,7 +108,7 @@ def help_cmd():
 
 
 def informative_callback(update: Update, context: CallbackContext):
-    cmd = update.message.text.split(' ')[0][1:] #prende solo la prima parola (cioè il comando) ed esclude lo slash
+    cmd = update.message.text.split(' ')[0][1:] #prende solo la prima parola del messaggio (cioè il comando) escludendo lo slash
     check_log(update, context, cmd)
     message_text = read_md(cmd)
     context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text, parse_mode='Markdown')
@@ -526,7 +526,6 @@ def send_errors(update: Update, context: CallbackContext):
         context.bot.sendDocument(chat_id=config_map['dev_group_chatid'], document=open('logs/errors.txt', 'rb'))
 
 def updater_lep(context):
-    job = context.job
     year_exam = get_year_code(11 , 30) # aaaa/12/01 (cambio nuovo anno esami) data dal quale esami del vecchio a nuovo anno coesistono
     scrape_exams("1" + str(year_exam), delete= True) # flag che permette di eliminare tutti gli esami presenti in tabella exams
     if(check_print_old_exams(year_exam)):
