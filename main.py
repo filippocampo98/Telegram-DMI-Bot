@@ -95,7 +95,7 @@ def main():
 	dp.add_handler(CallbackQueryHandler(regolamentodidattico_button, pattern='regolamentodidattico_button'))
 
 	#esami
-	dp.add_handler(MessageHandler(Filters.regex(r"^(?!=<[/])ins:\s+"), esami_input_insegnamento))
+	dp.add_handler(MessageHandler(Filters.regex(r"^(?!=<[/])[Ii]ns:\s+"), esami_input_insegnamento)) #regex accetta [/ins: nome] oppure [/Ins: nome], per agevolare chi usa il cellulare
 	dp.add_handler(CallbackQueryHandler(esami_handler, pattern='esami_button_*'))
 
 	#JobQueue

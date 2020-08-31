@@ -45,11 +45,11 @@ def dict_factory(cursor, row):
 def esami_cmd(userDict):
 	output_str = []
  	#stringa contenente le sessioni per cui la flag è true, separate da ", " 	
-	select_sessione = ", ".join([key for key, value in userDict.items() if userDict.get(key, False) and "sessione" in key]).replace("sessione", "") #=> , prima, seconda, terza
+	select_sessione = ", ".join([key for key, value in userDict.items() if value and "sessione" in key]).replace("sessione", "") #risultat es.=> , prima, seconda, terza
 	#stringa contenente le sessioni per cui la flag è true, separate da " = '[]' and not " 		
-	where_sessione = " = '[]' and not ".join([key for key, value in userDict.items() if userDict.get(key, False) and "sessione" in key]).replace("sessione", "") #=> and not prima = '[] and not terza = '[]' 
-	#stringa contenente gli anni per cui la flag è true, separate da "' and anno = '"	
-	where_anno = "' and anno = '".join([key for key, value in userDict.items() if userDict.get(key, False) and "anno" in key]) #=>  and anno = '1° anno' and anno = '3° anno'
+	where_sessione = " = '[]' and not ".join([key for key, value in userDict.items() if value and "sessione" in key]).replace("sessione", "") #risultat es=> and not prima = '[] and not terza = '[]' 
+	#stringa contenente gli anni per cui la flag è true, separate da "' or anno = '"	
+	where_anno = "' or anno = '".join([key for key, value in userDict.items() if value and "anno" in key]) #riustato es.=>  and (anno = '1° anno' or anno = '3° anno)'
 	#stringa contenente l'insegnamento, se presente		
 	where_insegnamento = userDict.get("insegnamento", "") #=> and insegnamento LIKE '%stringa%'
 
@@ -58,7 +58,7 @@ def esami_cmd(userDict):
 			   WHERE true {} {} {}""".format(
 	", " + select_sessione if select_sessione else ", prima, seconda, terza, straordinaria",
 	"and not " + where_sessione + " = '[]'" if where_sessione else "",
-	"and anno = '" + where_anno + "'" if where_anno else "",
+	"and (anno = '" + where_anno + "')" if where_anno else "",
 	"and insegnamento LIKE '%" + where_insegnamento + "%'" if where_insegnamento else ""
 	)
 

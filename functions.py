@@ -71,8 +71,8 @@ def lezioni(update: Update, context: CallbackContext, *m):
 def get_esami_text_InlineKeyboard(context: CallbackContext) -> (str, InlineKeyboardMarkup): #restituisce una tuple formata da (message_text, InlineKeyboardMarkup)
     keyboard = [[]]
 
-    text_anno = ", ".join([key for key, value in context.user_data.items() if context.user_data.get(key, False) and "anno" in key]) #stringa contenente gli anni per cui la flag è true
-    text_sessione = ", ".join([key for key, value in context.user_data.items() if context.user_data.get(key, False) and "sessione" in key]).replace("sessione", "") #stringa contenente le sessioni per cui la flag è true
+    text_anno = ", ".join([key for key, value in context.user_data.items() if value and "anno" in key]) #stringa contenente gli anni per cui la flag è true
+    text_sessione = ", ".join([key for key, value in context.user_data.items() if value and "sessione" in key]).replace("sessione", "") #stringa contenente le sessioni per cui la flag è true
     text_insegnamento = context.user_data.get("insegnamento", "") #stringa contenente l'insegnamento
 
     message_text = "Anno: {}\nSessione: {}\nInsegnamento: {}"\
@@ -106,7 +106,7 @@ def esami(update: Update, context: CallbackContext):
 def esami_input_insegnamento(update: Update, context: CallbackContext):
     if context.user_data.get('cmd', 'null') == "input_insegnamento": #se effettivamente l'user aveva richiesto di modificare l'insegnamento...
         check_log(update, context, "esami_input_insegnamento")
-        context.user_data['insegnamento'] = re.sub(r"^(?!=<[/])ins:\s+", "", update.message.text) #ottieni il nome dell'insegnamento e salvalo nel dict
+        context.user_data['insegnamento'] = re.sub(r"^(?!=<[/])[Ii]ns:\s+", "", update.message.text) #ottieni il nome dell'insegnamento e salvalo nel dict
         del context.user_data['cmd'] #elimina la possibilità di modificare l'insegnamento fino a quando l'apposito button non viene premuto di nuovo
         reply = get_esami_text_InlineKeyboard(context)
         context.bot.sendMessage(chat_id=update.message.chat_id, text=reply[0], reply_markup=reply[1])
