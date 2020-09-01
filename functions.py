@@ -71,8 +71,8 @@ def lezioni(update: Update, context: CallbackContext, *m):
 def get_esami_text_InlineKeyboard(context: CallbackContext) -> (str, InlineKeyboardMarkup): #restituisce una tuple formata da (message_text, InlineKeyboardMarkup)
     keyboard = [[]]
 
-    text_anno = ", ".join([key for key, value in context.user_data.items() if value and "anno" in key]) #stringa contenente gli anni per cui la flag è true
-    text_sessione = ", ".join([key for key, value in context.user_data.items() if value and "sessione" in key]).replace("sessione", "") #stringa contenente le sessioni per cui la flag è true
+    text_anno = ", ".join([key for key in context.user_data.keys() if "anno" in key]) #stringa contenente gli anni per cui la flag è true
+    text_sessione = ", ".join([key for key in context.user_data.keys() if "sessione" in key]).replace("sessione", "") #stringa contenente le sessioni per cui la flag è true
     text_insegnamento = context.user_data.get("insegnamento", "") #stringa contenente l'insegnamento
 
     message_text = "Anno: {}\nSessione: {}\nInsegnamento: {}"\
@@ -696,21 +696,29 @@ def md_handler(update: Update, context: CallbackContext):
 
 def esami_handler(update: Update, context: CallbackContext):
     callbackData = update.callback_query.data
+    chat_id = update.callback_query.message.chat_id
+    message_id = update.callback_query.message.message_id
     if "anno" in callbackData:
-        context.user_data[callbackData[-7:]] = not context.user_data.get(callbackData[-7:], False) #inverti la flag presente al momento, o mettila ad true se non era presente 
+        if callbackData[-7:] not in context.user_data.keys(): #se non era presente, setta la key di [1° anno|2° anno| 3° anno] a true... 
+            context.user_data[callbackData[-7:]] = True 
+        else:
+           del context.user_data[callbackData[-7:]] #... o elmina la key se era già presente
     elif "sessione" in callbackData:
-        context.user_data['sessione' + callbackData[22:]] = not context.user_data.get('sessione' + callbackData[22:], False) #inverti la flag presente al momento, o mettila ad true se non era presente 
+        if 'sessione' + callbackData[22:] not in context.user_data.keys(): #se non era presente, setta la key di sessione[prima|seconda|terza] a true... 
+            context.user_data['sessione' + callbackData[22:]] = True 
+        else:
+           del context.user_data['sessione' + callbackData[22:]] #... o elmina la key se era già presente
     elif "search" in callbackData:
         message_text = esami_cmd(context.user_data) #ottieni il risultato della query che soddisfa le richieste
-        send_message(update, context, message_text) #manda il messaggio suddividendo la lunga stringa in puù messaggi
+        context.bot.editMessageText(chat_id=chat_id, message_id=message_id, text=update.callback_query.message.text) #rimuovi la inline keyboard e lascia il resoconto della query
+        send_message(update, context, message_text) #manda il risutato della query suddividendo la stringa in più messaggi
         context.user_data.clear() #ripulisci il dict
         return
     else:
         logger.error("esami_handler: an error has occurred")
 
     reply = get_esami_text_InlineKeyboard(context)
-
-    context.bot.editMessageText(text=reply[0], chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id, reply_markup=reply[1])
+    context.bot.editMessageText(text=reply[0], chat_id=chat_id, message_id=message_id, reply_markup=reply[1])
 
 
 def esami_button_sessione(update: Update, context: CallbackContext, chat_id, message_id):

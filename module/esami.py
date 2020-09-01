@@ -44,22 +44,19 @@ def dict_factory(cursor, row):
 
 def esami_cmd(userDict):
 	output_str = []
- 	#stringa contenente le sessioni per cui la flag è true, separate da ", " 	
-	select_sessione = ", ".join([key for key, value in userDict.items() if value and "sessione" in key]).replace("sessione", "") #risultat es.=> , prima, seconda, terza
-	#stringa contenente le sessioni per cui la flag è true, separate da " = '[]' and not " 		
-	where_sessione = " = '[]' and not ".join([key for key, value in userDict.items() if value and "sessione" in key]).replace("sessione", "") #risultat es=> and not prima = '[] and not terza = '[]' 
-	#stringa contenente gli anni per cui la flag è true, separate da "' or anno = '"	
-	where_anno = "' or anno = '".join([key for key, value in userDict.items() if value and "anno" in key]) #riustato es.=>  and (anno = '1° anno' or anno = '3° anno)'
-	#stringa contenente l'insegnamento, se presente		
-	where_insegnamento = userDict.get("insegnamento", "") #=> and insegnamento LIKE '%stringa%'
+ 	
+	select_sessione = ", ".join([key for key in userDict.keys() if "sessione" in key]).replace("sessione", "") #stringa contenente le sessioni per cui il dict contiene la key, separate da ", " 	
+	where_sessione = " = '[]' and not ".join([key for key in userDict.keys() if "sessione" in key]).replace("sessione", "") #stringa contenente le sessioni per cui il dict contiene la key, separate da " = '[]' and not " 
+	where_anno = "' or anno = '".join([key for key in userDict.keys() if "anno" in key]) #stringa contenente gli anni per cui il dict contiene la key, separate da "' or anno = '"	
+	where_insegnamento = userDict.get("insegnamento", "")  #stringa contenente l'insegnamento, se presente
 
 	query = """SELECT anno, cdl, docenti, insegnamento{} 
 			   FROM exams
 			   WHERE true {} {} {}""".format(
-	", " + select_sessione if select_sessione else ", prima, seconda, terza, straordinaria",
-	"and not " + where_sessione + " = '[]'" if where_sessione else "",
-	"and (anno = '" + where_anno + "')" if where_anno else "",
-	"and insegnamento LIKE '%" + where_insegnamento + "%'" if where_insegnamento else ""
+	", " + select_sessione if select_sessione else ", prima, seconda, terza, straordinaria", #es.=> , prima, seconda, terza
+	"and not " + where_sessione + " = '[]'" if where_sessione else "", #es.=> and not prima = '[] and not terza = '[]' 
+	"and (anno = '" + where_anno + "')" if where_anno else "", #es.=>  and (anno = '1° anno' or anno = '3° anno)'
+	"and insegnamento LIKE '%" + where_insegnamento + "%'" if where_insegnamento else "" #es.=> and insegnamento LIKE '%stringa%'
 	)
 
 	conn = sqlite3.connect('data/DMI_DB.db')
