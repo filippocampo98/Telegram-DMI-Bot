@@ -71,9 +71,10 @@ def lezioni(update: Update, context: CallbackContext, *m):
 def get_esami_text_InlineKeyboard(context: CallbackContext) -> (str, InlineKeyboardMarkup): #restituisce una tuple formata da (message_text, InlineKeyboardMarkup)
     keyboard = [[]]
 
-    text_anno = ", ".join([key for key in context.user_data.keys() if "anno" in key]) #stringa contenente gli anni per cui la flag è true
-    text_sessione = ", ".join([key for key in context.user_data.keys() if "sessione" in key]).replace("sessione", "") #stringa contenente le sessioni per cui la flag è true
-    text_insegnamento = context.user_data.get("insegnamento", "") #stringa contenente l'insegnamento
+    esami_user_data = context.user_data['esami']
+    text_anno = ", ".join([key for key in esami_user_data.keys() if "anno" in key]) #stringa contenente gli anni per cui la flag è true
+    text_sessione = ", ".join([key for key in esami_user_data.keys() if "sessione" in key]).replace("sessione", "") #stringa contenente le sessioni per cui la flag è true
+    text_insegnamento = esami_user_data.get("insegnamento", "") #stringa contenente l'insegnamento
 
     message_text = "Anno: {}\nSessione: {}\nInsegnamento: {}"\
         .format(text_anno if text_anno else "tutti",\
@@ -98,16 +99,17 @@ def get_esami_text_InlineKeyboard(context: CallbackContext) -> (str, InlineKeybo
 
 def esami(update: Update, context: CallbackContext):
     check_log(update, context, "esami")
-    context.user_data.clear() #ripulisce il dict dell'user da eventuali dati presenti
+    if 'esami' in context.user_data: context.user_data['esami'].clear() #ripulisce il dict dell'user relativo al comando /esami da eventuali dati presenti
+    else: context.user_data['esami'] = {} #crea il dict che conterrà i dati del comando /esami all'interno della key ['esami'] di user data
     reply = get_esami_text_InlineKeyboard(context)
     context.bot.sendMessage(chat_id=update.message.chat_id, text=reply[0], reply_markup=reply[1])
 
 
 def esami_input_insegnamento(update: Update, context: CallbackContext):
-    if context.user_data.get('cmd', 'null') == "input_insegnamento": #se effettivamente l'user aveva richiesto di modificare l'insegnamento...
+    if context.user_data['esami'].get('cmd', 'null') == "input_insegnamento": #se effettivamente l'user aveva richiesto di modificare l'insegnamento...
         check_log(update, context, "esami_input_insegnamento")
-        context.user_data['insegnamento'] = re.sub(r"^(?!=<[/])[Ii]ns:\s+", "", update.message.text) #ottieni il nome dell'insegnamento e salvalo nel dict
-        del context.user_data['cmd'] #elimina la possibilità di modificare l'insegnamento fino a quando l'apposito button non viene premuto di nuovo
+        context.user_data['esami']['insegnamento'] = re.sub(r"^(?!=<[/])[Ii]ns:\s+", "", update.message.text) #ottieni il nome dell'insegnamento e salvalo nel dict
+        del context.user_data['esami']['cmd'] #elimina la possibilità di modificare l'insegnamento fino a quando l'apposito button non viene premuto di nuovo
         reply = get_esami_text_InlineKeyboard(context)
         context.bot.sendMessage(chat_id=update.message.chat_id, text=reply[0], reply_markup=reply[1])
 
@@ -698,21 +700,22 @@ def esami_handler(update: Update, context: CallbackContext):
     callbackData = update.callback_query.data
     chat_id = update.callback_query.message.chat_id
     message_id = update.callback_query.message.message_id
+    esami_user_data = context.user_data['esami']
     if "anno" in callbackData:
-        if callbackData[-7:] not in context.user_data.keys(): #se non era presente, setta la key di [1° anno|2° anno| 3° anno] a true... 
-            context.user_data[callbackData[-7:]] = True 
+        if callbackData[-7:] not in esami_user_data.keys(): #se non era presente, setta la key di [1° anno|2° anno| 3° anno] a true... 
+            esami_user_data[callbackData[-7:]] = True 
         else:
-           del context.user_data[callbackData[-7:]] #... o elmina la key se era già presente
+           del esami_user_data[callbackData[-7:]] #... o elmina la key se era già presente
     elif "sessione" in callbackData:
-        if 'sessione' + callbackData[22:] not in context.user_data.keys(): #se non era presente, setta la key di sessione[prima|seconda|terza] a true... 
-            context.user_data['sessione' + callbackData[22:]] = True 
+        if 'sessione' + callbackData[22:] not in esami_user_data.keys(): #se non era presente, setta la key di sessione[prima|seconda|terza] a true... 
+            esami_user_data['sessione' + callbackData[22:]] = True 
         else:
-           del context.user_data['sessione' + callbackData[22:]] #... o elmina la key se era già presente
+           del esami_user_data['sessione' + callbackData[22:]] #... o elmina la key se era già presente
     elif "search" in callbackData:
-        message_text = esami_cmd(context.user_data) #ottieni il risultato della query che soddisfa le richieste
+        message_text = esami_cmd(esami_user_data) #ottieni il risultato della query che soddisfa le richieste
         context.bot.editMessageText(chat_id=chat_id, message_id=message_id, text=update.callback_query.message.text) #rimuovi la inline keyboard e lascia il resoconto della query
         send_message(update, context, message_text) #manda il risutato della query suddividendo la stringa in più messaggi
-        context.user_data.clear() #ripulisci il dict
+        esami_user_data.clear() #ripulisci il dict
         return
     else:
         logger.error("esami_handler: an error has occurred")
@@ -742,7 +745,7 @@ def esami_button_sessione(update: Update, context: CallbackContext, chat_id, mes
 
 
 def esami_button_insegnamento(update: Update, context: CallbackContext, chat_id, message_id):
-    context.user_data['cmd'] = "input_insegnamento" #è in attesa di un messaggio nel formato corretto che imposti il valore del campo insegnamento
+    context.user_data['esami']['cmd'] = "input_insegnamento" #è in attesa di un messaggio nel formato corretto che imposti il valore del campo insegnamento
     message_text = "Inserire l'insegnamento desiderato nel formato:\n" + \
                    "ins: nome insegnamento\n" + \
                    "Esempio:\n" +\
