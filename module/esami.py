@@ -52,7 +52,7 @@ def esami_cmd(userDict):
 
 	query = """SELECT anno, cdl, docenti, insegnamento{} 
 			   FROM exams
-			   WHERE true {} {} {}""".format(
+			   WHERE 1 = 1 {} {} {}""".format(
 	", " + select_sessione if select_sessione else ", prima, seconda, terza, straordinaria", #es.=> , prima, seconda, terza
 	"and not " + where_sessione + " = '[]'" if where_sessione else "", #es.=> and not prima = '[] and not terza = '[]' 
 	"and (anno = '" + where_anno + "')" if where_anno else "", #es.=>  and (anno = '1° anno' or anno = '3° anno)'
