@@ -101,8 +101,16 @@ def esami(update: Update, context: CallbackContext):
     check_log(update, context, "esami")
     if 'esami' in context.user_data: context.user_data['esami'].clear() #ripulisce il dict dell'user relativo al comando /esami da eventuali dati presenti
     else: context.user_data['esami'] = {} #crea il dict che conterrà i dati del comando /esami all'interno della key ['esami'] di user data
-    reply = get_esami_text_InlineKeyboard(context)
-    context.bot.sendMessage(chat_id=update.message.chat_id, text=reply[0], reply_markup=reply[1])
+
+    user_id = update.message.from_user.id
+    chat_id = update.message.chat_id
+    if chat_id != user_id: # forza ad eseguire il comando in una chat privata, anche per evitare di inondare un gruppo con i risultati
+        context.bot.sendMessage(chat_id=chat_id, text="Questo comando è utilizzabile solo in privato")
+        context.bot.sendMessage(chat_id=user_id, text="Dal comando esami che hai eseguito in un gruppo")
+    
+    message_text, inline_keyboard = get_esami_text_InlineKeyboard(context)
+    context.bot.sendMessage(chat_id=user_id, text=message_text, reply_markup=inline_keyboard)
+
 
 
 def esami_input_insegnamento(update: Update, context: CallbackContext):
@@ -110,8 +118,8 @@ def esami_input_insegnamento(update: Update, context: CallbackContext):
         check_log(update, context, "esami_input_insegnamento")
         context.user_data['esami']['insegnamento'] = re.sub(r"^(?!=<[/])[Ii]ns:\s+", "", update.message.text) #ottieni il nome dell'insegnamento e salvalo nel dict
         del context.user_data['esami']['cmd'] #elimina la possibilità di modificare l'insegnamento fino a quando l'apposito button non viene premuto di nuovo
-        reply = get_esami_text_InlineKeyboard(context)
-        context.bot.sendMessage(chat_id=update.message.chat_id, text=reply[0], reply_markup=reply[1])
+        message_text, inline_keyboard = get_esami_text_InlineKeyboard(context)
+        context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text, reply_markup=inline_keyboard)
 
 
 # Commands
@@ -432,7 +440,7 @@ def help(update: Update, context: CallbackContext):
         [
             InlineKeyboardButton("📖 Esami (Triennale)",    url='http://dev7.unict.it/_esami_x_curl.php?cds=X81&aa=1' + str(get_year_code(12 , 20))),
             InlineKeyboardButton("📖 Esami (Magistrale)",   url='http://dev7.unict.it/_esami_x_curl.php?cds=W82&aa=1' + str(get_year_code(12 , 20))),
-            InlineKeyboardButton("🗓 Aulario",              url='http://aule.dmi.unict.it/aulario/roschedule.php'),
+            InlineKeyboardButton("🗓 Aulario",              url='http://aule.dmi.unict.it/booked/Web/view-schedule.php'),
             InlineKeyboardButton("Lezioni",                 url='http://web.dmi.unict.it/corsi/l-31/orario-lezioni')
         ]
     )
@@ -720,8 +728,8 @@ def esami_handler(update: Update, context: CallbackContext):
     else:
         logger.error("esami_handler: an error has occurred")
 
-    reply = get_esami_text_InlineKeyboard(context)
-    context.bot.editMessageText(text=reply[0], chat_id=chat_id, message_id=message_id, reply_markup=reply[1])
+    message_text, inline_keyboard = get_esami_text_InlineKeyboard(context)
+    context.bot.editMessageText(text=message_text, chat_id=chat_id, message_id=message_id, reply_markup=inline_keyboard)
 
 
 def esami_button_sessione(update: Update, context: CallbackContext, chat_id, message_id):
