@@ -98,4 +98,4 @@ This project is made possible thanks to the contributions of:
 - [Francesco Coppola](https://github.com/BeastHunter19/)
 - [Luca Longo](https://github.com/D4ed4lUS94)
 - [Danilo Santitto](https://github.com/Warcreed)
-
+- [Ernesto Casablanca](https://github.com/TendTo)
