@@ -2,7 +2,7 @@
 
 # Telegram
 import telegram
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, Bot
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, Bot, ParseMode
 from telegram.ext import Updater, Filters, MessageHandler, CommandHandler, CallbackQueryHandler, RegexHandler, CallbackContext
 from telegram.error import (TelegramError, Unauthorized, BadRequest, TimedOut, ChatMigrated, NetworkError)
 
@@ -438,10 +438,9 @@ def help(update: Update, context: CallbackContext):
 
     keyboard.append(
         [
-            InlineKeyboardButton("📖 Esami (Triennale)",    url='http://dev7.unict.it/_esami_x_curl.php?cds=X81&aa=1' + str(get_year_code(12 , 20))),
-            InlineKeyboardButton("📖 Esami (Magistrale)",   url='http://dev7.unict.it/_esami_x_curl.php?cds=W82&aa=1' + str(get_year_code(12 , 20))),
+            InlineKeyboardButton("📖 Esami (link)",        callback_data="md_esami_link"),
             InlineKeyboardButton("🗓 Aulario",              url='http://aule.dmi.unict.it/booked/Web/view-schedule.php'),
-            InlineKeyboardButton("Lezioni",                 url='http://web.dmi.unict.it/corsi/l-31/orario-lezioni')
+            InlineKeyboardButton("Orari lezioni (link)",    callback_data="md_lezioni_link")
         ]
     )
 
@@ -695,12 +694,12 @@ def md_handler(update: Update, context: CallbackContext):
 
     message_text = read_md(data)
     check_log(update, context, data, 1)
-
+    
     context.bot.editMessageText(
       text=message_text,
       chat_id=query.message.chat_id,
       message_id=query.message.message_id,
-      parse_mode='Markdown'
+      parse_mode=ParseMode.MARKDOWN
     )
 
 
