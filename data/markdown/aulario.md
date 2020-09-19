@@ -1,1 +1,1 @@
-http://aule.dmi.unict.it/aulario/roschedule.php
+http://aule.dmi.unict.it/booked/Web/view-schedule.php
