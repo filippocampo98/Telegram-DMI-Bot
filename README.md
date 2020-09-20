@@ -92,7 +92,7 @@ This project is made possible thanks to the contributions of:
 - [Luca Cavallaro](https://github.com/lucacavallaro)
 - [Pierpaolo Pecoraio](https://github.com/Pierpaolo791)
 - [Alessandro Catalano](https://github.com/Wornairz)
-- [Davide Carnemolla](https://github.com/daxcpp)
+- [Davide Carnemolla](https://github.com/herbrant)
 - [Salvo Distefano](https://github.com/RayperZ)
 - [Mario Gazzara](https://github.com/gazer99)
 - [Francesco Coppola](https://github.com/BeastHunter19/)
