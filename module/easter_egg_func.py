@@ -4,7 +4,7 @@ import sqlite3
 from telegram import Update
 from telegram.ext import CallbackContext
 from classes.EasterEgg import EasterEgg
-from module.shared import check_log
+from module.shared import check_log, config_map
 
 def smonta_portoni(update: Update, context: CallbackContext):
     check_log(update, context, "smonta_portoni")
