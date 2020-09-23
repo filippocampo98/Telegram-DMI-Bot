@@ -100,3 +100,4 @@ This project is made possible thanks to the contributions of:
 - [Danilo Santitto](https://github.com/Warcreed)
 - [Ernesto Casablanca](https://github.com/TendTo)
 - [Graziano Di Grande](https://github.com/Drendog)
+- [Santo Cariotti](https://github.com/dcariotti)
