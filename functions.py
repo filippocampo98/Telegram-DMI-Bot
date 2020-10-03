@@ -622,7 +622,7 @@ def git(update: Update, context: CallbackContext):
     else:
         db = sqlite3.connect('data/DMI_DB.db')
 
-        if db.execute("SELECT Chat_id FROM 'Chat_id_List' WHERE Chat_id = %s" % chat_id).fetchone():
+        if db.execute("SELECT Chat_id FROM 'Chat_id_List' WHERE Chat_id = ?",  chat_id).fetchone():
             gitlab_handler(update, context)
         else:
             context.bot.sendMessage(chat_id=chat_id, text="🔒 Non hai i permessi per utilizzare la funzione %s\nUtilizzare il comando /request <nome> <cognome> <e-mail> (il nome e il cognome devono essere scritti uniti Es: Di Mauro -> DiMauro)" % executed_command)
@@ -644,8 +644,8 @@ def report(update: Update, context: CallbackContext):
         if  context.args:
             db = sqlite3.connect('data/DMI_DB.db')
             message = "⚠️Segnalazione⚠️\n"
-            if db.execute("SELECT Chat_id FROM 'Chat_id_List' WHERE Chat_id = %s" %chat_id).fetchone():
-                name = db.execute("SELECT Username,Nome,Cognome FROM 'Chat_id_List' WHERE Chat_id = %s" %chat_id)
+            if db.execute("SELECT Chat_id FROM 'Chat_id_List' WHERE Chat_id = ?", chat_id).fetchone():
+                name = db.execute("SELECT Username,Nome,Cognome FROM 'Chat_id_List' WHERE Chat_id = ?", chat_id)
                 row = name.fetchone()
 
                 if row[0] is None:
