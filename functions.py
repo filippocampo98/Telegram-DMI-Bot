@@ -611,10 +611,9 @@ def get_year_code(month, day):
 
 def start(update: Update, context: CallbackContext):
     reply_keyboard = get_help_keyboard()
+    message_text = read_md("start")
     context.bot.sendMessage(chat_id=update.message.chat_id,
-                            text="Benvenuto! Questo bot è stato realizzato dagli studenti del Corso di Laurea in Informatica"\
-                                  "al fine di suppotare gli studenti del DMI!\n"\
-                                  "Per scoprire cosa puoi fare usa /help o premi il pulsante ❔ Help",
+                            text=message_text,
                             reply_markup=reply_keyboard)
 
 def git(update: Update, context: CallbackContext):
