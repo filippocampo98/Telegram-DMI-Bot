@@ -73,8 +73,8 @@ def get_esami_text_InlineKeyboard(context: CallbackContext) -> (str, InlineKeybo
     keyboard = [[]]
 
     esami_user_data = context.user_data['esami']
-    text_anno = ", ".join([key for key in esami_user_data.keys() if "anno" in key]) #stringa contenente gli anni per cui la flag è true
-    text_sessione = ", ".join([key for key in esami_user_data.keys() if "sessione" in key]).replace("sessione", "") #stringa contenente le sessioni per cui la flag è true
+    text_anno = ", ".join([key for key in esami_user_data if "anno" in key]) #stringa contenente gli anni per cui la flag è true
+    text_sessione = ", ".join([key for key in esami_user_data if "sessione" in key]).replace("sessione", "") #stringa contenente le sessioni per cui la flag è true
     text_insegnamento = esami_user_data.get("insegnamento", "") #stringa contenente l'insegnamento
 
     message_text = "Anno: {}\nSessione: {}\nInsegnamento: {}"\

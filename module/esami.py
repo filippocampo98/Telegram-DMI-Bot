@@ -45,18 +45,25 @@ def dict_factory(cursor, row):
 def esami_cmd(userDict):
 	output_str = []
  	
-	select_sessione = ", ".join([key for key in userDict.keys() if "sessione" in key]).replace("sessione", "") #stringa contenente le sessioni per cui il dict contiene la key, separate da ", " 	
-	where_sessione = " = '[]' and not ".join([key for key in userDict.keys() if "sessione" in key]).replace("sessione", "") #stringa contenente le sessioni per cui il dict contiene la key, separate da " = '[]' and not " 
-	where_anno = "' or anno = '".join([key for key in userDict.keys() if "anno" in key]) #stringa contenente gli anni per cui il dict contiene la key, separate da "' or anno = '"	
+	select_sessione = ", ".join([key for key in userDict if "sessione" in key]).replace("sessione", "") #stringa contenente le sessioni per cui il dict contiene la key, separate da ", " 	
+	where_sessione = " = '[]' or not ".join([key for key in userDict if "sessione" in key]).replace("sessione", "") #stringa contenente le sessioni per cui il dict contiene la key, separate da " = '[]' and not " 
+	where_anno = "' or anno = '".join([key for key in userDict if "anno" in key]) #stringa contenente gli anni per cui il dict contiene la key, separate da "' or anno = '"	
 	where_insegnamento = userDict.get("insegnamento", "")  #stringa contenente l'insegnamento, se presente
 
-	query = """SELECT anno, cdl, docenti, insegnamento{} 
-			   FROM exams
-			   WHERE insegnamento LIKE ? {} {}""".format(
-	", " + select_sessione if select_sessione else ", prima, seconda, terza, straordinaria", #es.=> , prima, seconda, terza
-	"and not " + where_sessione + " = '[]'" if where_sessione else "", #es.=> and not prima = '[] and not terza = '[]' 
-	"and (anno = '" + where_anno + "')" if where_anno else "", #es.=>  and (anno = '1° anno' or anno = '3° anno)'
-	)
+	if not select_sessione:
+		select_sessione = "prima, seconda, terza, straordinaria"
+	if where_sessione:
+		where_sessione = f"and (not {where_sessione} = '[]')"
+	else:
+		where_sessione = ""
+	if where_anno:
+		where_anno = f"and (anno = '{where_anno}')"
+	else:
+		where_anno = ""
+
+	query = f"""SELECT anno, cdl, docenti, insegnamento, {select_sessione} 
+				FROM exams
+				WHERE insegnamento LIKE ? {where_sessione} {where_anno}"""
 
 	conn = sqlite3.connect('data/DMI_DB.db')
 	conn.row_factory = dict_factory
