@@ -52,21 +52,21 @@ def esami_cmd(userDict):
 
 	query = """SELECT anno, cdl, docenti, insegnamento{} 
 			   FROM exams
-			   WHERE 1 = 1 {} {} {}""".format(
+			   WHERE insegnamento LIKE ? {} {}""".format(
 	", " + select_sessione if select_sessione else ", prima, seconda, terza, straordinaria", #es.=> , prima, seconda, terza
 	"and not " + where_sessione + " = '[]'" if where_sessione else "", #es.=> and not prima = '[] and not terza = '[]' 
 	"and (anno = '" + where_anno + "')" if where_anno else "", #es.=>  and (anno = '1° anno' or anno = '3° anno)'
-	"and insegnamento LIKE '%" + where_insegnamento + "%'" if where_insegnamento else "" #es.=> and insegnamento LIKE '%stringa%'
 	)
 
 	conn = sqlite3.connect('data/DMI_DB.db')
 	conn.row_factory = dict_factory
 	cur = conn.cursor()
 	try:
-		cur.execute(query)
-	except:
+		cur.execute(query, ('%'+ where_insegnamento+'%',))
+	except Exception as e:
 		print("The following exams query could not be executed (command \\esami)")
 		print(query) #per controllare cosa è andato storto
+		print("[error]: " + str(e))
 
 	for item in cur.fetchall():
 		output_str.append(esami_output(item))
