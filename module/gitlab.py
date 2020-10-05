@@ -361,13 +361,13 @@ def gitlab_handler(update: Update, context: CallbackContext):
 
             db_result = db.execute(query % (origin_id, blob_id)).fetchone()
         else:
-            db_result = db.execute("SELECT parent_id, name FROM gitlab WHERE id = ?", origin_id).fetchone()
+            db_result = db.execute("SELECT parent_id, name FROM gitlab WHERE id = %s" % origin_id).fetchone()
 
         if db_result:
             parent = db_result
 
         if action == 'x':
-            _type = db.execute('SELECT type FROM gitlab WHERE id = ?', origin_id).fetchone()
+            _type = db.execute('SELECT type FROM gitlab WHERE id = %s' % origin_id).fetchone()
             action = (_type[0] if _type else 'subgroup')[0]
 
         if action == 's':
@@ -386,7 +386,7 @@ def gitlab_handler(update: Update, context: CallbackContext):
         elif action == 'p':
             buttons.extend(explore_repository_tree(origin_id, '/', db))
         elif action == 't':
-            path = db.execute("SELECT pathname FROM gitlab WHERE id = ?", blob_id).fetchone()
+            path = db.execute("SELECT pathname FROM gitlab WHERE id = '%s'" % blob_id).fetchone()
             buttons.extend(explore_repository_tree(origin_id, path, db))
         elif action == 'b':
             blob = {

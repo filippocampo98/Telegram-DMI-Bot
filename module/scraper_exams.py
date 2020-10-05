@@ -88,12 +88,13 @@ def scrape_exams(year_exams, delete= False):
 		values += '("'+'", "'.join(str(v).replace("\"", "'") for v in i.values())+'"),' #serve ad evitare errori nella formazione della query, che nascono dalla presenza di " nel bel mezzo di un valore
 	values = values[:-1]
 
+	query = "INSERT INTO exams ({}) VALUES {}".format(columns, values)
 
 	conn = sqlite3.connect('data/DMI_DB.db')
 	if(delete):
 		conn.execute('DELETE FROM `exams`;') # TRUNCATE professors
 	try:
-		conn.execute("INSERT INTO exams (?) VALUES ?", columns, values)
+		conn.execute(query)
 		conn.commit()
 	except:
 		logger.error("The exams query could not be executed")
