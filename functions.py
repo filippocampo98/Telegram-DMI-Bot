@@ -192,7 +192,7 @@ def callback(update: Update, context: CallbackContext):
 
         try:
             if len(array_value) == 5:
-                conn.execute("INSERT INTO 'Chat_id_List' VALUES ("+update.callback_query.data+",'" + array_value[4] + "','" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "') ")
+                conn.execute("INSERT INTO 'Chat_id_List' VALUES (?, ?, ?, ?, ?)", update.callback_query.data, array_value[4], array_value[1], array_value[2], array_value[3])
                 context.bot.sendMessage(chat_id=update.callback_query.data, text="🔓 La tua richiesta è stata accettata. Leggi il file README")
                 context.bot.sendDocument(chat_id=update.callback_query.data, document=open('data/README.pdf', 'rb'))
 
@@ -201,7 +201,7 @@ def callback(update: Update, context: CallbackContext):
 
                 context.bot.sendMessage(chat_id=config_map['dev_group_chatid'], text=str(array_value[1]) + " " + str(array_value[2] + str(" è stato inserito nel database")))
             elif len(array_value) == 4:
-                conn.execute("INSERT INTO 'Chat_id_List'('Chat_id','Nome','Cognome','Email') VALUES (" + update.callback_query.data + ",'" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "')")
+                conn.execute("INSERT INTO 'Chat_id_List'('Chat_id','Nome','Cognome','Email') VALUES (?, ?, ?, ?)", update.callback_query.data, array_value[1], array_value[2], array_value[3])
                 context.bot.sendMessage(chat_id=update.callback_query.data, text="🔓 La tua richiesta è stata accettata. Leggi il file README")
                 context.bot.sendDocument(chat_id=update.callback_query.data, document=open('data/README.pdf', 'rb'))
 
@@ -330,7 +330,7 @@ def request(update: Update, context: CallbackContext):
 
     if chat_id > 0:
         # if we do not find any chat_id in the db
-        if not conn.execute("SELECT Chat_id FROM Chat_id_List WHERE Chat_id = " + str(chat_id)).fetchone():
+        if not conn.execute("SELECT Chat_id FROM Chat_id_List WHERE Chat_id = ?", str(chat_id)).fetchone():
             message_text = "✉️ Richiesta inviata"
             keyboard = [[]]
 
@@ -364,12 +364,12 @@ def add_db(update: Update, context: CallbackContext):
         # /add nome cognome e-mail username chatid
         array_value = update.message.text.split(" ")
         if len(array_value) == 6:
-            conn.execute("INSERT INTO 'Chat_id_List' VALUES (" + array_value[5] + ",'" + array_value[4] + "','" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "') ")
+            conn.execute("INSERT INTO 'Chat_id_List' VALUES (?, ?, ?, ?, ?)", array_value[5], array_value[4], array_value[1], array_value[2], array_value[3])
             context.bot.sendMessage(chat_id=array_value[5], text="🔓 La tua richiesta è stata accettata. Leggi il file README")
             context.bot.sendDocument(chat_id=array_value[5], document=open('data/README.pdf', 'rb'))
             conn.commit()
         elif len(array_value) == 5:
-            conn.execute("INSERT INTO 'Chat_id_List'('Chat_id','Nome','Cognome','Email') VALUES (" + array_value[4] + ",'" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "')")
+            conn.execute("INSERT INTO 'Chat_id_List'('Chat_id','Nome','Cognome','Email') VALUES (?, ?, ?, ?)", array_value[4], array_value[1], array_value[2], array_value[3])
             context.bot.sendMessage(chat_id=int(array_value[4]), text="🔓 La tua richiesta è stata accettata. Leggi il file README")
             context.bot.sendDocument(chat_id=int(array_value[4]), document=open('data/README.pdf', 'rb'))
             conn.commit()
@@ -392,7 +392,7 @@ def drive(update: Update, context: CallbackContext):
     if chat_id < 0:
         context.bot.sendMessage(chat_id=chat_id, text="La funzione /drive non è ammessa nei gruppi")
     else:
-        if conn.execute("SELECT Chat_id FROM 'Chat_id_List' WHERE Chat_id = " + str(chat_id)).fetchone():
+        if conn.execute("SELECT Chat_id FROM 'Chat_id_List' WHERE Chat_id = ?", str(chat_id)).fetchone():
             keyboard2 = [[]]
 
             try:
