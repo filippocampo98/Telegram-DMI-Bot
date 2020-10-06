@@ -62,6 +62,7 @@ def main():
 	dp.add_handler(CommandHandler('prof', prof))
 
 	dp.add_handler(CommandHandler('aulario', informative_callback))
+	dp.add_handler(MessageHandler(Filters.regex('📆 Aulario'), informative_callback))
 	dp.add_handler(CommandHandler('help', help))
 	dp.add_handler(MessageHandler(Filters.regex('❔ Help'), help))
 	dp.add_handler(CommandHandler('contributors', informative_callback))
@@ -77,6 +78,8 @@ def main():
 	dp.add_handler(CommandHandler('errors', send_errors))
 	dp.add_handler(CommandHandler('start', start))
 	dp.add_handler(CommandHandler('cloud', informative_callback))
+	dp.add_handler(MessageHandler(Filters.regex('☁️ Cloud'), informative_callback))
+	dp.add_handler(MessageHandler(Filters.regex('📫 Segnalazione Rappresentanti'), informative_callback))
 
   # generic buttons
 	dp.add_handler(CallbackQueryHandler(generic_button_handler, pattern='^(lezioni_button|help_cmd|exit_cmd)'))

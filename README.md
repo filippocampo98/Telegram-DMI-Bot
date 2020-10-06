@@ -80,25 +80,5 @@ $ python main.py
 ### License
 This open-source software is published under the GNU General Public License (GNU GPL) version 3. Please refer to the "LICENSE" file of this project for the full text.
 
-### Credits
-This project is made possible thanks to the contributions of:
-
-- [Stefano Borzì](https://github.com/Helias)
-- [Adriano Ferraguto](https://github.com/adrianoferraguto)
-- [Vincenzo Filetti](https://github.com/veeenz)
-- [Simone Di Mauro](https://github.com/simone989)
-- [Alessandro Maggio](https://github.com/Tkd-alex)
-- [Alessio Piazza](https://github.com/Squalex95)
-- [Luca Cavallaro](https://github.com/lucacavallaro)
-- [Pierpaolo Pecoraio](https://github.com/Pierpaolo791)
-- [Alessandro Catalano](https://github.com/Wornairz)
-- [Davide Carnemolla](https://github.com/herbrant)
-- [Salvo Distefano](https://github.com/RayperZ)
-- [Mario Gazzara](https://github.com/gazer99)
-- [Francesco Coppola](https://github.com/BeastHunter19/)
-- [Luca Longo](https://github.com/D4ed4lUS94)
-- [Danilo Santitto](https://github.com/Warcreed)
-- [Ernesto Casablanca](https://github.com/TendTo)
-- [Graziano Di Grande](https://github.com/Drendog)
-- [Santo Cariotti](https://github.com/dcariotti)
-- [Giuseppe Criscione](https://github.com/datalux)
+### Contributors
+You can find the list of contributors [here](CONTRIBUTORS.md)

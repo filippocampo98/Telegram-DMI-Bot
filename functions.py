@@ -159,7 +159,11 @@ def help_cmd():
 
 
 def informative_callback(update: Update, context: CallbackContext):
-    cmd = update.message.text.split(' ')[0][1:] #prende solo la prima parola del messaggio (cioè il comando) escludendo lo slash
+     # controllo per poter gestire i comandi (/comando) e i messaggi inviati premendo i bottoni (❔ Help)
+    if update.message.text[0] == '/':
+        cmd = update.message.text.split(' ')[0][1:] #prende solo la prima parola del messaggio (cioè il comando) escludendo lo slash
+    else:
+        cmd = update.message.text.split(' ')[1].lower() # prende la prima parola dopo l'emoji
     check_log(update, context, cmd)
     message_text = read_md(cmd)
     context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text, parse_mode='Markdown')
