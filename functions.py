@@ -38,7 +38,6 @@ from module.scraper_notices import scrape_notices
 from module.gitlab import gitlab_handler
 from module.easter_egg_func import *
 from module.regolamento_didattico import *
-from module.utils.keyboard_utils import get_help_keyboard
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -73,8 +72,8 @@ def get_esami_text_InlineKeyboard(context: CallbackContext) -> (str, InlineKeybo
     keyboard = [[]]
 
     esami_user_data = context.user_data['esami']
-    text_anno = ", ".join([key for key in esami_user_data if "anno" in key]) #stringa contenente gli anni per cui la flag è true
-    text_sessione = ", ".join([key for key in esami_user_data if "sessione" in key]).replace("sessione", "") #stringa contenente le sessioni per cui la flag è true
+    text_anno = ", ".join([key for key in esami_user_data.keys() if "anno" in key]) #stringa contenente gli anni per cui la flag è true
+    text_sessione = ", ".join([key for key in esami_user_data.keys() if "sessione" in key]).replace("sessione", "") #stringa contenente le sessioni per cui la flag è true
     text_insegnamento = esami_user_data.get("insegnamento", "") #stringa contenente l'insegnamento
 
     message_text = "Anno: {}\nSessione: {}\nInsegnamento: {}"\
@@ -108,7 +107,7 @@ def esami(update: Update, context: CallbackContext):
     if chat_id != user_id: # forza ad eseguire il comando in una chat privata, anche per evitare di inondare un gruppo con i risultati
         context.bot.sendMessage(chat_id=chat_id, text="Questo comando è utilizzabile solo in privato")
         context.bot.sendMessage(chat_id=user_id, text="Dal comando esami che hai eseguito in un gruppo")
-    
+
     message_text, inline_keyboard = get_esami_text_InlineKeyboard(context)
     context.bot.sendMessage(chat_id=user_id, text=message_text, reply_markup=inline_keyboard)
 
@@ -168,7 +167,6 @@ def informative_callback(update: Update, context: CallbackContext):
     message_text = read_md(cmd)
     context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text, parse_mode='Markdown')
 
-
 def exit_cmd():
     output = "."
     return output
@@ -197,7 +195,7 @@ def callback(update: Update, context: CallbackContext):
 
         try:
             if len(array_value) == 5:
-                conn.execute("INSERT INTO 'Chat_id_List' VALUES (?, ?, ?, ?, ?)", update.callback_query.data, array_value[4], array_value[1], array_value[2], array_value[3])
+                conn.execute("INSERT INTO 'Chat_id_List' VALUES ("+update.callback_query.data+",'" + array_value[4] + "','" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "') ")
                 context.bot.sendMessage(chat_id=update.callback_query.data, text="🔓 La tua richiesta è stata accettata. Leggi il file README")
                 context.bot.sendDocument(chat_id=update.callback_query.data, document=open('data/README.pdf', 'rb'))
 
@@ -206,7 +204,7 @@ def callback(update: Update, context: CallbackContext):
 
                 context.bot.sendMessage(chat_id=config_map['dev_group_chatid'], text=str(array_value[1]) + " " + str(array_value[2] + str(" è stato inserito nel database")))
             elif len(array_value) == 4:
-                conn.execute("INSERT INTO 'Chat_id_List'('Chat_id','Nome','Cognome','Email') VALUES (?, ?, ?, ?)", update.callback_query.data, array_value[1], array_value[2], array_value[3])
+                conn.execute("INSERT INTO 'Chat_id_List'('Chat_id','Nome','Cognome','Email') VALUES (" + update.callback_query.data + ",'" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "')")
                 context.bot.sendMessage(chat_id=update.callback_query.data, text="🔓 La tua richiesta è stata accettata. Leggi il file README")
                 context.bot.sendDocument(chat_id=update.callback_query.data, document=open('data/README.pdf', 'rb'))
 
@@ -335,7 +333,7 @@ def request(update: Update, context: CallbackContext):
 
     if chat_id > 0:
         # if we do not find any chat_id in the db
-        if not conn.execute("SELECT Chat_id FROM Chat_id_List WHERE Chat_id = ?", str(chat_id)).fetchone():
+        if not conn.execute("SELECT Chat_id FROM Chat_id_List WHERE Chat_id = " + str(chat_id)).fetchone():
             message_text = "✉️ Richiesta inviata"
             keyboard = [[]]
 
@@ -369,12 +367,12 @@ def add_db(update: Update, context: CallbackContext):
         # /add nome cognome e-mail username chatid
         array_value = update.message.text.split(" ")
         if len(array_value) == 6:
-            conn.execute("INSERT INTO 'Chat_id_List' VALUES (?, ?, ?, ?, ?)", array_value[5], array_value[4], array_value[1], array_value[2], array_value[3])
+            conn.execute("INSERT INTO 'Chat_id_List' VALUES (" + array_value[5] + ",'" + array_value[4] + "','" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "') ")
             context.bot.sendMessage(chat_id=array_value[5], text="🔓 La tua richiesta è stata accettata. Leggi il file README")
             context.bot.sendDocument(chat_id=array_value[5], document=open('data/README.pdf', 'rb'))
             conn.commit()
         elif len(array_value) == 5:
-            conn.execute("INSERT INTO 'Chat_id_List'('Chat_id','Nome','Cognome','Email') VALUES (?, ?, ?, ?)", array_value[4], array_value[1], array_value[2], array_value[3])
+            conn.execute("INSERT INTO 'Chat_id_List'('Chat_id','Nome','Cognome','Email') VALUES (" + array_value[4] + ",'" + array_value[1] + "','" + array_value[2] + "','" + array_value[3] + "')")
             context.bot.sendMessage(chat_id=int(array_value[4]), text="🔓 La tua richiesta è stata accettata. Leggi il file README")
             context.bot.sendDocument(chat_id=int(array_value[4]), document=open('data/README.pdf', 'rb'))
             conn.commit()
@@ -397,7 +395,7 @@ def drive(update: Update, context: CallbackContext):
     if chat_id < 0:
         context.bot.sendMessage(chat_id=chat_id, text="La funzione /drive non è ammessa nei gruppi")
     else:
-        if conn.execute("SELECT Chat_id FROM 'Chat_id_List' WHERE Chat_id = ?", str(chat_id)).fetchone():
+        if conn.execute("SELECT Chat_id FROM 'Chat_id_List' WHERE Chat_id = " + str(chat_id)).fetchone():
             keyboard2 = [[]]
 
             try:
@@ -614,11 +612,7 @@ def get_year_code(month, day):
     return str(year)[-2:]
 
 def start(update: Update, context: CallbackContext):
-    reply_keyboard = get_help_keyboard()
-    message_text = read_md("start")
-    context.bot.sendMessage(chat_id=update.message.chat_id,
-                            text=message_text,
-                            reply_markup=reply_keyboard)
+    context.bot.sendMessage(chat_id=update.message.chat_id, text="Benvenuto! Questo bot è stato realizzato dagli studenti del Corso di Laurea in Informatica al fine di suppotare gli studenti del DMI! Per scoprire cosa puoi fare usa /help")
 
 def git(update: Update, context: CallbackContext):
     check_log(update, context, "gitlab")
@@ -653,8 +647,8 @@ def report(update: Update, context: CallbackContext):
         if  context.args:
             db = sqlite3.connect('data/DMI_DB.db')
             message = "⚠️Segnalazione⚠️\n"
-            if db.execute("SELECT Chat_id FROM 'Chat_id_List' WHERE Chat_id = ?", chat_id).fetchone():
-                name = db.execute("SELECT Username,Nome,Cognome FROM 'Chat_id_List' WHERE Chat_id = ?", chat_id)
+            if db.execute("SELECT Chat_id FROM 'Chat_id_List' WHERE Chat_id = %s" %chat_id).fetchone():
+                name = db.execute("SELECT Username,Nome,Cognome FROM 'Chat_id_List' WHERE Chat_id = %s" %chat_id)
                 row = name.fetchone()
 
                 if row[0] is None:
@@ -684,7 +678,7 @@ def submenu_handler(update: Update, context: CallbackContext):
       query.message.chat_id,
       query.message.message_id
     )
-  
+
 def generic_button_handler(update: Update, context: CallbackContext):
     query = update.callback_query
     data = query.data
@@ -703,7 +697,7 @@ def md_handler(update: Update, context: CallbackContext):
 
     message_text = read_md(data)
     check_log(update, context, data, 1)
-    
+
     context.bot.editMessageText(
       text=message_text,
       chat_id=query.message.chat_id,
@@ -781,5 +775,3 @@ def esami_button_anno(update: Update, context: CallbackContext, chat_id, message
             InlineKeyboardButton("3° anno", callback_data="esami_button_anno_3° anno"),
         ]
     )
-
-    context.bot.editMessageText(text=message_text, chat_id=chat_id, message_id=message_id, reply_markup=InlineKeyboardMarkup(keyboard))
