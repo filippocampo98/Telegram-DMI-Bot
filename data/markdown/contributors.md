@@ -19,6 +19,8 @@ This project is made possible thanks to the contributions of:
 - [Graziano Di Grande](https://github.com/Drendog) @Adrenoid
 - [Santo Cariotti](https://github.com/dcariotti) @dcariotti
 - [Giuseppe Criscione](https://github.com/datalux) @datalux
+- [Stefano Origlio](https://github.com/InfernoMentale) @bastardo_saudita360
+- [Salvo Asero](https://github.com/Guberlo) @SalAsero
 
 If you want to contribute, your help would be  really appreciated:
 https://github.com/UNICT-DMI/Telegram-DMI-Bot.git
