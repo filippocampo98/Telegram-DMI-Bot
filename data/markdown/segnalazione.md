@@ -1,1 +1,1 @@
-Per inviare una richiesta o una segnalazione ai Rappresentanti ERSU scrivi il comando **/report &lt;inserisci qui la segnalazione&gt;**.
+Per inviare una richiesta o una segnalazione ai Rappresentanti ERSU scrivi il comando **/report <inserisci qui la segnalazione>**.
