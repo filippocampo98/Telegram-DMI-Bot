@@ -38,7 +38,6 @@ from module.scraper_notices import scrape_notices
 from module.gitlab import gitlab_handler
 from module.easter_egg_func import *
 from module.regolamento_didattico import *
-from module.utils.keyboard_utils import get_help_keyboard
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -73,8 +72,8 @@ def get_esami_text_InlineKeyboard(context: CallbackContext) -> (str, InlineKeybo
     keyboard = [[]]
 
     esami_user_data = context.user_data['esami']
-    text_anno = ", ".join([key for key in esami_user_data if "anno" in key]) #stringa contenente gli anni per cui la flag è true
-    text_sessione = ", ".join([key for key in esami_user_data if "sessione" in key]).replace("sessione", "") #stringa contenente le sessioni per cui la flag è true
+    text_anno = ", ".join([key for key in esami_user_data.keys() if "anno" in key]) #stringa contenente gli anni per cui la flag è true
+    text_sessione = ", ".join([key for key in esami_user_data.keys() if "sessione" in key]).replace("sessione", "") #stringa contenente le sessioni per cui la flag è true
     text_insegnamento = esami_user_data.get("insegnamento", "") #stringa contenente l'insegnamento
 
     message_text = "Anno: {}\nSessione: {}\nInsegnamento: {}"\
@@ -108,7 +107,7 @@ def esami(update: Update, context: CallbackContext):
     if chat_id != user_id: # forza ad eseguire il comando in una chat privata, anche per evitare di inondare un gruppo con i risultati
         context.bot.sendMessage(chat_id=chat_id, text="Questo comando è utilizzabile solo in privato")
         context.bot.sendMessage(chat_id=user_id, text="Dal comando esami che hai eseguito in un gruppo")
-    
+
     message_text, inline_keyboard = get_esami_text_InlineKeyboard(context)
     context.bot.sendMessage(chat_id=user_id, text=message_text, reply_markup=inline_keyboard)
 
@@ -167,7 +166,6 @@ def informative_callback(update: Update, context: CallbackContext):
     check_log(update, context, cmd)
     message_text = read_md(cmd)
     context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text, parse_mode='Markdown')
-
 
 def exit_cmd():
     output = "."
@@ -611,11 +609,7 @@ def get_year_code(month, day):
     return str(year)[-2:]
 
 def start(update: Update, context: CallbackContext):
-    reply_keyboard = get_help_keyboard()
-    message_text = read_md("start")
-    context.bot.sendMessage(chat_id=update.message.chat_id,
-                            text=message_text,
-                            reply_markup=reply_keyboard)
+    context.bot.sendMessage(chat_id=update.message.chat_id, text="Benvenuto! Questo bot è stato realizzato dagli studenti del Corso di Laurea in Informatica al fine di suppotare gli studenti del DMI! Per scoprire cosa puoi fare usa /help")
 
 def git(update: Update, context: CallbackContext):
     check_log(update, context, "gitlab")
@@ -681,7 +675,7 @@ def submenu_handler(update: Update, context: CallbackContext):
       query.message.chat_id,
       query.message.message_id
     )
-  
+
 def generic_button_handler(update: Update, context: CallbackContext):
     query = update.callback_query
     data = query.data
@@ -700,7 +694,7 @@ def md_handler(update: Update, context: CallbackContext):
 
     message_text = read_md(data)
     check_log(update, context, data, 1)
-    
+
     context.bot.editMessageText(
       text=message_text,
       chat_id=query.message.chat_id,
@@ -778,5 +772,3 @@ def esami_button_anno(update: Update, context: CallbackContext, chat_id, message
             InlineKeyboardButton("3° anno", callback_data="esami_button_anno_3° anno"),
         ]
     )
-
-    context.bot.editMessageText(text=message_text, chat_id=chat_id, message_id=message_id, reply_markup=InlineKeyboardMarkup(keyboard))
