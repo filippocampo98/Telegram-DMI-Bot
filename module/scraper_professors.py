@@ -93,10 +93,11 @@ def scrape_prof():
     	values += '("'+'", "'.join(str(v).replace('"', '') for v in i.values())+'"),'
     values = values[:-1]
 
+    query = "INSERT INTO professors ({}) VALUES {}".format(columns, values)
 
     conn = sqlite3.connect('data/DMI_DB.db')
     conn.execute('DELETE FROM `professors`;') # TRUNCATE professors
-    conn.execute("INSERT INTO professors (?) VALUES ?", columns, values)
+    conn.execute(query)
     conn.commit()
     conn.close()
 
