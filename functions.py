@@ -216,9 +216,6 @@ def callback(update: Update, context: CallbackContext):
         except Exception as error:
             print(error)
             context.bot.sendMessage(chat_id=config_map['dev_group_chatid'], text=str("ERRORE INSERIMENTO: ") + str(update['callback_query']['message']['text']) + " " + str(update['callback_query']['data']))
-
-        text = ""
-
     else:
         pid = os.fork()
         if (pid == 0):
