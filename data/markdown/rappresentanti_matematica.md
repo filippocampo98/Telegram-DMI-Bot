@@ -1,7 +1,7 @@
 *Rappresentanti Corso di Laurea Triennale*
-Catania Valentina - @valentina\_catania
+Catania Valentina - @valentina_catania
 Polignano Luisa - @LuisaPolignano
-Sciacca Susanna
+
 
 *Rappresentnati Corso di Laurea Magistrale*
 Saccone Damiano @Dami88m
