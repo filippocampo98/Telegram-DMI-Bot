@@ -35,10 +35,6 @@ def lezioni_output(item):
 
     output = "*Nome:* " + item["nome"]
     output += "\n*Aula:* " + str(item["aula"])
-
-    for day in daylist:
-        numero_giorno = get_numero_giorno(day.replace('ì','i'))
-
     output += "\n*Anno:* " + str(item["anno"]) + "\n"
 
     return output
