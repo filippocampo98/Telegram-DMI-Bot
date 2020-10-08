@@ -33,6 +33,11 @@ If you want to test the bot by creating your personal istance, follow this steps
 - beautifulsoup4
 - python-gitlab
 
+To install all the requirements you can run:
+```bash
+pip3 install -r requirements.txt
+```
+
 ### Special functions
 
 Notes: only some users are allowed to use these commands indeed there is an if condition that check the chatid of the user that can use them
