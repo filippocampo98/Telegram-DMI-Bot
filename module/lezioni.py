@@ -7,7 +7,6 @@ import calendar
 import datetime
 import locale
 import time
-from module.scraper_lessons import get_giorno
 
 locale.setlocale(locale.LC_ALL, 'it_IT.utf8')
 
