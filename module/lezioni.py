@@ -38,8 +38,6 @@ def lezioni_output(item):
 
     for day in daylist:
         numero_giorno = get_numero_giorno(day.replace('ì','i'))
-        if(numero_giorno == item['giorno_settimana']):
-            output += "\n*Giorno:* " + day.title()
 
     output += "\n*Anno:* " + str(item["anno"]) + "\n"
 
@@ -49,7 +47,7 @@ def lezioni_condition(items, condition, *arg):
     output = set()
     for item in items:
         if(arg):
-            if( (arg[0] in str(item[condition]).lower()) or (get_numero_anno(arg[0]) == item[condition]) ):
+            if( (arg[0] in str(item[condition]).lower()) or (get_numero_anno(arg[0]) == item[condition]) ): # il primo è utile quando come arg viene passato il nome (es. programmazione), il secondo quando viene passato l'anno(es. primo)
                 output.add(lezioni_output(item))
         else:
             if(get_numero_giorno(condition) in item['giorno_settimana']):
@@ -153,6 +151,6 @@ def lezioni_cmd(bot, update, args):
             bot.sendMessage(chat_id=update.message.chat_id, text=str(e))
 
     else:
-        output_str = "Inserisci almeno uno dei seguenti parametri: giorno, materia, anno."
+        output_str = "Inserisci almeno uno dei seguenti parametri: giorno, materia, anno. Ad esempio: /lezioni oggi primo anno"
 
     return output_str
