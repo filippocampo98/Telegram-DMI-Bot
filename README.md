@@ -10,12 +10,12 @@ Please note that the commands and their answers are in Italian.
 
 ---
 
-### Setting up a local istance
-If you want to test the bot by creating your personal istance, follow this steps:
+### Setting up a local instance
+If you want to test the bot by creating your personal instance, follow this steps:
 * **Clone this repository** or download it as zip.
 * **Send a message to your bot** on Telegram, even '/start' will do. If you don't, you could get an error
-* Copy the file data/DMI_DB.db.dist into data/DMI_DB.db to enable the database sqlite
-* Copy the file config/settings.yaml.dist into config/settings.yaml (If you don't have a token, message Telegram's [@BotFather](http://telegram.me/Botfather) to create a bot and get a token for it)
+* Make a copy of the file "data/DMI_DB.db.dist" in the same directory and rename it to "DMI_DB.db" to enable the database sqlite
+* Make a copy of the file "config/settings.yaml.dist" in the same directory and rename it to "settings.yaml" (If you don't have a token, message Telegram's [@BotFather](http://telegram.me/Botfather) to create a bot and get a token for it)
 * Now you can launch "main.py" with your Python3 interpreter
 
 ### System requirements
