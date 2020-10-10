@@ -31,8 +31,6 @@ def get_numero_anno(anno):
     return switcher.get(anno, "Anno non valido, utilizzare primo/secondo/terzo")
 
 def lezioni_output(item):
-    daylist = list(calendar.day_name)
-
     output = "*Nome:* " + item["nome"]
     output += "\n*Aula:* " + str(item["aula"])
     output += "\n*Anno:* " + str(item["anno"]) + "\n"
@@ -42,9 +40,8 @@ def lezioni_output(item):
 def lezioni_condition(items, condition, *arg):
     output = set()
     for item in items:
-        if(arg):
-            if( (arg[0] in str(item[condition]).lower()) or (get_numero_anno(arg[0]) == item[condition]) ): # il primo è utile quando come arg viene passato il nome (es. programmazione), il secondo quando viene passato l'anno(es. primo)
-                output.add(lezioni_output(item))
+        if( arg and ( (arg[0] in str(item[condition]).lower()) or (get_numero_anno(arg[0]) == item[condition]) ) ): # controlla se viene passato un arg, se come arg verrà passato il nome allora il primo check sarà vero, altrimenti controlleremo se è stato passato l'anno
+            output.add(lezioni_output(item))
         else:
             if(get_numero_giorno(condition) in item['giorno_settimana']):
                 output.add(lezioni_output(item))
