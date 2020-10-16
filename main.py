@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from functions import TOKEN, Bot, Updater, MessageHandler, CommandHandler, CallbackQueryHandler, Filters, telegram, Update, CallbackContext,\
 	smonta_portoni, santino, prof_sticker, bladrim, lei_che_ne_pensa_signorina, informative_callback, lezioni, esami, prof, report, give_chat_id, send_log, send_chat_ids, send_errors, start, callback, help,\
-	regolamenti, regolamentodidattico, regolamentodidattico_button, regolamentodidattico_keyboard, triennale, magistrale, regdid, esami_handler, esami_input_insegnamento,\
+	regolamenti, regolamentodidattico, regolamentodidattico_button, regolamentodidattico_keyboard, triennale, magistrale, regdid, esami_handler, lezioni_handler, esami_input_insegnamento, lezioni_input_insegnamento,\
 	generic_button_handler, gitlab_handler, submenu_handler, md_handler,\
 	updater_lep, git, drive, stats, stats_tot, request, add_db #importati solo componenti utilizzati nel main
 from module.shared import config_map
@@ -82,7 +82,7 @@ def main():
 	dp.add_handler(MessageHandler(Filters.regex('📫 Segnalazione Rappresentanti'), informative_callback))
 
   # generic buttons
-	dp.add_handler(CallbackQueryHandler(generic_button_handler, pattern='^(lezioni_button|help_cmd|exit_cmd)'))
+	dp.add_handler(CallbackQueryHandler(generic_button_handler, pattern='^(help_cmd|exit_cmd)'))
 	dp.add_handler(CallbackQueryHandler(submenu_handler,        pattern='sm_*'))
 	dp.add_handler(CallbackQueryHandler(md_handler,             pattern='md_*'))
 
@@ -101,6 +101,10 @@ def main():
 	#esami
 	dp.add_handler(MessageHandler(Filters.regex(r"^(?!=<[/])[Ii]ns:\s+"), esami_input_insegnamento)) #regex accetta [/ins: nome] oppure [/Ins: nome], per agevolare chi usa il cellulare
 	dp.add_handler(CallbackQueryHandler(esami_handler, pattern='esami_button_*'))
+
+	# lezioni
+	dp.add_handler(CallbackQueryHandler(lezioni_handler, pattern='lezioni_button_*'))
+	dp.add_handler(MessageHandler(Filters.regex(r"^(?!=<[/])[Nn]ome:\s+"), lezioni_input_insegnamento))
 
 	#JobQueue
 	j = updater.job_queue
