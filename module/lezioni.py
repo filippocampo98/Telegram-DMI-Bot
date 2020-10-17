@@ -1,7 +1,20 @@
 # -*- coding: utf-8 -*-
 
-import json
+# Telegram
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.ext import CallbackContext, CallbackQueryHandler
+
+# System libraries
+import logging
+
+# Modules
+from module.shared import check_log, send_message
+
 import sqlite3
+import re
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def get_nome_giorno(day):
     switcher = {
@@ -13,6 +26,135 @@ def get_nome_giorno(day):
     }
 
     return switcher.get(day, "Giorno non valido")
+
+# eliminate
+def lezioni_button():
+    output = "Scrivi /lezioni inserendo almeno uno dei seguenti parametri: giorno, materia"
+    return output
+
+def get_lezioni_text_InLineKeyboard(context: CallbackContext) -> (str, InlineKeyboardMarkup): #restituisce una tuple formata da (message_text, InlineKeyboardMarkup)
+    keyboard = [[]]
+
+    lezioni_user_data = context.user_data['lezioni']
+    text_anno = ", ".join([key for key in lezioni_user_data if "anno" in key]).replace("anno","") #stringa contenente gli anni per cui la flag è true
+    text_giorno = ", ".join([key for key in lezioni_user_data if "giorno" in key]).replace("giorno","") #stringa contenente le lezioni per cui la flag è true
+    text_insegnamento = lezioni_user_data.get("insegnamento", "") #stringa contenente l'insegnamento
+
+    message_text = "Anno: {}\nGiorno: {}\nInsegnamento: {}"\
+        .format(text_anno if text_anno else "tutti",\
+                text_giorno if text_giorno else "tutti",\
+                text_insegnamento if text_insegnamento else "tutti")
+    keyboard.append([InlineKeyboardButton(" ~ Personalizza la ricerca ~ ", callback_data="_div")])
+    keyboard.append(
+            [
+                InlineKeyboardButton(" Anno ", callback_data="sm_lezioni_button_anno"),
+                InlineKeyboardButton(" Giorno ", callback_data="sm_lezioni_button_giorno"),
+            ]
+        )
+    keyboard.append(
+            [
+                InlineKeyboardButton(" Insegnamento ", callback_data="sm_lezioni_button_insegnamento"),
+                InlineKeyboardButton(" Cerca ", callback_data="lezioni_button_search")
+            ]
+        )
+
+    return message_text, InlineKeyboardMarkup(keyboard)
+
+def lezioni(update: Update, context: CallbackContext):
+    check_log(update, context, "lezioni")
+    if 'lezioni' in context.user_data: context.user_data['lezioni'].clear() #ripulisce il dict dell'user relativo al comando /esami da eventuali dati presenti
+    else: context.user_data['lezioni'] = {} #crea il dict che conterrà i dati del comando /esami all'interno della key ['esami'] di user data
+
+    user_id = update.message.from_user.id
+    chat_id = update.message.chat_id
+    if chat_id != user_id: # forza ad eseguire il comando in una chat privata, anche per evitare di inondare un gruppo con i risultati
+        context.bot.sendMessage(chat_id=chat_id, text="Questo comando è utilizzabile solo in privato")
+        context.bot.sendMessage(chat_id=user_id, text="Dal comando lezioni che hai eseguito in un gruppo")
+    
+    message_text, inline_keyboard = get_lezioni_text_InLineKeyboard(context)
+    context.bot.sendMessage(chat_id=user_id, text=message_text, reply_markup=inline_keyboard)
+
+def lezioni_input_insegnamento(update: Update, context: CallbackContext):
+    if context.user_data['lezioni'].get('cmd', 'null') == "input_insegnamento": #se effettivamente l'user aveva richiesto di modificare l'insegnamento...
+        check_log(update, context, "lezioni_input_insegnamento")
+        context.user_data['lezioni']['insegnamento'] = re.sub(r"^(?!=<[/])[Nn]ome:\s+", "", update.message.text) #ottieni il nome dell'insegnamento e salvalo nel dict
+        del context.user_data['lezioni']['cmd'] #elimina la possibilità di modificare l'insegnamento fino a quando l'apposito button non viene premuto di nuovo
+        message_text, inline_keyboard = get_lezioni_text_InLineKeyboard(context)
+        context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text, reply_markup=inline_keyboard)
+
+def lezioni_handler(update: Update, context: CallbackContext):
+    callbackData = update.callback_query.data
+    chat_id = update.callback_query.message.chat_id
+    message_id = update.callback_query.message.message_id
+    lezioni_user_data = context.user_data['lezioni']
+    if "anno" in callbackData:
+        if callbackData[20:] not in lezioni_user_data.keys(): #se non era presente, setta la key di [1° anno|2° anno| 3° anno] a true... 
+            lezioni_user_data[callbackData[20:]] = True 
+        else:
+           del lezioni_user_data[callbackData[20:]] #... o elmina la key se era già presente
+    elif "giorno" in callbackData:
+        if 'giorno' + callbackData[22:] not in lezioni_user_data.keys(): #se non era presente, setta la key di sessione[prima|seconda|terza] a true... 
+            lezioni_user_data['giorno' + callbackData[22:]] = True 
+        else:
+           del lezioni_user_data['giorno' + callbackData[22:]] #... o elmina la key se era già presente
+    elif "search" in callbackData:
+        message_text = lezioni_cmd(lezioni_user_data) #ottieni il risultato della query che soddisfa le richieste
+        context.bot.editMessageText(chat_id=chat_id, message_id=message_id, text=update.callback_query.message.text) #rimuovi la inline keyboard e lascia il resoconto della query
+        send_message(update, context, message_text) #manda il risutato della query suddividendo la stringa in più messaggi
+        lezioni_user_data.clear() #ripulisci il dict
+        return
+    else:
+        logger.error("esami_handler: an error has occurred")
+
+    message_text, inline_keyboard = get_lezioni_text_InLineKeyboard(context)
+    context.bot.editMessageText(text=message_text, chat_id=chat_id, message_id=message_id, reply_markup=inline_keyboard)
+
+def lezioni_button_giorno(update: Update, context: CallbackContext, chat_id, message_id):
+    keyboard = [[]]
+    message_text = "Seleziona il giorno che ti interessa"
+
+    keyboard.append(
+        [
+            InlineKeyboardButton("Lunedì", callback_data="lezioni_button_giorno_1 giorno"),
+            InlineKeyboardButton("Martedì", callback_data="lezioni_button_giorno_2 giorno"),
+        ]
+    )
+    keyboard.append(
+        [
+            InlineKeyboardButton("Mercoledì", callback_data="lezioni_button_giorno_3 giorno"),
+            InlineKeyboardButton("Giovedì", callback_data="lezioni_button_giorno_4 giorno"),
+        ]
+    )
+    keyboard.append(
+        [
+            InlineKeyboardButton("Venerdì", callback_data="lezioni_button_giorno_5 giorno"),
+        ]
+    )
+
+    context.bot.editMessageText(text=message_text, chat_id=chat_id, message_id=message_id, reply_markup=InlineKeyboardMarkup(keyboard))
+
+def lezioni_button_insegnamento(update: Update, context: CallbackContext, chat_id, message_id):
+    context.user_data['lezioni']['cmd'] = "input_insegnamento" #è in attesa di un messaggio nel formato corretto che imposti il valore del campo insegnamento
+    message_text = "Inserire il nome della materia nel formato:\n" + \
+                   "nome: nome insegnamento\n" + \
+                   "Esempio:\n" +\
+                   "nome: SisTeMi oPeRaTIvI"
+
+    context.bot.editMessageText(text=message_text, chat_id=chat_id, message_id=message_id)
+
+def lezioni_button_anno(update: Update, context: CallbackContext, chat_id, message_id):
+    keyboard = [[]]
+    message_text = "Seleziona l'anno che ti interessa"
+
+    keyboard.append(
+        [
+            InlineKeyboardButton("Primo anno", callback_data="lezioni_button_anno_1 anno"), #check here to change the received text
+            InlineKeyboardButton("Secondo anno", callback_data="lezioni_button_anno_2 anno"),
+            InlineKeyboardButton("Terzo anno", callback_data="lezioni_button_anno_3 anno"),
+        ]
+    )
+
+    context.bot.editMessageText(text=message_text, chat_id=chat_id, message_id=message_id, reply_markup=InlineKeyboardMarkup(keyboard))
 
 def lezioni_cmd(userDict):
     output_str = []
@@ -49,14 +191,6 @@ def lezioni_cmd(userDict):
 
     return check_output(output_str)
 
-
-def dict_factory(cursor, row):
-    d = {}
-    for idx, col in enumerate(cursor.description):
-        d[col[0]] = row[idx]
-    return d
-
-
 def lezioni_output(item):
     output = "*Insegnamento:* " + item["nome"]
     output += "\n*Giorno:* " + get_nome_giorno(item["giorno_settimana"])
@@ -65,6 +199,11 @@ def lezioni_output(item):
     output += "\n*Aula:* " + str(item["aula"]) + "\n"
     return output
 
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
 
 def check_output(output):
     if len(output):

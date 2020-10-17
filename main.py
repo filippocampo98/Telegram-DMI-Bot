@@ -1,10 +1,28 @@
 # -*- coding: utf-8 -*-
-from functions import TOKEN, Bot, Updater, MessageHandler, CommandHandler, CallbackQueryHandler, Filters, telegram, Update, CallbackContext,\
-	smonta_portoni, santino, prof_sticker, bladrim, lei_che_ne_pensa_signorina, informative_callback, lezioni, esami, prof, report, give_chat_id, send_log, send_chat_ids, send_errors, start, callback, help,\
-	regolamenti, regolamentodidattico, regolamentodidattico_button, regolamentodidattico_keyboard, triennale, magistrale, regdid, esami_handler, lezioni_handler, esami_input_insegnamento, lezioni_input_insegnamento,\
-	generic_button_handler, gitlab_handler, submenu_handler, md_handler,\
-	updater_lep, git, drive, stats, stats_tot, request, add_db #importati solo componenti utilizzati nel main
-from module.shared import config_map
+
+# Telegram
+import telegram
+from telegram import Bot, Update
+from telegram.ext import Updater, CallbackQueryHandler, CommandHandler, Filters, CallbackContext, MessageHandler
+
+# Modules
+from module.easter_egg_func import smonta_portoni, santino, prof_sticker, bladrim, lei_che_ne_pensa_signorina
+from module.callback_handlers import informative_callback, generic_button_handler, submenu_handler, md_handler, callback 
+from module.shared import config_map, TOKEN, give_chat_id
+from module.regolamento_didattico import regolamenti, regolamentodidattico, regolamentodidattico_button, regolamentodidattico_keyboard, triennale, magistrale, regdid
+from module.esami import esami, esami_handler, esami_input_insegnamento
+from module.lezioni import lezioni, lezioni_handler, lezioni_input_insegnamento
+from module.professori import prof
+from module.help import help
+from module.gitlab import git, gitlab_handler
+from module.gdrive import drive
+from module.request import request, add_db
+from module.report import report
+from module.stats import stats, stats_tot
+from module.job_updater import updater_lep
+from module.utils.send_utils import send_chat_ids, send_errors, send_log
+from start import start
+
 
 bot = telegram.Bot(config_map["token"])
 
