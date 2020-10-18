@@ -27,11 +27,6 @@ def get_nome_giorno(day):
 
     return switcher.get(day, "Giorno non valido")
 
-# eliminate
-def lezioni_button():
-    output = "Scrivi /lezioni inserendo almeno uno dei seguenti parametri: giorno, materia"
-    return output
-
 def get_lezioni_text_InLineKeyboard(context: CallbackContext) -> (str, InlineKeyboardMarkup): #restituisce una tuple formata da (message_text, InlineKeyboardMarkup)
     keyboard = [[]]
 
@@ -62,8 +57,8 @@ def get_lezioni_text_InLineKeyboard(context: CallbackContext) -> (str, InlineKey
 
 def lezioni(update: Update, context: CallbackContext):
     check_log(update, context, "lezioni")
-    if 'lezioni' in context.user_data: context.user_data['lezioni'].clear() #ripulisce il dict dell'user relativo al comando /esami da eventuali dati presenti
-    else: context.user_data['lezioni'] = {} #crea il dict che conterrà i dati del comando /esami all'interno della key ['esami'] di user data
+    if 'lezioni' in context.user_data: context.user_data['lezioni'].clear() #ripulisce il dict dell'user relativo al comando /lezioni da eventuali dati presenti
+    else: context.user_data['lezioni'] = {} #crea il dict che conterrà i dati del comando /lezioni all'interno della key ['lezioni'] di user data
 
     user_id = update.message.from_user.id
     chat_id = update.message.chat_id
@@ -88,15 +83,15 @@ def lezioni_handler(update: Update, context: CallbackContext):
     message_id = update.callback_query.message.message_id
     lezioni_user_data = context.user_data['lezioni']
     if "anno" in callbackData:
-        if callbackData[20:] not in lezioni_user_data.keys(): #se non era presente, setta la key di [1° anno|2° anno| 3° anno] a true... 
+        if callbackData[20:] not in lezioni_user_data.keys(): #se non era presente, setta la key di [1 anno|2 anno| 3 anno] a true... 
             lezioni_user_data[callbackData[20:]] = True 
         else:
            del lezioni_user_data[callbackData[20:]] #... o elmina la key se era già presente
     elif "giorno" in callbackData:
-        if 'giorno' + callbackData[22:] not in lezioni_user_data.keys(): #se non era presente, setta la key di sessione[prima|seconda|terza] a true... 
-            lezioni_user_data['giorno' + callbackData[22:]] = True 
+        if 'giorno' + callbackData[22:] not in lezioni_user_data.keys(): #se non era presente, setta la key del giorno[1|2|3...] a true... 
+            lezioni_user_data[callbackData[22:]] = True 
         else:
-           del lezioni_user_data['giorno' + callbackData[22:]] #... o elmina la key se era già presente
+           del lezioni_user_data[callbackData[22:]] #... o elmina la key se era già presente
     elif "search" in callbackData:
         message_text = lezioni_cmd(lezioni_user_data) #ottieni il risultato della query che soddisfa le richieste
         context.bot.editMessageText(chat_id=chat_id, message_id=message_id, text=update.callback_query.message.text) #rimuovi la inline keyboard e lascia il resoconto della query
@@ -104,7 +99,7 @@ def lezioni_handler(update: Update, context: CallbackContext):
         lezioni_user_data.clear() #ripulisci il dict
         return
     else:
-        logger.error("esami_handler: an error has occurred")
+        logger.error("lezioni_handler: an error has occurred")
 
     message_text, inline_keyboard = get_lezioni_text_InLineKeyboard(context)
     context.bot.editMessageText(text=message_text, chat_id=chat_id, message_id=message_id, reply_markup=inline_keyboard)
@@ -159,7 +154,7 @@ def lezioni_button_anno(update: Update, context: CallbackContext, chat_id, messa
 def lezioni_cmd(userDict):
     output_str = []
 
-    where_giorno = " or giorno_settimana = ".join([key.replace("giorno", "") for key in userDict if "giorno" in key])  # stringa contenente le sessioni per cui il dict contiene la key, separate da " = '[]' and not "
+    where_giorno = " or giorno_settimana = ".join([key.replace("giorno", "") for key in userDict if "giorno" in key])  # stringa contenente i giorni per cui il dict contiene la key, separati da " = '[]' and not "
     where_anno = " or anno = ".join([key.replace(" anno", "") for key in userDict if "anno" in key]) # stringa contenente gli anni per cui il dict contiene la key, separate da "' or anno = '"
     where_insegnamento = userDict.get("insegnamento", "") # stringa contenente l'insegnamento, se presente
 
