@@ -88,7 +88,7 @@ def lezioni_handler(update: Update, context: CallbackContext):
         else:
            del lezioni_user_data[callbackData[20:]] #... o elmina la key se era già presente
     elif "giorno" in callbackData:
-        if 'giorno' + callbackData[22:] not in lezioni_user_data.keys(): #se non era presente, setta la key del giorno[1|2|3...] a true... 
+        if callbackData[22:] not in lezioni_user_data.keys(): #se non era presente, setta la key del giorno[1|2|3...] a true... 
             lezioni_user_data[callbackData[22:]] = True 
         else:
            del lezioni_user_data[callbackData[22:]] #... o elmina la key se era già presente
