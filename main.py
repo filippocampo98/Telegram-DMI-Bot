@@ -100,7 +100,7 @@ def main():
 	dp.add_handler(MessageHandler(Filters.regex('📫 Segnalazione Rappresentanti'), informative_callback))
 
   # generic buttons
-	dp.add_handler(CallbackQueryHandler(generic_button_handler, pattern='^(help_cmd|exit_cmd)'))
+	dp.add_handler(CallbackQueryHandler(generic_button_handler, pattern='^(exit_cmd)'))
 	dp.add_handler(CallbackQueryHandler(submenu_handler,        pattern='sm_*'))
 	dp.add_handler(CallbackQueryHandler(md_handler,             pattern='md_*'))
 

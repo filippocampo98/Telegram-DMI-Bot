@@ -9,12 +9,12 @@ from pydrive.drive import GoogleDrive
 from pydrive.auth import GoogleAuth
 
 # Modules
-from module.shared import read_md, check_log, config_map, TOKEN
+from module.shared import read_md, check_log, config_map, TOKEN, CUSicon
 
 # Needed to correctly run functions using globals()
-from module.esami import esami_button, esami_button_anno, esami_button_insegnamento, esami_button_sessione
-from module.lezioni import lezioni_button, lezioni_button_anno, lezioni_button_giorno, lezioni_button_insegnamento
-from module.help import rapp_menu, help_cmd, exit_cmd
+from module.esami import esami_button_anno, esami_button_insegnamento, esami_button_sessione
+from module.lezioni import lezioni_button_anno, lezioni_button_giorno, lezioni_button_insegnamento
+from module.help import rapp_menu, exit_cmd
 
 # System libraries
 import sqlite3
@@ -22,6 +22,7 @@ import os
 import sys
 from datetime import datetime
 import json
+import random
 
 
 def callback(update: Update, context: CallbackContext):
@@ -193,8 +194,14 @@ def md_handler(update: Update, context: CallbackContext):
     query = update.callback_query
 
     data = query.data.replace("md_", "")
-
+    print(data)
     message_text = read_md(data)
+
+    if(data == "help"):
+        print("replacing")
+        message_text = message_text.replace("<cusicon>", CUSicon[random.randint(0, 5)])
+        print(message_text)
+
     check_log(update, context, data, 1)
     
     context.bot.editMessageText(

@@ -3,31 +3,7 @@ from telegram.ext import CallbackContext
 
 import random
 
-from module.shared import check_log, CUSicon
-
-def help_cmd():
-    output = "@DMI_Bot risponde ai seguenti comandi: \n\n"
-    output += "📖 /esami - linka il calendario degli esami\n"
-    output += "🗓 /aulario - linka l\'aulario\n"
-    output += "👔 /prof <nome> - es. /prof Barbanera\n"
-    output += "👥 /rappresentanti - elenco dei rappresentanti del DMI\n"
-    output += "📚 /biblioteca - orario biblioteca DMI\n"
-    output += CUSicon[random.randint(0, 5)] + " /cus sede e contatti\n"
-    output += "  /cloud - linka le cartelle condivise su cloud\n\n"
-    output += "Segreteria orari e contatti:\n"
-    output += "/sdidattica - segreteria didattica\n"
-    output += "/sstudenti - segreteria studenti\n"
-    output += "/cea - CEA\n"
-    output += "\nERSU orari e contatti\n"
-    output += "/ersu - sede centrale\n"
-    output += "/ufficioersu - (ufficio tesserini)\n"
-    output += "/urp - URP studenti\n\n"
-    output += "~Bot~\n"
-    output += "📂 /drive - accedi a drive\n"
-    output += "📂 /git - /gitlab - accedi a gitlab\n"
-    output += "/contributors"
-    output += "/regolamentodidattico"
-    return output
+from module.shared import check_log, CUSicon, read_md
 
 def help(update: Update, context: CallbackContext):
     check_log(update, context, "help")
@@ -90,7 +66,7 @@ def help(update: Update, context: CallbackContext):
 
     keyboard.append(
         [
-            InlineKeyboardButton("Tutti i comandi", callback_data="help_cmd"),
+            InlineKeyboardButton("Tutti i comandi", callback_data="md_help"),
             InlineKeyboardButton("Chiudi",          callback_data="exit_cmd")
         ]
     )
