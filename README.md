@@ -117,7 +117,7 @@ python3 conftest.py .
 - Follow the procedure and copy the session value it provides in the settings file in "test:session". You can then delete the "conftest.py" you just used, you won't need it again
 - Edit the remaining values in the settings file as you like
 
-**Check [here](https://dev.to/blueset/how-to-write-integration-tests-for-a-telegram-bot-4c0e) you you want to have more information on the steps above**
+**Check [here](https://dev.to/blueset/how-to-write-integration-tests-for-a-telegram-bot-4c0e) if you want to have more information on the steps above**
 
 Start tests:
 ```bash
