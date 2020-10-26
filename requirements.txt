@@ -5,3 +5,4 @@ xlrd
 beautifulsoup4
 python-gitlab
 pytz
+matplotlib
