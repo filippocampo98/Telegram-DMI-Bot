@@ -9,12 +9,9 @@ from datetime import date, timedelta
 import matplotlib.pyplot as plt
 
 def stats(update: Update, context: CallbackContext):
-    if context.args:
+    days = 30
+    if context.args and int(context.args[0]) > 0:
         days = int(context.args[0])
-        if days <= 0:
-            days = 30
-    else:
-        days = 30
     stats_gen(update, context, days)
 
 def stats_gen(update: Update, context: CallbackContext, days):
