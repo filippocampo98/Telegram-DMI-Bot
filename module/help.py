@@ -11,12 +11,12 @@ def help(update: Update, context: CallbackContext):
     keyboard = [[]]
     message_text = "@DMI_Bot risponde ai seguenti comandi:"
 
-    keyboard.append([InlineKeyboardButton(" ~ Dipartimento e CdL ~ ", callback_data="_div")])
+    keyboard.append([InlineKeyboardButton(" ~ Dipartimento e CdL ~ ", callback_data="NONE")])
 
     keyboard.append(
         [
             InlineKeyboardButton("📖 Esami (link)",        callback_data="md_esami_link"),
-            InlineKeyboardButton("🗓 Aulario",              url='http://aule.dmi.unict.it/booked/Web/view-schedule.php'),
+            InlineKeyboardButton("🗓 Aulario",              callback_data="sm_aulario"),
             InlineKeyboardButton("Orari lezioni (link)",    callback_data="md_lezioni_link")
         ]
     )
@@ -34,7 +34,7 @@ def help(update: Update, context: CallbackContext):
         ]
     )
 
-    keyboard.append([InlineKeyboardButton(" ~ Segreteria orari e contatti ~ ", callback_data="_div")])
+    keyboard.append([InlineKeyboardButton(" ~ Segreteria orari e contatti ~ ", callback_data="NONE")])
 
     keyboard.append(
         [
@@ -44,7 +44,7 @@ def help(update: Update, context: CallbackContext):
         ]
     )
 
-    keyboard.append([InlineKeyboardButton(" ~ ERSU orari e contatti ~ ", callback_data="_div")])
+    keyboard.append([InlineKeyboardButton(" ~ ERSU orari e contatti ~ ", callback_data="NONE")])
 
     keyboard.append(
         [
@@ -54,7 +54,7 @@ def help(update: Update, context: CallbackContext):
         ]
     )
 
-    keyboard.append([InlineKeyboardButton(" ~ Bot e varie ~ ", callback_data="_div")])
+    keyboard.append([InlineKeyboardButton(" ~ Bot e varie ~ ", callback_data="NONE")])
 
     keyboard.append(
         [

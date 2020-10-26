@@ -15,7 +15,7 @@ from module.shared import read_md, check_log, config_map, TOKEN, CUSicon
 from module.esami import esami_button_anno, esami_button_insegnamento, esami_button_sessione
 from module.lezioni import lezioni_button_anno, lezioni_button_giorno, lezioni_button_insegnamento
 from module.help import rapp_menu, exit_cmd
-
+from module.aulario import aulario, aulario_subj
 # System libraries
 import sqlite3
 import os
@@ -178,7 +178,7 @@ def submenu_handler(update: Update, context: CallbackContext):
       query.message.chat_id,
       query.message.message_id
     )
-  
+
 def generic_button_handler(update: Update, context: CallbackContext):
     query = update.callback_query
     data = query.data
@@ -194,16 +194,13 @@ def md_handler(update: Update, context: CallbackContext):
     query = update.callback_query
 
     data = query.data.replace("md_", "")
-    print(data)
     message_text = read_md(data)
 
     if(data == "help"):
-        print("replacing")
         message_text = message_text.replace("<cusicon>", CUSicon[random.randint(0, 5)])
-        print(message_text)
 
     check_log(update, context, data, 1)
-    
+
     context.bot.editMessageText(
       text=message_text,
       chat_id=query.message.chat_id,
@@ -220,3 +217,22 @@ def informative_callback(update: Update, context: CallbackContext):
     check_log(update, context, cmd)
     message_text = read_md(cmd)
     context.bot.sendMessage(chat_id=update.message.chat_id, text=message_text, parse_mode='Markdown')
+
+def submenu_with_args_handler(update: Update, context: CallbackContext):
+    query = update.callback_query
+    data = query.data
+    chat_id = query.message.chat_id
+    message_id = query.message.message_id
+    func_name = data.split('&')[1]
+    arg = data.split('&')[2]
+    globals()[func_name](
+      query,
+      context,
+      query.message.chat_id,
+      query.message.message_id,
+      arg
+    )
+
+
+def none_handler(update: Update, context: CallbackContext):
+    update.callback_query.answer()
