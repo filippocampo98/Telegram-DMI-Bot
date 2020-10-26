@@ -35,6 +35,7 @@ If you want to test the bot by creating your personal instance, follow this step
 - pytz
 - pandas
 - dryscrape
+- pillow
 
 To install all the requirements you can run:
 ```bash
@@ -85,6 +86,8 @@ Now you can go to the dmibot directory and run the bot:
 $ cd /usr/local/dmibot/
 $ python main.py
 ```
+
+Note: if you need to run the main.py in a VPS, you will need now xvfb-run to run it (`xvfb-run python3 main.py`), because **dryscrape** requires it.
 
 ### Testing
 
