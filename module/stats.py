@@ -7,6 +7,9 @@ import sqlite3
 import os
 from datetime import date, timedelta
 import matplotlib.pyplot as plt
+import warnings
+
+warnings.filterwarnings("ignore", category=UserWarning, message='^Starting a Matplotlib')
 
 EASTER_EGG = ("leiCheNePensaSignorina", "smonta_portoni", "santino", "bladrim", "prof_sticker")
 
