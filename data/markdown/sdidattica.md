@@ -3,7 +3,8 @@ Sede presso il Dipartimento di Matematica e Informatica (primo piano vicino alla
 **Personale di segreteria**
 
     Sig.ra Cristina Mele
-    Tel.  0957383090
+    📞  0957383090
+    ✉️: cristina.mele@unict.it
     Ricevimento:  da lunedì a venerdì per appuntamento
 
 **Segreteria didattica**
@@ -13,6 +14,6 @@ Sede presso il Dipartimento di Matematica e Informatica (primo piano vicino alla
     
 **Ulteriori Contatti DMI**
     
-    e-mail: dmi@unict.it
-    Tel: 0957383025 - Fax: 095330094
+    ✉️: dmi@unict.it
+    📞 0957383025 - Fax: 095330094
     
