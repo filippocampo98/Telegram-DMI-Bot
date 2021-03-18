@@ -76,7 +76,7 @@ services:
 $ docker run -v </path/to/settings.yaml>:/dmibot/config/settings.yaml -v </path/to/DMI_DB.db>:/dmibot/data/DMI_DB.db -t unictdmi/dmibot
 ```
 
-## Parameter
+### Parameter
 Container images are configured using parameters passed at runtime (such as those above). These parameters are separated by a colon and indicate \<external>:\<internal> respectively.
 
 | Parameter | Function |
@@ -84,7 +84,7 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-v /dmibot/config/settings.yaml` | configurations file |
 | `-v /dmibot/data/DMI_DB.db` | database |
 
-## Building locally
+### Building locally
 ```bash
 git clone https://github.com/UNICT-DMI/Telegram-DMI-Bot.git
 cd Telegram-DMI-Bot
