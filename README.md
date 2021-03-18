@@ -15,7 +15,7 @@ Please note that the commands and their answers are in Italian.
 
 #### Automatically
 
-- Follow the [**Docker container**](##Docker-container) section
+- Follow the [**Docker**](#docker) section
 
 #### Manually
 
@@ -63,8 +63,8 @@ pip3 install -r requirements.txt
 ```yaml
 version: '2'
 services:
-    exambox:
-        build: .
+    dmibot:
+        image: unictdmi/dmibot
         container_name: dmibot
         volumes:
             - </path/to/settings.yaml>:/dmibot/config/settings.yaml
@@ -73,8 +73,22 @@ services:
 
 ### docker cli
 ```bash
-$ docker build -t dmibot .
-$ docker run -v </path/to/settings.yaml>:/dmibot/config/settings.yaml -v </path/to/DMI_DB.db>:/dmibot/data/DMI_DB.db -t dmibot
+$ docker run -v </path/to/settings.yaml>:/dmibot/config/settings.yaml -v </path/to/DMI_DB.db>:/dmibot/data/DMI_DB.db -t unictdmi/dmibot
+```
+
+## Parameter
+Container images are configured using parameters passed at runtime (such as those above). These parameters are separated by a colon and indicate \<external>:\<internal> respectively.
+
+| Parameter | Function |
+| :----: | --- |
+| `-v /dmibot/config/settings.yaml` | configurations file |
+| `-v /dmibot/data/DMI_DB.db` | database |
+
+## Building locally
+```bash
+git clone https://github.com/UNICT-DMI/Telegram-DMI-Bot.git
+cd Telegram-DMI-Bot
+docker build --no-cache -t dmibot .
 ```
 
 ---
