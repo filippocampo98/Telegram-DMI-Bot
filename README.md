@@ -60,7 +60,7 @@ pip3 install -r requirements.txt
 
 ### docker-compose(recommended)
 
-```json
+```yaml
 version: '2'
 services:
     exambox:
