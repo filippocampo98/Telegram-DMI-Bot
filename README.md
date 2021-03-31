@@ -44,7 +44,6 @@ _(If you don't have a token, message Telegram's [@BotFather](http://telegram.me/
 - requests
 - beautifulsoup4
 - python-gitlab
-- pytz
 - matplotlib
 - pandas
 - pillow
@@ -168,6 +167,12 @@ Start tests:
 ```bash
 pytest
 ```
+
+## :books: Documentation
+
+Check the gh-pages branch
+
+[Link to the documentation](https://unict-dmi.github.io/Telegram-DMI-Bot/)
 
 ### License
 

@@ -1,11 +1,11 @@
 """Test configuration"""
-from threading import Thread
 import asyncio
 import warnings
 import pytest
 from telethon.sync import TelegramClient
 from telethon.sessions import StringSession
-from main import main
+from telegram.ext import Updater
+from main import add_handlers
 from module.shared import config_map
 
 warnings.filterwarnings("ignore",
@@ -24,15 +24,6 @@ def get_session():
         print("Your session string is:", connection.session.save())
 
 
-def start_test_bot():
-    """Starts the bot with the test stettings
-    """
-    config_map['token'] = config_map['test']['token']
-    config_map['dev_group_chatid'] = config_map['test']['dev_group_chatid']
-    config_map['representatives_group'] = config_map['test']['representatives_group']
-    main()
-
-
 @pytest.fixture(scope="session")
 def event_loop():
     """Allows to use @pytest.fixture(scope="session") for the folowing functions
@@ -45,7 +36,7 @@ def event_loop():
     loop.close()
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="session")
 async def bot():
     """Called at the beginning of the testing session.
     Starts the bot with the testing setting in another thread
@@ -54,15 +45,23 @@ async def bot():
         None: wait for the testing session to end
     """
     print("[info] started telegram bot")
-    t = Thread(target=start_test_bot, daemon=True)
-    t.start()
+    for test_key in config_map['test']:
+        if test_key in config_map:
+            config_map[test_key] = config_map['test'][test_key]
+
+    updater = Updater(config_map['token'], request_kwargs={'read_timeout': 20, 'connect_timeout': 20}, use_context=True)
+    add_handlers(updater.dispatcher)
+    updater.start_polling()
     await asyncio.sleep(2)
+
     yield None
+
+    updater.stop()
     print("[info] closed telegram bot")
 
 
 @pytest.fixture(scope="session")
-async def client() -> TelegramClient:
+async def client(bot) -> TelegramClient:
     """Called at the beginning of the testing session.
     Creates the telegram client that will simulate the user
 

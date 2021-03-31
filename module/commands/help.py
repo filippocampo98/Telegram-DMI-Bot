@@ -1,14 +1,21 @@
-from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
-from telegram.ext import CallbackContext
-
+"""/help command"""
 import random
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.ext import CallbackContext
+from module.shared import AULARIO, CLOUD, CUSicon, check_log
 
-from module.shared import check_log, CUSicon, read_md, AULARIO, CLOUD
 
-def help(update: Update, context: CallbackContext) -> None:
-    check_log(update, context, "help")
+def help_cmd(update: Update, context: CallbackContext):
+    """Called by the /help command.
+    Shows all the actions supported by the bot
+
+    Args:
+        update: update event
+        context: context passed by the handler
+    """
+    check_log(update, "help")
     chat_id = update.message.chat_id
-    
+
     message_text = "@DMI_Bot risponde ai seguenti comandi:"
 
     keyboard = [[]]
@@ -21,7 +28,7 @@ def help(update: Update, context: CallbackContext) -> None:
 
     keyboard.append([
         InlineKeyboardButton("📘 Orari lezioni (link)",    callback_data="md_lezioni_link"),
-        InlineKeyboardButton("👨‍🏫 Info Professori",    callback_data="md_professori")
+        InlineKeyboardButton("👨‍🏫 Info Professori",         callback_data="md_professori")
     ])
 
     keyboard.append([
@@ -31,7 +38,7 @@ def help(update: Update, context: CallbackContext) -> None:
     keyboard.append([
         InlineKeyboardButton("👥 Rappresentanti",                       callback_data="sm_rapp_menu"),
         InlineKeyboardButton("📚 Biblioteca",                           callback_data="md_biblioteca"),
-        InlineKeyboardButton("📊 Gruppi",				   callback_data="md_gruppi"),
+        InlineKeyboardButton("📊 Gruppi",                               callback_data="md_gruppi"),
     ])
 
     keyboard.append([
@@ -43,7 +50,7 @@ def help(update: Update, context: CallbackContext) -> None:
 
     keyboard.append([
         InlineKeyboardButton("Seg. Didattica",  callback_data="md_sdidattica"),
-        InlineKeyboardButton("Seg. Studenti",   callback_data="md_sstudenti"),
+        InlineKeyboardButton("Seg. Studenti",   callback_data="md_studenti"),
         InlineKeyboardButton("CEA",             callback_data="md_cea")
     ])
 
@@ -63,12 +70,11 @@ def help(update: Update, context: CallbackContext) -> None:
     ])
 
     keyboard.append([InlineKeyboardButton(" ~ Progetti e Riconoscimenti ~ ", callback_data="NONE")])
-    
+
     keyboard.append([
         InlineKeyboardButton("📈 Opis Manager",      callback_data="md_opismanager"),
         InlineKeyboardButton("Contributors",         callback_data="md_contributors")
     ])
-
 
     keyboard.append([
         InlineKeyboardButton("Tutti i comandi", callback_data="md_help"),
@@ -79,8 +85,16 @@ def help(update: Update, context: CallbackContext) -> None:
 
     context.bot.sendMessage(chat_id=chat_id, text=message_text, reply_markup=reply_markup)
 
-def rapp_menu(update: Update, context: CallbackContext, chat_id, message_id: int) -> None:
-    
+def rapp_menu(update: Update, context: CallbackContext, chat_id: int, message_id: int):
+    """Called by the sm_rapp_menu button from the /help command.
+    Allows the user to select the department
+
+    Args:
+        update: update event
+        context: context passed by the handler
+        chat_id: id of the chat the command was invoked from
+        message_id: id of the help message
+    """
     message_text = "Quali rappresentanti vuoi contattare?"
 
     keyboard = [[]]
@@ -94,7 +108,3 @@ def rapp_menu(update: Update, context: CallbackContext, chat_id, message_id: int
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     context.bot.editMessageText(text=message_text, chat_id=chat_id, message_id=message_id, reply_markup=reply_markup)
-
-def exit_cmd() -> str:
-    output = "."
-    return output

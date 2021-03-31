@@ -1,6 +1,5 @@
 -- chat_id_list
 CREATE TABLE IF NOT EXISTS `Chat_id_List` (
-  `id` INTEGER PRIMARY KEY,
   `Chat_id` int(11) NOT NULL,
   `Username` text NOT NULL,
   `Nome` int(11) NOT NULL,
@@ -21,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `professors` (
   "ruolo" VARCHAR(255),
   "nome" VARCHAR(255),
   "cognome" VARCHAR(255),
-  "scheda DMI" VARCHAR(255),
+  "scheda_dmi" VARCHAR(255),
   "fax" VARCHAR(255),
   "telefono" VARCHAR(255),
   "email" VARCHAR(255),
@@ -50,6 +49,16 @@ CREATE TABLE IF NOT EXISTS `exams` (
   `seconda` VARCHAR(255),
   `terza` VARCHAR(255),
   `straordinaria` VARCHAR(255)
+);
+
+-- timetable_slots
+CREATE TABLE IF NOT EXISTS `timetable_slots` (
+  `ID` INTEGER PRIMARY KEY,
+  `nome` VARCHAR(255) NOT NULL,
+  `giorno` INT(4) NOT NULL,
+  `ora_inizio` VARCHAR(255) NOT NULL,
+  `ora_fine` VARCHAR(255) NOT NULL,
+  `aula` VARCHAR(255) NOT NULL
 );
 
 -- gitlab
