@@ -12,7 +12,6 @@ from module.commands.start import start
 from module.commands.stats import stats, stats_tot
 from module.commands.help import help_cmd
 from module.commands.report import report
-from module.commands.request import add_db, request, request_handler
 from module.commands.gdrive import drive, drive_handler
 from module.commands.regolamento_didattico import regolamentodidattico, regolamentodidattico_handler, send_regolamento
 from module.easter_egg_func import bladrim, lei_che_ne_pensa_signorina, prof_sticker, santino, smonta_portoni
@@ -29,12 +28,35 @@ def add_commands(up: Updater):
     Args:
         up (Updater): supplyed Updater
     """
-    #TODO: add all commands and remove the comment in the main
     commands = [
         BotCommand("start", "messaggio di benvenuto"),
         BotCommand("help ", "help"),
+        BotCommand("gruppi", "link alla lista dei gruppi telegram delle materie"),
         BotCommand("esami", "cerca informazioni sugli esami"),
         BotCommand("lezioni", "cerca informazioni sulle lezioni"),
+        BotCommand("prof", "cerca informazioni sui professori"),
+        BotCommand("aulario", "cerca informazioni sull'aulario"),
+        BotCommand("ufficioersu", "locazione e orari sede ufficio ersu"),
+        BotCommand("ersu", "locazione e orari sede ersu"),
+        BotCommand("sdidattica", "locazione e orari segreteria didattica"),
+        BotCommand("studenti", "locazione e orari segreteria studenti"),
+        BotCommand("cus", "locazione e orari del CUS"),
+        BotCommand("cea", "CEA"),
+        BotCommand("urp", "URP"),
+        BotCommand("mensa", "orari e menù della mensa"),
+        BotCommand("biblioteca", "orari della biblioteca"),
+        BotCommand("drive", "accedi alla cartella Drive"),
+        BotCommand("git", "accedi al materiale didattico su GitLab"),
+        BotCommand("gitlab", "accedi al materiale didattico su GitLab"),
+        BotCommand("rappresentanti", "lista rappresentanti"),
+        BotCommand("rappresentanti_dmi", "lista rappresentanti dmi"),
+        BotCommand("rappresentanti_matematica", "lista rappresentanti matematica"),
+        BotCommand("rappresentanti_informatica", "lista rappresentanti informatica"),
+        BotCommand("report", "segnala un problema"),
+        BotCommand("contributors", "sviluppatori del bot"),
+        BotCommand("chat_id", "mostra la chat id di questa chat"),
+        BotCommand("cloud", "risorse didattiche in cloud"),
+        BotCommand("regolamentodidattico", "lista dei regolamenti didattici"),
     ]
     up.bot.set_my_commands(commands=commands)
 
@@ -105,7 +127,6 @@ def add_handlers(dp: Dispatcher):
 
     # drive & gitlab buttons
     dp.add_handler(CallbackQueryHandler(drive_handler, pattern=r'^drive_file_.*'))
-    dp.add_handler(CallbackQueryHandler(request_handler, pattern=r'^drive_accept_.*'))
     dp.add_handler(CallbackQueryHandler(gitlab_handler, pattern='git_.*'))
 
     # regolamento didattico
@@ -130,11 +151,6 @@ def add_handlers(dp: Dispatcher):
         dp.add_handler(CommandHandler('git', git))
         dp.add_handler(CommandHandler('gitlab', git))
 
-    if config_map['debug']['disable_drive'] == 0 or \
-     config_map['debug']['disable_gitlab'] == 0:
-        dp.add_handler(CommandHandler('request', request))
-        dp.add_handler(CommandHandler('add_db', add_db))
-
     # stats command
     if config_map['debug']['disable_db'] == 0:
         dp.add_handler(CommandHandler('stats', stats))
@@ -153,7 +169,7 @@ def add_jobs(dp: Dispatcher):
 def main():
     """Main function"""
     updater = Updater(config_map['token'], request_kwargs={'read_timeout': 20, 'connect_timeout': 20}, use_context=True)
-    #add_commands(updater)
+    add_commands(updater)
     add_handlers(updater.dispatcher)
     add_jobs(updater.dispatcher)
 
