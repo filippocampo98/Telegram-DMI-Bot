@@ -38,7 +38,7 @@ def generate_prof_text(names: list) -> str:
 
     professors = set()
     names_number = len(names)
-    s_names = [].append(names[0])
+    s_names = [names[0]]
 
     if names_number > 1:
         for name in names[1:-1]:
