@@ -32,7 +32,7 @@ def help_cmd(update: Update, context: CallbackContext):
     ])
 
     keyboard.append([
-        InlineKeyboardButton("Regolamento Didattico", callback_data="regolamentodidattico_button")
+        InlineKeyboardButton("Regolamento Didattico", callback_data="reg_button_home")
     ])
 
     keyboard.append([
