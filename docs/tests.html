@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/dark.css" type="text/css" />
 
   
@@ -30,6 +32,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -176,8 +179,8 @@
 <span id="conftest"></span><h2>conftest<a class="headerlink" href="#module-tests.conftest" title="Permalink to this headline">¶</a></h2>
 <p>Test configuration</p>
 <dl class="py function">
-<dt id="tests.conftest.bot">
-<code class="sig-prename descclassname"><span class="pre">tests.conftest.</span></code><code class="sig-name descname"><span class="pre">bot</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.bot" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="tests.conftest.bot">
+<span class="sig-prename descclassname"><span class="pre">tests.conftest.</span></span><span class="sig-name descname"><span class="pre">bot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.bot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called at the beginning of the testing session.
 Starts the bot with the testing setting in another thread</p>
 <dl class="field-list simple">
@@ -188,8 +191,8 @@ Starts the bot with the testing setting in another thread</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tests.conftest.client">
-<code class="sig-prename descclassname"><span class="pre">tests.conftest.</span></code><code class="sig-name descname"><span class="pre">client</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.client" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="tests.conftest.client">
+<span class="sig-prename descclassname"><span class="pre">tests.conftest.</span></span><span class="sig-name descname"><span class="pre">client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.client" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called at the beginning of the testing session.
 Creates the telegram client that will simulate the user</p>
 <dl class="field-list simple">
@@ -203,8 +206,8 @@ Creates the telegram client that will simulate the user</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tests.conftest.event_loop">
-<code class="sig-prename descclassname"><span class="pre">tests.conftest.</span></code><code class="sig-name descname"><span class="pre">event_loop</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.event_loop" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="tests.conftest.event_loop">
+<span class="sig-prename descclassname"><span class="pre">tests.conftest.</span></span><span class="sig-name descname"><span class="pre">event_loop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.event_loop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Allows to use &#64;pytest.fixture(scope=”session”) for the folowing functions</p>
 <dl class="field-list simple">
 <dt class="field-odd">Yields</dt>
@@ -214,8 +217,8 @@ Creates the telegram client that will simulate the user</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tests.conftest.get_session">
-<code class="sig-prename descclassname"><span class="pre">tests.conftest.</span></code><code class="sig-name descname"><span class="pre">get_session</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.get_session" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="tests.conftest.get_session">
+<span class="sig-prename descclassname"><span class="pre">tests.conftest.</span></span><span class="sig-name descname"><span class="pre">get_session</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.get_session" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shows the String session.
 The string found must be inserted in the settings.yaml file</p>
 </dd></dl>
@@ -225,8 +228,8 @@ The string found must be inserted in the settings.yaml file</p>
 <span id="test-bot"></span><h2>test_bot<a class="headerlink" href="#module-tests.test_bot" title="Permalink to this headline">¶</a></h2>
 <p>Tests the bot functionality</p>
 <dl class="py function">
-<dt id="tests.test_bot.test_aulario_cmd">
-<em class="property"><span class="pre">async</span> </em><code class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></code><code class="sig-name descname"><span class="pre">test_aulario_cmd</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_aulario_cmd" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="tests.test_bot.test_aulario_cmd">
+<em class="property"><span class="pre">async</span> </em><span class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></span><span class="sig-name descname"><span class="pre">test_aulario_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_aulario_cmd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests the /aulario command</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -236,8 +239,8 @@ The string found must be inserted in the settings.yaml file</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tests.test_bot.test_esami_cmd">
-<em class="property"><span class="pre">async</span> </em><code class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></code><code class="sig-name descname"><span class="pre">test_esami_cmd</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_esami_cmd" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="tests.test_bot.test_esami_cmd">
+<em class="property"><span class="pre">async</span> </em><span class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></span><span class="sig-name descname"><span class="pre">test_esami_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_esami_cmd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests all the possible options in the /esami command</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -247,8 +250,8 @@ The string found must be inserted in the settings.yaml file</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tests.test_bot.test_help_buttons">
-<em class="property"><span class="pre">async</span> </em><code class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></code><code class="sig-name descname"><span class="pre">test_help_buttons</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_help_buttons" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="tests.test_bot.test_help_buttons">
+<em class="property"><span class="pre">async</span> </em><span class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></span><span class="sig-name descname"><span class="pre">test_help_buttons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_help_buttons" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests all the md buttons in the help command</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -258,8 +261,8 @@ The string found must be inserted in the settings.yaml file</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tests.test_bot.test_lezioni_cmd">
-<em class="property"><span class="pre">async</span> </em><code class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></code><code class="sig-name descname"><span class="pre">test_lezioni_cmd</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_lezioni_cmd" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="tests.test_bot.test_lezioni_cmd">
+<em class="property"><span class="pre">async</span> </em><span class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></span><span class="sig-name descname"><span class="pre">test_lezioni_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_lezioni_cmd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests all the possible options in the /lezioni command</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -269,8 +272,8 @@ The string found must be inserted in the settings.yaml file</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tests.test_bot.test_prof_cmd">
-<em class="property"><span class="pre">async</span> </em><code class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></code><code class="sig-name descname"><span class="pre">test_prof_cmd</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_prof_cmd" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="tests.test_bot.test_prof_cmd">
+<em class="property"><span class="pre">async</span> </em><span class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></span><span class="sig-name descname"><span class="pre">test_prof_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_prof_cmd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests the /prof command</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -280,8 +283,8 @@ The string found must be inserted in the settings.yaml file</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tests.test_bot.test_rappresentanti_buttons">
-<em class="property"><span class="pre">async</span> </em><code class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></code><code class="sig-name descname"><span class="pre">test_rappresentanti_buttons</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_rappresentanti_buttons" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="tests.test_bot.test_rappresentanti_buttons">
+<em class="property"><span class="pre">async</span> </em><span class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></span><span class="sig-name descname"><span class="pre">test_rappresentanti_buttons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_rappresentanti_buttons" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests all the buttons in the rappresentanti sub-menu</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -291,8 +294,8 @@ The string found must be inserted in the settings.yaml file</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tests.test_bot.test_rappresentanti_cmd">
-<em class="property"><span class="pre">async</span> </em><code class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></code><code class="sig-name descname"><span class="pre">test_rappresentanti_cmd</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_rappresentanti_cmd" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="tests.test_bot.test_rappresentanti_cmd">
+<em class="property"><span class="pre">async</span> </em><span class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></span><span class="sig-name descname"><span class="pre">test_rappresentanti_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_rappresentanti_cmd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests the /rappresentanti command</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -302,8 +305,8 @@ The string found must be inserted in the settings.yaml file</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tests.test_bot.test_regolamentodidattico_cmd">
-<em class="property"><span class="pre">async</span> </em><code class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></code><code class="sig-name descname"><span class="pre">test_regolamentodidattico_cmd</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_regolamentodidattico_cmd" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="tests.test_bot.test_regolamentodidattico_cmd">
+<em class="property"><span class="pre">async</span> </em><span class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></span><span class="sig-name descname"><span class="pre">test_regolamentodidattico_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_regolamentodidattico_cmd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests the /regolamentodidattico command</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -313,8 +316,8 @@ The string found must be inserted in the settings.yaml file</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tests.test_bot.test_report_cmd">
-<em class="property"><span class="pre">async</span> </em><code class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></code><code class="sig-name descname"><span class="pre">test_report_cmd</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_report_cmd" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="tests.test_bot.test_report_cmd">
+<em class="property"><span class="pre">async</span> </em><span class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></span><span class="sig-name descname"><span class="pre">test_report_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_report_cmd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests the /report command</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -324,8 +327,8 @@ The string found must be inserted in the settings.yaml file</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tests.test_bot.test_start_cmd">
-<em class="property"><span class="pre">async</span> </em><code class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></code><code class="sig-name descname"><span class="pre">test_start_cmd</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_start_cmd" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="tests.test_bot.test_start_cmd">
+<em class="property"><span class="pre">async</span> </em><span class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></span><span class="sig-name descname"><span class="pre">test_start_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_start_cmd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests the /start command</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -335,8 +338,8 @@ The string found must be inserted in the settings.yaml file</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tests.test_bot.test_stats_cmd">
-<em class="property"><span class="pre">async</span> </em><code class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></code><code class="sig-name descname"><span class="pre">test_stats_cmd</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_stats_cmd" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="tests.test_bot.test_stats_cmd">
+<em class="property"><span class="pre">async</span> </em><span class="sig-prename descclassname"><span class="pre">tests.test_bot.</span></span><span class="sig-name descname"><span class="pre">test_stats_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_bot.test_stats_cmd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests the /stats and /stats_tot command</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
