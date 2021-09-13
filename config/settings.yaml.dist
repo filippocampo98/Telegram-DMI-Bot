@@ -9,6 +9,8 @@ client_config:
 save_credentials: True
 save_credentials_backend: file
 save_credentials_file: config/drive_credentials.json
+drive_folder_id: FOLDER_ID
+drive_permission_duration: 12
 
 get_refresh_token: True
 

@@ -1,5 +1,5 @@
 """/drive command"""
-import os
+import os, yaml
 from pydrive.auth import AuthError, GoogleAuth
 from pydrive.drive import GoogleDrive
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
@@ -7,6 +7,8 @@ from telegram.ext import CallbackContext
 from module.shared import check_log
 from module.debug import log_error
 
+with open('config/settings.yaml', 'r') as yaml_config:
+    config_map = yaml.load(yaml_config, Loader=yaml.SafeLoader)
 
 def drive(update: Update, context: CallbackContext):
     """Called by the /drive command.
@@ -28,12 +30,12 @@ def drive(update: Update, context: CallbackContext):
         return
 
     try:
-        file_list = gdrive.ListFile({'q': "'0B7-Gi4nb88hremEzWnh3QmN3ZlU' in parents and trashed=false", 'orderBy': 'folder,title'}).GetList()
+        file_list = gdrive.ListFile({'q': f"'{config_map['drive_folder_id']}' in parents and trashed=false", 'orderBy': 'folder,title'}).GetList()
     except AuthError as e:
         log_error(header="drive", error=e)
 
     keyboard = get_files_keyboard(file_list, row_len=3)  # keyboard that allows the user to navigate the folder
-    context.bot.sendMessage(chat_id=chat_id, text="DMI UNICT - Appunti & Risorse:", reply_markup=InlineKeyboardMarkup(keyboard))
+    context.bot.sendMessage(chat_id=chat_id, text="Appunti & Risorse:", reply_markup=InlineKeyboardMarkup(keyboard))
 
 
 def drive_handler(update: Update, context: CallbackContext):
