@@ -3,12 +3,11 @@ import asyncio
 import warnings
 
 import pytest
+from main import add_handlers
+from module.shared import config_map
 from telegram.ext import Updater
 from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
-
-from main import add_handlers
-from module.shared import config_map
 
 warnings.filterwarnings(
     "ignore",
@@ -18,6 +17,12 @@ warnings.filterwarnings(
 api_id = config_map['test']['api_id']
 api_hash = config_map['test']['api_hash']
 session = config_map['test']['session']
+
+
+def pytest_configure():
+    """Initializes the timeout and bot_tag global variables"""
+    pytest.timeout = 8
+    pytest.bot_tag = config_map['test']['tag']
 
 
 def get_session():

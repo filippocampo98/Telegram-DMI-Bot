@@ -5,8 +5,6 @@ from telethon.sync import TelegramClient
 from telethon.tl.custom.conversation import Conversation
 from telethon.tl.custom.message import Message
 
-from . import TIMEOUT, bot_tag
-
 
 @pytest.mark.asyncio
 async def test_prof_cmd(client: TelegramClient):
@@ -16,7 +14,7 @@ async def test_prof_cmd(client: TelegramClient):
         client (TelegramClient): client used to simulate the user
     """
     conv: Conversation
-    async with client.conversation(bot_tag, timeout=TIMEOUT) as conv:
+    async with client.conversation(pytest.bot_tag, timeout=pytest.timeout) as conv:
         commands = (
             "/prof",
             "/prof bilotta",
