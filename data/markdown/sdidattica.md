@@ -10,7 +10,7 @@ Sede presso il Dipartimento di Matematica e Informatica (primo piano vicino alla
 **Segreteria didattica**
 
     Matematica - 0957383093
-    Informatica - 0957383090
+    Informatica - 0957383091
     
 **Ulteriori Contatti DMI**
     
