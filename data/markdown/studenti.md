@@ -1,7 +1,6 @@
 Segreteria studenti
-Sede presso la Cittadella Universitaria (vicino la mensa)
+Sede presso Via Santa Maria del Rosario, 11 - 95131 Catania
 
-Via S. Sofia, 64 ed. 11 - 95125 Catania
 📞 095 738 1111
 📞 095 738 6107
 📞 095.7386103, 6119, 6109, 6125, 6129, 6123, 6122, 6106, 6107, 6121
@@ -26,7 +25,7 @@ Informatica (L)
 ✉️ gfamoso@unict.it
 📞 095 738 6126
 
-Informatica (L-LM)
+Informatica (LM)
 👤 Maria Malogioglio
 ✉️ maria.malogioglio@unict.it
 📞 095 738 6108
