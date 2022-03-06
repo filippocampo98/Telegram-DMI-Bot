@@ -7,7 +7,7 @@ Cocuzza Daniele - @danielecocuzza
 Gibilterra Martin - @w8floosh
 Parlavecchio Martina - @makapx
 Patania Alex - @under3\_5
-Pistorio Anna - @annapist25
+Pistorio Anna - @annapistorio
 
 
 *Rappresentanti Corso di Laurea Magistrale*
