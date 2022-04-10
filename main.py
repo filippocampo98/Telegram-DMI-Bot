@@ -56,7 +56,7 @@ def add_commands(up: Updater):
         BotCommand("rappresentanti_informatica", "lista rappresentanti informatica"),
         BotCommand("report", "segnala un problema"),
         BotCommand("contributors", "sviluppatori del bot"),
-        BotCommand("chat_id", "mostra la chat id di questa chat"),
+        BotCommand("chatid", "mostra la chat id di questa chat"),
         BotCommand("cloud", "risorse didattiche in cloud"),
         BotCommand("regolamentodidattico", "lista dei regolamenti didattici"),
         BotCommand("ricevimenti", "lista orari ricevimenti dei professori"),
