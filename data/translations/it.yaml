@@ -1,0 +1,315 @@
+# Italian Translations
+
+# Shared
+SHOW_RELATED_COMMANDS_TEXT_ID: "Visualizzazione comandi relativi a:"
+CLOSE_KEYBOARD_TEXT_ID: "❌ Chiudi"
+BACK_TO_MENU_KEYBOARD_TEXT_ID: "🔙 Torna al menu"
+BACK_TO_MAIN_MENU_KEYBOARD_TEXT_ID: "Menu principale  ⏪"
+BACK_BUTTON_TEXT_TEXT_ID: "Indietro ◀"
+BACHELOR_TEXT_ID: "Triennale"
+MASTER_TEXT_ID: "Magistrale"
+FOUND_RESULT_TEXT_ID: "Risultati trovati: %capybara%"
+NO_RESULT_FOUND_TEXT_ID: "Nessun risultato trovato\n"
+SEARCH_YEAR_TEXT_ID: "Anno"
+SEARCH_DAY_TEXT_ID: "Giorno"
+SEARCH_SESSION_TEXT_ID: "Sessione"
+SEARCH_COURSE_TEXT_ID: "Insegnamento"
+SEARCH_HEADER_TEXT_ID: "~ Personalizza la ricerca ~"
+SEARCH_BUTTON_TEXT_ID: "Cerca"
+USE_WARNING_TEXT_ID: "Il comando %capybara% è utilizzabile solo in privato"
+GROUP_WARNING_TEXT_ID: "Dal comando %capybara% che hai eseguito in un gruppo"
+SELECT_YEAR_TEXT_ID: "Seleziona l'anno che ti interessa"
+YEAR_1ST_TEXT_ID: "Primo Anno"
+YEAR_2ND_TEXT_ID: "Secondo Anno"
+YEAR_3RD_TEXT_ID: "Terzo Anno"
+
+# sticky keyboard
+HELP_KEYBOARD_TEXT_ID: "❔ Aiuto"
+AULARIO_KEYBOARD_TEXT_ID: "📆 Aulario"
+CLOUD_KEYBOARD_TEXT_ID: "☁ Cloud"
+REPORT_TO_KEYBOARD_TEXT_ID: "📫 Segnalazione Rappresentanti"
+
+# /start command
+START_TEXT_ID: |-
+  Benvenuto! Questo bot è stato realizzato dagli studenti del Corso di Laurea in Informatica al fine di suppotare gli studenti del DMI!
+  Per scoprire cosa puoi fare usa /help o premi il pulsante ❔ Aiuto
+
+# /help command
+HELP_HEADER_TEXT_ID: "@DMI_Bot risponde ai seguenti comandi:"
+HELP_DIPARTIMENTO_CDL_KEYBOARD_TEXT_ID: "🏢 Dipartimento e CdL"
+HELP_REGOLAMENTO_DIDATTICO_KEYBOARD_TEXT_ID: "🪧 Regolamento Didattico"
+HELP_SEGRETERIA_CONTATTI_KEYBOARD_TEXT_ID: "🕐 Segreteria orari e contatti"
+HELP_ERSU_ORARI_KEYBOARD_TEXT_ID: "🍽 ERSU orari e contatti"
+HELP_APPUNTI_CLOUD_KEYBOARD_TEXT_ID: "☁ Appunti & Cloud"
+HELP_PROGETTI_RICONOSCIMENTI_KEYBOARD_TEXT_ID: "🏅 Progetti e Riconoscimenti"
+HELP_ALL_COMMANDS_KEYBOARD_TEXT_ID: "Tutti i comandi"
+HELP_ALL_COMMANDS_TOOLTIP_ID: |-
+  *@DMI_Bot risponde ai seguenti comandi:*
+  📖 /esami - _effettua una ricerca delle informazioni degli esami secondo i parametri immessi_
+  📘 /lezioni - _effettua una ricerca delle lezioni secondo i parametri immessi_
+  🗓 /aulario - _visualizza aulario e mappa delle aule_
+  👔 /prof <nome> - _es. /prof Barbanera_
+  👥 /rappresentanti - _elenco dei rappresentanti_
+  📚 /biblioteca - _orario biblioteca DMI_
+  <cusicon> /cus - _sede e contatti_
+  ☁ /cloud - _linka le cartelle condivise su cloud_
+  📣 /report - _permette di inviare una segnalazione ai rappresentanti_
+  📂 /drive - _accedi a drive_
+  🤝 /drive\_contribute - _ottieni i permessi per caricare materiale sulla cartella drive_
+  📂 /git o /gitlab - _accedi a gitlab_
+  🧑‍💻 /contributors - _mostra gli sviluppatori che hanno contribuito allo sviluppo del bot_
+  🧾 /regolamentodidattico - _invia il pdf del regolamento didattico per l'anno desiderato_
+  
+  *Segreteria orari e contatti:*
+  ✍ /sdidattica - _segreteria didattica_
+  📓 /studenti - _segreteria studenti_
+  /cea - _informazioni Centro per i sistemi di Elaborazione e Applicazioni scientifiche e didattiche_
+  
+  *ERSU orari e contatti:*
+  🗃 /ersu - _informazioni sede centrale ersu_
+  🗃 /ufficioersu - _(ufficio tesserini)_
+  🗃 /urp - _URP studenti_
+
+# /help-CDL command
+HELP_CDL_EXAMS_TEXT_ID: "📖 Esami (link)"
+HELP_CDL_LESSONS_TIMETABLE_TEXT_ID: "📘 Orari lezioni (link)"
+HELP_CDL_PROF_INFO_TEXT_ID: "👨‍🏫 Info Professori"
+HELP_CDL_REPRS_TEXT_ID: "👥 Rappresentanti"
+HELP_CDL_LIBRARY_TEXT_ID: "📚 Biblioteca"
+HELP_CDL_GROUPS_TEXT_ID: "📊 Gruppi"
+HELP_CDL_PROF_TOOLTIP_ID: |-
+  Per avere info sui professori puoi utilizzare il seguente comando:
+  /prof Stanco
+HELP_CDL_EXAMS_LINK_TOOLTIP_ID: |-
+  *Link agli esami*
+  _Informatica triennale (L-31):_ [link](%capybara%)
+  _Matematica triennale (L-35):_ [link](%capybara%)
+  _Informatica magistrale (LM-18):_ [link](%capybara%)
+  _Matematica magistrale (LM-40):_ [link](%capybara%)
+HELP_CDL_CLASSES_LINK_TOOLTIP_ID: |-
+  *Link agli orari delle lezioni*
+  _Informatica triennale (L-31):_ [link](%capybara%)
+  _Matematica triennale (L-35):_ [link](%capybara%)
+  _Informatica magistrale (LM-18):_ [link](%capybara%)
+  _Matematica magistrale (LM-40):_ [link](%capybara%)
+HELP_CDL_LIBRARY_TOOLTIP_ID: |-
+  *Orari della biblioteca:*
+  
+  Sala Lettura:
+  
+  %capybara%
+
+  Servizio Distribuzione:
+  
+  %capybara%
+
+# /help-Reprs command
+REPRS_HEADER_TEXT_ID: "Quali rappresentanti vuoi contattare?"
+REPRS_DMI_TEXT_ID: "Rapp. DMI"
+REPRS_DMI_CS_TEXT_ID: "Rapp. Informatica"
+REPRS_DMI_MATH_TEXT_ID: "Rapp. Matematica"
+REPRS_DMI_TOOLTIP_ID: "*Rappresentanti DMI*"
+REPRS_DMI_CS_TOOLTIP_ID: |-
+  *Rappresentanti Corso di Laurea Informatica Triennale*
+  
+  %capybara%
+  
+  *Rappresentanti Corso di Laurea Informatica Magistrale*
+  
+  %capybara%
+REPRS_DMI_MATH_TOOLTIP_ID: |-
+  *Rappresentanti Corso di Laurea Matematica Triennale*
+  
+  %capybara%
+  
+  *Rappresentanti Corso di Laurea Matematica Magistrale*
+  
+  %capybara%
+
+# /help-Segr command
+SEGR_DID_TEXT_ID: "Seg. Didattica"
+SEGR_STU_TEXT_ID: "Seg. Studenti"
+SEGR_CEA_TEXT_ID: "CEA"
+SEGR_DID_TOOLTIP_ID: |-
+  Sede presso il Dipartimento di Matematica e Informatica (primo piano vicino alla direzione) 
+
+  **Personale di segreteria**
+  
+  %capybara%
+
+  **Segreteria didattica**
+
+  %capybara%
+
+  **Ulteriori Contatti DMI**
+
+  %capybara%
+SEGR_STU_TOOLTIP_ID: |-
+  *Segreteria studenti*
+  
+  Posizione:
+  
+  %capybara%
+  
+  Contatti:
+  
+  %capybara%
+
+  🕑 Orario invernale:
+  
+  %capybara%
+
+  Ufficio carriere studenti - Settore scientifico
+
+  Matematica Triennale e Magistrale (L-LM)
+  
+  %capybara%
+
+  Informatica Triennale (L)
+  
+  %capybara%
+  
+  Informatica Magistrale (LM)
+  
+  %capybara%
+SEGR_CEA_TOOLTIP_ID: |-
+  *Centro per i sistemi di elaborazione e le applicazioni scientifiche e didattiche (CEA)*
+  
+  Contatti:
+  
+  %capybara%
+  
+  Posizione:
+  
+  %capybara%
+  
+  Sito web:
+  
+  %capybara%
+
+# /help-ERSU command
+ERSU_TEXT_ID: "ERSU"
+ERSU_OFFICE_TEXT_ID: "Ufficio ERSU"
+ERSU_URP_TEXT_ID: "URP"
+ERSU_TOOLTIP_ID: |-
+  *ERSU Catania - sede centrale*
+  
+  Posizione:
+  
+  %capybara%
+  
+  Contatti:
+  
+  %capybara%
+
+  🕑 Orari:
+  
+  %capybara%
+ERSU_OFFICE_TOOLTIP_ID: |-
+  *ERSU Catania - Ufficio Tesserini*
+  
+  Posizione:
+  
+  %capybara%
+
+  🕑 Orari:
+  
+  %capybara%
+  
+  Posizione:
+
+  %capybara%
+
+  🕑 Orari:
+
+  %capybara%
+ERSU_URP_TOOLTIP_ID: |-
+  *URP Studenti*
+  
+  Posizione:
+  
+  %capybara%
+  
+  Contatti:
+  
+  %capybara%
+
+# /help-projct/credits command
+PRJ_OPIS_TEXT_ID: "Opis Manager"
+CREDITS_CONTRIBUTORS_TEXT_ID: "Collaboratori"
+
+# /help-miscs command
+MISC_GDRIVE_TEXT_ID: "📂 Drive"
+MISC_GITLAB_TEXT_ID: "📂 GitLab"
+MISC_GDRIVE_TOOLTIP_ID: "Per accedere alla cartella Google Drive del dipartimento digita /drive"
+MISC_GITLAB_TOOLTIP_ID: "Per accedere ai file GitLab del dipartimento digita /git o /gitlab"
+
+# /aulario command
+AULARIO_DAY_SELECTION_TEXT_ID: "Seleziona la data della lezione che ti interessa."
+AULARIO_WARNING_TEXT_ID: "⚠ Aulario non ancora pronto, riprova fra qualche minuto ⚠"
+AULARIO_LESSON_SELECTION_TEXT_ID: "Quale lezione devi seguire?"
+AULARIO_NO_LESSON_WARNING_TEXT_ID: "Nessuna lezione programmata per questo giorno"
+AULARIO_LESSON_AT_TIME_TEXT_ID: "Ore:"
+
+# /drive command
+DRIVE_NO_USERNAME_WARNING_TEXT_ID: "Nessuno username"
+DRIVE_USE_TEXT_TEXT_ID: |-
+  USO: /drive_contribute [e-mail] [motivazione]
+  ESEMPIO: 
+    /drive_contribute mario.rossi@gmail.com Vorrei caricare i miei appunti di Fondamenti di Informatica
+DRIVE_CONFIRM_ACCESS_TEXT_ID: |-
+  Hai ottenuto l'accesso in scrittura alla cartella Drive!
+  Presto ti arriverà un'email di conferma per gli accessi in scrittura e potrai aggiungere appunti nella cartella mediante questo link https://cutt.ly/unict-dmi-drive
+DRIVE_VALIDATION_ERROR_TEXT_ID: "Si é verificato un errore durante la validazione dell'email, riprova più tardi o verifica se hai già gli accessi in scrittura alla cartella mediante questo link https://cutt.ly/unict-dmi-drive"
+DRIVE_HEADER_TEXT_ID: "Appunti & Risorse:"
+DRIVE_ERROR_DEVS_TEXT_ID: "Si è verificato un errore, ci scusiamo per il disagio. Contatta i devs. /help"
+DRIVE_ERROR_GFILE_TEXT_ID: |-
+  Impossibile scaricare questo file poichè esso è un google document...
+  Andare su seguente link: %capybara%
+DRIVE_ERROR_TOO_BIG_TEXT_ID: |-
+  File troppo grande per il download diretto...
+  Scarica dal seguente link: %capybara%
+
+# /report command
+REPORT_ON_GROUP_WARNING_TEXT_ID: "La funzione %capybara% non è ammessa nei gruppi."
+REPORT_NO_USERNAME_WARNING_TEXT_ID: "La funzione %capybara% non è ammessa se non si dispone di un username."
+REPORT_WARNING_TEXT_ID: "Errore. Inserisci la tua segnalazione dopo /report (Ad esempio /report Piovono capibara dal cielo!.)"
+REPORT_RESPONSE_TEXT_ID: |-
+  Resoconto segnalazione:
+  %capybara%
+  Grazie per la segnalazione, un rappresentante ti contatterà nel minor tempo possibile.
+
+# /regolamentodidattico command
+REG_CDL_GRAD_SELECT_TEXT_ID: "Scegliere uno dei corsi di laurea:"
+REG_CDL_YEAR_SELECT_TEXT_ID: "Scegliere il regolamento in base al proprio anno di immatricolazione:"
+REG_CDL_INF_COURSE_TEXT_ID: "Scegliere uno dei seguenti corsi (Informatica):"
+REG_CDL_MAT_COURSE_TEXT_ID: "Scegliere uno dei seguenti corsi (Matematica):"
+REG_CDL_RET_FILE_TEXT_ID: "Ecco il file richiesto:"
+
+# /prof command
+PROF_USE_TEXT_ID: "La sintassi del comando è: /prof <nome_professore>\n"
+
+# /lezioni command
+CLASSES_SELECT_DAY_TEXT_ID: "Seleziona il giorno che ti interessa"
+CLASSES_SELECT_DAY1_TEXT_ID: "Lunedì"
+CLASSES_SELECT_DAY2_TEXT_ID: "Martedì"
+CLASSES_SELECT_DAY3_TEXT_ID: "Mercoledì"
+CLASSES_SELECT_DAY4_TEXT_ID: "Giovedì"
+CLASSES_SELECT_DAY5_TEXT_ID: "Vederdì"
+CLASSES_USAGE_TEXT_ID: |-
+  Inserire il nome della materia nel formato:
+    nome: nome insegnamento
+  Esempio:
+    nome: SisTeMi oPeRaTIvI
+
+# /exams command
+EXAMS_SELECT_SESSION_TEXT_ID: "Seleziona la sessione che ti interessa"
+EXAMS_SESSION_1_TEXT_ID: "Prima"
+EXAMS_SESSION_2_TEXT_ID: "Seconda"
+EXAMS_SESSION_3_TEXT_ID: "Terza"
+EXAMS_SESSION_4_TEXT_ID: "Straordinaria"
+EXAMS_USAGE_TEXT_ID: |-
+  Inserire il nome della materia nel formato:
+    ins: nome insegnamento
+  Esempio:
+    ins: SisTeMi oPeRaTIvI
