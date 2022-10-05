@@ -77,6 +77,11 @@ class Lesson(Scrapable):
                     semestre = 1
 
                 table = soup.find('table', id='tbl_small_font')
+
+                if not table:
+                    logger.warning(f"Lessons table for `{url}` not found.")
+                    break
+
                 tr_all = table.find_all('tr')
 
                 anno = 1
