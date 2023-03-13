@@ -64,6 +64,7 @@ def add_commands(up: Updater) -> None:
         BotCommand("ricevimenti", "lista orari ricevimenti dei professori"),
         BotCommand("trasporto_urbano_unict", "link orari BRTU"),
         BotCommand("dmi_3d", "mappa in 3D del DMI"),
+        BotCommand("mercatino", "bot per la vendita e l'acquisto di libri"),
     ]
     up.bot.set_my_commands(commands=commands)
 
@@ -110,6 +111,9 @@ def add_handlers(dp: Dispatcher) -> None:
     dp.add_handler(CommandHandler('help', help_cmd))
     dp.add_handler(MessageHandler(Filters.regex(get_regex_multi_lang(TEXT_IDS.HELP_KEYBOARD_TEXT_ID)), help_cmd))
     dp.add_handler(CommandHandler('contributors', informative_callback))
+    dp.add_handler(CommandHandler('mercatino', informative_callback))
+    dp.add_handler(MessageHandler(Filters.regex(get_regex_multi_lang(TEXT_IDS.MERCATINO_LIBRI_KEYBOARD_TEXT_ID)), informative_callback))
+
 
     dp.add_handler(CommandHandler('rappresentanti', informative_callback))
     dp.add_handler(CommandHandler('rappresentanti_dmi', informative_callback))
