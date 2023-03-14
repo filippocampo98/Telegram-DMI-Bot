@@ -37,14 +37,14 @@ jobs:
       - name: Lint with pylint
         run: |
           pylint main.py setup.py module
-      - name: Setup enviroment
-        run: |
-          mv config/settings.yaml.dist config/settings.yaml
-          mv data/DMI_DB.db.dist data/DMI_DB.db
-          python3 setup.py useless_token --test_api_id ${{secrets.API_ID}} \
-          --test_api_hash ${{secrets.API_HASH}} --test_session ${{secrets.SESSION}} \
-          --test_tag ${{secrets.TEST_TAG}} --test_token ${{secrets.TEST_TOKEN}} \
-          --test_representatives_group ${{secrets.TEST_USER_ID}} --test_dev_group_chatid ${{secrets.TEST_USER_ID}}
+      # - name: Setup enviroment
+      #   run: |
+      #     mv config/settings.yaml.dist config/settings.yaml
+      #     mv data/DMI_DB.db.dist data/DMI_DB.db
+      #     python3 setup.py useless_token --test_api_id ${{secrets.API_ID}} \
+      #     --test_api_hash ${{secrets.API_HASH}} --test_session ${{secrets.SESSION}} \
+      #     --test_tag ${{secrets.TEST_TAG}} --test_token ${{secrets.TEST_TOKEN}} \
+      #     --test_representatives_group ${{secrets.TEST_USER_ID}} --test_dev_group_chatid ${{secrets.TEST_USER_ID}}
       - name: Unit test
         run: pytest tests/unit/
       # - name: End-to-end test
