@@ -5,6 +5,7 @@ from telegram.ext import run_async, CallbackContext
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 
 #Modules
+from module.debug.log_manager import notify_error_admin
 from module.shared import config_map, check_log
 
 # System libraries
